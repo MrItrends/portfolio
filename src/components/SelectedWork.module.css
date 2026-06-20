@@ -1,0 +1,78 @@
+.work {
+  min-height: 100vh;
+  padding: var(--space-8) var(--page-margin) var(--space-7);
+}
+
+/* Gentle emergence — the section rises in once it enters the viewport. */
+.label,
+.row {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity var(--duration-slow) var(--ease),
+    transform var(--duration-slow) var(--ease);
+}
+
+.revealed .label,
+.revealed .row {
+  opacity: 1;
+  transform: none;
+}
+
+.revealed .row {
+  transition-delay: 120ms;
+}
+
+.label {
+  font-size: var(--text-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-6);
+}
+
+.list {
+  list-style: none;
+}
+
+/* Editorial index row: index · title · description, ruled at the top. */
+.row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: var(--grid-gutter);
+  row-gap: var(--space-2);
+  align-items: baseline;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-ink);
+}
+
+.index {
+  font-size: var(--text-sm);
+  letter-spacing: 0.02em;
+}
+
+.title {
+  grid-column: 2;
+  margin: 0;
+  font-weight: 500;
+  font-size: var(--text-2xl);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.desc {
+  grid-column: 2;
+  font-size: var(--text-lg);
+  max-width: 32ch;
+}
+
+@media (min-width: 1024px) {
+  .row {
+    grid-template-columns: 4rem 1fr auto;
+    align-items: end;
+    column-gap: var(--space-6);
+  }
+  .desc {
+    grid-column: 3;
+    text-align: right;
+  }
+}

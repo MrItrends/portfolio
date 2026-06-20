@@ -1,0 +1,62 @@
+/* Scroll-driven hero. Stage provides the scroll distance; the pin holds the
+   typography fixed while the statement transforms into the identity. */
+
+.stage {
+  position: relative;
+  height: 220vh;
+}
+
+.pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Monumental statement, anchored to the grid margin (Swiss / architectural).
+   transform-origin top-left so it shrinks toward the lockup, not away from it. */
+.statement {
+  position: absolute;
+  top: var(--space-6);
+  left: var(--page-margin);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  transform-origin: left top;
+  will-change: transform, opacity;
+  font-weight: 500;
+  font-size: clamp(2.75rem, 11vw, 12rem);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+}
+
+.line {
+  display: block;
+}
+
+/* The identity, resting at the same anchor the statement collapses toward. */
+.wordmark {
+  position: absolute;
+  top: var(--space-6);
+  left: var(--page-margin);
+  opacity: 0;
+  will-change: transform, opacity;
+  font-weight: 500;
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+  letter-spacing: -0.01em;
+}
+
+/* No scroll hijack when motion is unwelcome — a single static monument. */
+@media (prefers-reduced-motion: reduce) {
+  .stage {
+    height: 100vh;
+  }
+  .statement {
+    transform: none;
+    opacity: 1;
+    top: clamp(var(--space-6), 20vh, var(--space-8));
+  }
+  .wordmark {
+    display: none;
+  }
+}
