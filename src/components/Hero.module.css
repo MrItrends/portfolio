@@ -25,13 +25,45 @@
   transform-origin: left top;
   will-change: transform, opacity;
   font-weight: 500;
-  font-size: clamp(2.75rem, 11vw, 12rem);
+  /* Width-driven, but capped by height so it never collides with the reel. */
+  font-size: min(clamp(2.75rem, 11vw, 12rem), 16vh);
   line-height: 0.92;
   letter-spacing: -0.03em;
 }
 
 .line {
   display: block;
+}
+
+/* Cinematic reel band, anchored to the bottom of the pin. It is NOT part of
+   the scroll transform, so it stays put while the statement collapses above —
+   the work is the constant, the typography is the variable. */
+.reel {
+  position: absolute;
+  left: var(--page-margin);
+  right: var(--page-margin);
+  bottom: var(--space-6);
+  height: clamp(180px, 32vh, 460px);
+  margin: 0;
+  overflow: hidden;
+  background: var(--color-ink);
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* On mobile the statement is small (one-word line caps the size), so the reel
+   sits closer beneath it and fills the lower space — keeping them connected. */
+@media (max-width: 600px) {
+  .reel {
+    top: 32vh;
+    bottom: var(--space-5);
+    height: auto;
+  }
 }
 
 /* The identity, resting at the same anchor the statement collapses toward. */
@@ -54,7 +86,6 @@
   .statement {
     transform: none;
     opacity: 1;
-    top: clamp(var(--space-6), 20vh, var(--space-8));
   }
   .wordmark {
     display: none;
