@@ -1,0 +1,107 @@
+/* Opening sequence — shares the homepage canvas so the reveal is seamless. */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  background: var(--color-bg);
+  padding: var(--page-margin);
+  opacity: 1;
+  transition: opacity var(--duration-slow) var(--ease);
+}
+
+.exiting {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform var(--duration-slow) var(--ease);
+}
+
+/* Counter dominates the viewport. Tabular figures keep digit width steady. */
+.counter {
+  font-weight: 500;
+  font-size: clamp(6rem, 30vw, 28rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.exiting .inner {
+  transform: translateY(-12px);
+}
+
+/* Single-line mask. Statements roll up through it, one at a time. */
+.captions {
+  position: relative;
+  width: min(90vw, 40rem);
+  height: 1.6em;
+  margin-top: clamp(var(--space-3), 4vw, var(--space-5));
+  overflow: hidden;
+}
+
+.statement {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  white-space: nowrap;
+  font-size: clamp(0.7rem, 2.4vw, 0.95rem);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(110%);
+  transition:
+    transform var(--duration-slow) var(--ease),
+    opacity var(--duration-slow) var(--ease);
+  will-change: transform, opacity;
+}
+
+.statementActive {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.statementBefore {
+  opacity: 0;
+  transform: translateY(-110%);
+}
+
+.statementAfter {
+  opacity: 0;
+  transform: translateY(110%);
+}
+
+/* Homepage fades up as the overlay fades out — a cross-dissolve, not a swap. */
+.content {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 700ms var(--ease),
+    transform 700ms var(--ease);
+}
+
+.revealed {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 600px) {
+  .statement {
+    letter-spacing: 0.1em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .statement {
+    transition: opacity 1ms linear;
+  }
+}
