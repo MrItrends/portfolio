@@ -1,13 +1,12 @@
 # Fonts
 
-Drop the PP Mori web files here with these exact names:
+The portfolio uses exactly two PP Mori weights (per `visual_system.md`):
 
-- `PPMori-Regular.woff2`  → weight 400
-- `PPMori-SemiBold.woff2` → weight 500 (used as "Medium")
+- `PPMori-Regular.woff2` → weight 400  ✓ installed
+- `PPMori-Medium.woff2`  → weight 500  ✓ installed
 
 These are referenced by `@font-face` in `src/app/globals.css`.
-Until they are present, the site falls back to a grotesque system stack.
 
-Only Regular and Medium/SemiBold are used — no Thin, ExtraLight, or Black.
-`.woff2` is preferred for performance; if you only have `.woff`/`.otf`,
-convert to `.woff2` (e.g. via the Fontsquirrel or Transfonter generator).
+Only Regular and Medium are used — no Thin, ExtraLight, SemiBold, Bold, or Black,
+and no italics. The other weights are intentionally left out to keep the type
+voice restrained and the payload small.
