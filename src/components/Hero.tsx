@@ -20,13 +20,9 @@ export default function Hero() {
   const stage = useRef<HTMLElement>(null);
   const statement = useRef<HTMLHeadingElement>(null);
   const wordmark = useRef<HTMLDivElement>(null);
-  const reel = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      reel.current?.pause();
-      return;
-    }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let ticking = false;
     const apply = () => {
@@ -81,20 +77,8 @@ export default function Hero() {
           Joshua Jumbo
         </div>
 
-        <figure className={styles.reel} aria-label="Selected work showreel">
-          <video
-            ref={reel}
-            className={styles.video}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            poster="/media/hero-reel-poster.jpg"
-          >
-            <source src="/media/hero-reel.webm" type="video/webm" />
-            <source src="/media/hero-reel.mp4" type="video/mp4" />
-          </video>
+        <figure className={styles.reel} aria-label="Showreel — in production">
+          <span className={styles.reelLabel}>Showreel</span>
         </figure>
       </div>
     </section>
