@@ -40,10 +40,11 @@
    the work is the constant, the typography is the variable. */
 .reel {
   position: absolute;
-  left: var(--page-margin);
   right: var(--page-margin);
   bottom: var(--space-6);
-  height: clamp(180px, 32vh, 460px);
+  /* 16:9 panel matching the film, so it shows in full — never cropped. */
+  aspect-ratio: 16 / 9;
+  height: clamp(180px, 34vh, 440px);
   margin: 0;
   overflow: hidden;
   background: var(--color-ink);
@@ -56,12 +57,14 @@
   display: block;
 }
 
-/* On mobile the statement is small (one-word line caps the size), so the reel
-   sits closer beneath it and fills the lower space — keeping them connected. */
+/* Mobile: the statement is small (one-word line caps it), so the reel spans the
+   full content width as a 16:9 panel sitting beneath it. */
 @media (max-width: 600px) {
   .reel {
-    top: 32vh;
-    bottom: var(--space-5);
+    left: var(--page-margin);
+    right: var(--page-margin);
+    top: 34vh;
+    bottom: auto;
     height: auto;
   }
 }
