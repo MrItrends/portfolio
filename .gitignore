@@ -40,3 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 COMMIT_MSG.tmp
+
+# large unused source clips
+public/images/*.mp4

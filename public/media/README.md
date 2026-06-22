@@ -1,22 +1,28 @@
 # Media
 
-## Hero reel
+## Hero reel — `hero-reel.{mp4,webm}` + `hero-reel-poster.jpg`
 
-The homepage hero plays an edited showreel. Drop the files here with these names:
+The homepage hero film: a 16:9 visual manifesto (~16.4s, seamless loop, muted,
+autoplay). Referenced by `src/components/Hero.tsx`.
 
-- `hero-reel.webm`        → primary source (VP9/AV1, smallest)
-- `hero-reel.mp4`         → fallback source (H.264, broad support)
-- `hero-reel-poster.jpg`  → first-frame poster (shown before play / on reduced motion)
+### Concept
 
-Referenced by `src/components/Hero.tsx`. Until they exist, the band renders as a
-clean dark panel (`#070707`).
+Each work sits as an editorial **plate** on the `#F1F1F1` ground with generous
+whitespace; transitions dissolve *through* that ground — whitespace is the
+connective tissue. Static plates, restrained dissolves, no decorative motion.
 
-### Editing notes
+Sequence (alternating theme / orientation / light–dark):
+NEDI dashboard (systems) → SPAL AI (detail) → Celo Events (interface) →
+Moodoo (process) → NEDI hero (interface) → Relief Now (outcome).
 
-- It is presented as a **wide, full-width cinematic band** (`object-fit: cover`),
-  so edit/crop with a wide safe-area in mind — important detail kept centred.
-- Autoplays **muted**, **loops**, no controls. Keep it short (~10–20s) and seamless.
-- Keep it light: target **< 5 MB**. Mute/strip the audio track entirely.
-- It is a *design trailer* — product thinking, interaction, system + visual craft.
-  Not a project walkthrough, not full screens. Quick, confident, edited.
-- Suggested work: SPAL, Xterns, Skillspace, ReliefNow, motion studies.
+### Rebuilding
+
+Source stills live in `public/images/`. The film is assembled with ffmpeg —
+landscape captures are cropped to remove the Safari window chrome
+(`crop=3012:1471:30:210` on the 3072×1736 shots), placed on the ground with
+margins, and joined with fade-through-ground transitions. The build script used
+is `/tmp/build_reel.sh` (re-create it if you want to re-edit the sequence,
+pacing, or swap shots).
+
+To change a shot or the pacing, edit the `clips=()` list / `DUR` / `FD` and
+re-run, then re-export `.mp4` (H.264, faststart) and `.webm` (VP9).
