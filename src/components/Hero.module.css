@@ -40,11 +40,10 @@
    the work is the constant, the typography is the variable. */
 .reel {
   position: absolute;
+  left: var(--page-margin);
   right: var(--page-margin);
   bottom: var(--space-6);
-  /* 16:9 panel matching the film, so it shows in full — never cropped. */
-  aspect-ratio: 16 / 9;
-  height: clamp(180px, 34vh, 440px);
+  height: clamp(180px, 32vh, 460px);
   margin: 0;
   overflow: hidden;
   background: var(--color-ink);
@@ -75,10 +74,8 @@
    full content width as a 16:9 panel sitting beneath it. */
 @media (max-width: 600px) {
   .reel {
-    left: var(--page-margin);
-    right: var(--page-margin);
     top: 34vh;
-    bottom: auto;
+    bottom: var(--space-5);
     height: auto;
   }
 }
