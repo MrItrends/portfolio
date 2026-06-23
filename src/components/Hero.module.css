@@ -6,26 +6,29 @@
   height: 220vh;
 }
 
+/* Flex column: statement takes its natural height, the reel fills the rest. */
 .pin {
   position: sticky;
   top: 0;
   height: 100vh;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-6) var(--page-margin);
 }
 
 /* Monumental statement, anchored to the grid margin (Swiss / architectural).
    transform-origin top-left so it shrinks toward the lockup, not away from it. */
 .statement {
-  position: absolute;
-  top: var(--space-6);
-  left: var(--page-margin);
+  align-self: flex-start;
   margin: 0;
   display: flex;
   flex-direction: column;
   transform-origin: left top;
   will-change: transform, opacity;
   font-weight: 500;
-  /* Width-driven, but capped by height so it never collides with the reel. */
+  /* Width-driven, but capped by height so it leaves room for the reel. */
   font-size: min(clamp(2.75rem, 11vw, 12rem), 16vh);
   line-height: 0.92;
   letter-spacing: -0.03em;
@@ -35,15 +38,13 @@
   display: block;
 }
 
-/* Cinematic reel band, anchored to the bottom of the pin. It is NOT part of
-   the scroll transform, so it stays put while the statement collapses above —
+/* Reel fills the remaining height below the statement. It is NOT part of the
+   scroll transform, so it stays put while the statement collapses above —
    the work is the constant, the typography is the variable. */
 .reel {
-  position: absolute;
-  left: var(--page-margin);
-  right: var(--page-margin);
-  bottom: var(--space-6);
-  height: clamp(180px, 32vh, 460px);
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
   margin: 0;
   overflow: hidden;
   background: var(--color-ink);
@@ -68,16 +69,6 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   opacity: 0.5;
-}
-
-/* Mobile: the statement is small (one-word line caps it), so the reel spans the
-   full content width as a 16:9 panel sitting beneath it. */
-@media (max-width: 600px) {
-  .reel {
-    top: 34vh;
-    bottom: var(--space-5);
-    height: auto;
-  }
 }
 
 /* The identity, resting at the same anchor the statement collapses toward. */
