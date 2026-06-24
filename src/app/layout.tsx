@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Intro from "@/components/Intro";
+import AmbientSound from "@/components/AmbientSound";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -32,6 +33,7 @@ export default function RootLayout({
       </head>
       <body>
         <Intro>{children}</Intro>
+        <AmbientSound />
       </body>
     </html>
   );
