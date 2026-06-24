@@ -1,54 +1,68 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { useEffect, useRef } from "react";
+import { PROJECTS } from "@/lib/projects";
 import styles from "./SelectedWork.module.css";
 
 /**
- * Selected Work emerges only after the hero lockup settles — curated, not
- * loaded. Minimal for now: the section label and the first real entry.
+ * Selected Work index — an editorial grid of case studies that reveal as they
+ * enter the viewport. Curated, not loaded. Thumbnails are placeholders for now.
  */
 export default function SelectedWork() {
-  const ref = useRef<HTMLElement>(null);
-  const [revealed, setRevealed] = useState(false);
+  const listRef = useRef<HTMLOListElement>(null);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    const items = listRef.current?.querySelectorAll("li");
+    if (!items) return;
     if (!("IntersectionObserver" in window)) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setRevealed(true);
+      items.forEach((i) => i.classList.add(styles.inView));
       return;
     }
     const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setRevealed(true);
-          io.disconnect();
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add(styles.inView);
+            io.unobserve(e.target);
+          }
         }
       },
-      { threshold: 0.25 }
+      { threshold: 0.2, rootMargin: "0px 0px -10% 0px" }
     );
-    io.observe(el);
+    items.forEach((i) => io.observe(i));
     return () => io.disconnect();
   }, []);
 
   return (
-    <section
-      ref={ref}
-      className={`${styles.work} ${revealed ? styles.revealed : ""}`}
-      aria-label="Selected work"
-    >
-      <p className={styles.label}>Selected Work</p>
+    <section className={styles.work} aria-label="Selected work">
+      <header className={styles.head}>
+        <p className={styles.label}>Selected Work</p>
+        <p className={styles.count}>{PROJECTS.length} case studies</p>
+      </header>
 
-      <ul className={styles.list}>
-        <li className={styles.row}>
-          <span className={styles.index}>01</span>
-          <h2 className={styles.title}>SPAL</h2>
-          <span className={styles.desc}>
-            Turning information into understanding
-          </span>
-        </li>
-      </ul>
+      <ol ref={listRef} className={styles.grid}>
+        {PROJECTS.map((p, i) => (
+          <li
+            key={p.slug}
+            className={styles.item}
+            style={{ "--col": i % 2 } as React.CSSProperties}
+          >
+            <Link href={`/work/${p.slug}`} className={styles.link}>
+              <figure className={styles.thumb}>
+                <span className={styles.thumbLabel}>{p.title}</span>
+              </figure>
+              <div className={styles.meta}>
+                <span className={styles.index}>
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className={styles.title}>{p.title}</h3>
+                <span className={styles.category}>{p.category}</span>
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ol>
     </section>
   );
 }

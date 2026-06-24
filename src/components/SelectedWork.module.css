@@ -1,78 +1,110 @@
 .work {
-  min-height: 100vh;
-  padding: var(--space-8) var(--page-margin) var(--space-7);
+  padding: var(--space-8) var(--page-margin) var(--space-9);
 }
 
-/* Gentle emergence — the section rises in once it enters the viewport. */
-.label,
-.row {
-  opacity: 0;
-  transform: translateY(20px);
-  transition:
-    opacity var(--duration-slow) var(--ease),
-    transform var(--duration-slow) var(--ease);
-}
-
-.revealed .label,
-.revealed .row {
-  opacity: 1;
-  transform: none;
-}
-
-.revealed .row {
-  transition-delay: 120ms;
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: var(--space-6);
 }
 
 .label {
   font-size: var(--text-sm);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  margin-bottom: var(--space-6);
 }
 
-.list {
+.count {
+  font-size: var(--text-sm);
+  opacity: 0.55;
+}
+
+.grid {
   list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: var(--grid-gutter);
+  row-gap: var(--space-7);
 }
 
-/* Editorial index row: index · title · description, ruled at the top. */
-.row {
+/* Each item rises in as it enters the viewport; columns stagger slightly. */
+.item {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity var(--duration-slow) var(--ease),
+    transform var(--duration-slow) var(--ease);
+  transition-delay: calc(var(--col, 0) * 90ms);
+}
+
+.inView {
+  opacity: 1;
+  transform: none;
+}
+
+.link {
+  display: block;
+  color: inherit;
+}
+
+/* Large editorial thumbnail — placeholder until real imagery is added. */
+.thumb {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  margin: 0 0 var(--space-3);
+  overflow: hidden;
+  background: var(--color-ink);
+}
+
+.thumbLabel {
+  position: absolute;
+  inset: 0;
   display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: var(--grid-gutter);
-  row-gap: var(--space-2);
+  place-items: center;
+  color: var(--color-bg);
+  font-size: var(--text-sm);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.4;
+}
+
+.meta {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: baseline;
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--color-ink);
+  gap: var(--space-2);
 }
 
 .index {
   font-size: var(--text-sm);
-  letter-spacing: 0.02em;
+  opacity: 0.55;
 }
 
 .title {
-  grid-column: 2;
   margin: 0;
   font-weight: 500;
-  font-size: var(--text-2xl);
-  line-height: 1;
-  letter-spacing: -0.02em;
-}
-
-.desc {
-  grid-column: 2;
   font-size: var(--text-lg);
-  max-width: 32ch;
+  letter-spacing: -0.01em;
 }
 
-@media (min-width: 1024px) {
-  .row {
-    grid-template-columns: 4rem 1fr auto;
-    align-items: end;
-    column-gap: var(--space-6);
+.category {
+  font-size: var(--text-sm);
+  opacity: 0.55;
+  text-align: right;
+}
+
+/* Subtle hover affordance — the work fades up to full presence. */
+.link:hover .thumbLabel {
+  opacity: 0.6;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+    row-gap: var(--space-6);
   }
-  .desc {
-    grid-column: 3;
-    text-align: right;
+  .item {
+    transition-delay: 0ms;
   }
 }

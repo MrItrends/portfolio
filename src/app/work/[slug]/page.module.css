@@ -1,0 +1,42 @@
+.page {
+  min-height: 100vh;
+  padding-block: var(--space-8) var(--space-9);
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: var(--space-7);
+  font-size: var(--text-sm);
+  letter-spacing: 0.02em;
+  opacity: 0.55;
+  transition: opacity var(--duration-base) var(--ease);
+}
+
+.back::before {
+  content: "← ";
+}
+
+.back:hover {
+  opacity: 1;
+}
+
+.category {
+  margin-bottom: var(--space-2);
+  font-size: var(--text-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.title {
+  margin: 0 0 var(--space-5);
+  font-weight: 500;
+  font-size: var(--text-display);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.status {
+  font-size: var(--text-lg);
+  opacity: 0.55;
+}
