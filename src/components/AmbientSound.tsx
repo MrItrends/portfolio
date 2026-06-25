@@ -97,10 +97,21 @@ export default function AmbientSound() {
     audio.addEventListener("ended", onEnded);
 
     let started = false;
-    const cleanup = () => {
-      window.removeEventListener("pointerdown", onGesture);
-      window.removeEventListener("keydown", onGesture);
-    };
+    // The widest net of "first interaction" events — whichever fires first
+    // unlocks audio. Browsers block audible autoplay until one of these; a
+    // click/tap/keypress qualifies, and we also try on the first scroll/wheel
+    // (works on browsers that have granted the site media engagement).
+    const GESTURES = [
+      "pointerdown",
+      "mousedown",
+      "touchstart",
+      "keydown",
+      "click",
+      "wheel",
+      "scroll",
+    ];
+    const cleanup = () =>
+      GESTURES.forEach((e) => window.removeEventListener(e, onGesture, true));
     const attempt = async () => {
       if (started) return;
       if (await play()) {
@@ -115,8 +126,9 @@ export default function AmbientSound() {
 
     if (localStorage.getItem(KEY) !== "off") {
       attempt(); // try immediately; usually blocked until a gesture
-      window.addEventListener("pointerdown", onGesture);
-      window.addEventListener("keydown", onGesture);
+      GESTURES.forEach((e) =>
+        window.addEventListener(e, onGesture, { capture: true, passive: true })
+      );
     }
 
     return () => {
