@@ -14,8 +14,8 @@ export const PROJECTS: Project[] = [
   { slug: "relief-now", title: "Relief Now", category: "Social Impact" },
   { slug: "anybuy", title: "Anybuy", category: "E-commerce" },
   {
-    slug: "nigenius",
-    title: "NiGenius",
+    slug: "nedi",
+    title: "NEDI",
     category: "EdTech",
     image: "/images/spalng.png",
   },

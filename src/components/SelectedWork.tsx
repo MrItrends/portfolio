@@ -10,6 +10,10 @@ import styles from "./SelectedWork.module.css";
  * Selected Work index — an editorial grid of case studies that reveal as they
  * enter the viewport. Curated, not loaded. Thumbnails are placeholders for now.
  */
+
+// Repeated name for the flowing marquee (nbsp keeps the spacing from collapsing).
+const SEP = "  ·  ";
+const strip = (title: string) => Array(4).fill(title).join(SEP) + SEP;
 export default function SelectedWork() {
   const listRef = useRef<HTMLOListElement>(null);
 
@@ -47,7 +51,7 @@ export default function SelectedWork() {
           <li
             key={p.slug}
             className={styles.item}
-            style={{ "--col": i % 2, "--i": i } as React.CSSProperties}
+            style={{ "--col": i % 2 } as React.CSSProperties}
           >
             <Link href={`/work/${p.slug}`} className={styles.link}>
               <figure className={styles.thumb}>
@@ -60,7 +64,12 @@ export default function SelectedWork() {
                     className={styles.thumbImg}
                   />
                 ) : (
-                  <span className={styles.thumbLabel}>{p.title}</span>
+                  <span className={styles.marquee} aria-hidden="true">
+                    <span className={styles.marqueeTrack}>
+                      <span className={styles.marqueeGroup}>{strip(p.title)}</span>
+                      <span className={styles.marqueeGroup}>{strip(p.title)}</span>
+                    </span>
+                  </span>
                 )}
               </figure>
               <div className={styles.meta}>

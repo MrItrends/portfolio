@@ -57,41 +57,64 @@
   background: var(--color-ink);
 }
 
+/* Thumbnail image + placeholder both zoom in on hover (clipped by .thumb). */
 .thumbImg {
   object-fit: cover;
+  transition: transform 600ms var(--ease);
 }
 
-/* Large case-study name on the placeholder. A slow, staggered fade makes the
-   emphasis travel through the grid, one thumbnail at a time. */
-.thumbLabel {
+.thumb:hover .thumbImg,
+.thumb:hover .marquee {
+  transform: scale(1.06);
+}
+
+/* Flowing name marquee on the placeholder — a seamless GSAP-style loop. */
+.marquee {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 0 var(--space-3);
-  text-align: center;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
   color: var(--color-bg);
-  font-weight: 500;
-  font-size: clamp(1.75rem, 3.4vw, 3rem);
-  letter-spacing: -0.02em;
-  animation: fadeThrough 8s ease-in-out infinite;
-  animation-delay: calc(var(--i, 0) * 0.85s);
+  transition: transform 600ms var(--ease);
 }
 
-@keyframes fadeThrough {
-  0%,
-  100% {
-    opacity: 0.22;
-  }
-  50% {
-    opacity: 0.85;
+.marqueeTrack {
+  display: flex;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  will-change: transform;
+  animation: flow 26s linear infinite;
+}
+
+/* Right-column tiles flow the other way, for rhythm. */
+.item:nth-child(even) .marqueeTrack {
+  animation-direction: reverse;
+}
+
+.marqueeGroup {
+  display: inline-flex;
+  align-items: center;
+  padding-right: 0.3em;
+  font-weight: 500;
+  font-size: clamp(1.6rem, 3.2vw, 2.75rem);
+  letter-spacing: -0.02em;
+  opacity: 0.5;
+}
+
+@keyframes flow {
+  to {
+    transform: translateX(-50%);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .thumbLabel {
+  .marqueeTrack {
     animation: none;
-    opacity: 0.55;
+  }
+  .thumbImg,
+  .marquee {
+    transition: none;
   }
 }
 
