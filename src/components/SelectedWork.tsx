@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { PROJECTS } from "@/lib/projects";
 import styles from "./SelectedWork.module.css";
@@ -50,7 +51,17 @@ export default function SelectedWork() {
           >
             <Link href={`/work/${p.slug}`} className={styles.link}>
               <figure className={styles.thumb}>
-                <span className={styles.thumbLabel}>{p.title}</span>
+                {p.image ? (
+                  <Image
+                    src={p.image}
+                    alt={`${p.title} — case study cover`}
+                    fill
+                    sizes="(max-width: 600px) 100vw, 50vw"
+                    className={styles.thumbImg}
+                  />
+                ) : (
+                  <span className={styles.thumbLabel}>{p.title}</span>
+                )}
               </figure>
               <div className={styles.meta}>
                 <span className={styles.index}>

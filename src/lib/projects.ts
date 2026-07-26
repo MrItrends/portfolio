@@ -3,6 +3,8 @@ export type Project = {
   title: string;
   /** Placeholder discipline tags — confirm/replace with real ones. */
   category: string;
+  /** Optional thumbnail in /public. Falls back to a placeholder panel. */
+  image?: string;
 };
 
 // Order = display order. SPAL leads. Add projects over time.
@@ -11,7 +13,12 @@ export const PROJECTS: Project[] = [
   { slug: "moodoo", title: "Moodoo", category: "Product Design" },
   { slug: "relief-now", title: "Relief Now", category: "Social Impact" },
   { slug: "anybuy", title: "Anybuy", category: "E-commerce" },
-  { slug: "nigenius", title: "NiGenius", category: "EdTech" },
+  {
+    slug: "nigenius",
+    title: "NiGenius",
+    category: "EdTech",
+    image: "/images/spalng.png",
+  },
   { slug: "robolearn-v1", title: "RoboLearn v1", category: "EdTech · Robotics" },
   { slug: "robolearn-v2", title: "RoboLearn v2", category: "EdTech · Robotics" },
   { slug: "events-planner", title: "Events Planner", category: "Events" },
