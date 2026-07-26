@@ -21,7 +21,6 @@
 /* ---------- Header ---------- */
 .header {
   margin-block: var(--space-6) var(--space-7);
-  max-width: 22ch;
 }
 
 .kicker {
@@ -38,6 +37,8 @@
   line-height: 0.98;
   letter-spacing: -0.03em;
   margin: 0;
+  /* ch resolves against the title's own large font — a wide, readable wrap. */
+  max-width: 18ch;
 }
 
 .meta {
