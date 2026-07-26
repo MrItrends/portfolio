@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { PROJECTS, getProject } from "@/lib/projects";
+import NediCaseStudy from "@/components/NediCaseStudy";
 import styles from "./page.module.css";
 
 export function generateStaticParams() {
@@ -28,6 +29,9 @@ export default async function CaseStudy({
   const { slug } = await params;
   const project = getProject(slug);
   if (!project) notFound();
+
+  // Fully-written case studies get their own layout; the rest show a stub.
+  if (slug === "nedi") return <NediCaseStudy />;
 
   return (
     <main className={styles.page}>

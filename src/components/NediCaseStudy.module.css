@@ -1,0 +1,156 @@
+.page {
+  padding-block: var(--space-7) var(--space-9);
+}
+
+.back {
+  display: inline-block;
+  font-size: var(--text-sm);
+  letter-spacing: 0.02em;
+  opacity: 0.55;
+  transition: opacity var(--duration-base) var(--ease);
+}
+
+.back::before {
+  content: "← ";
+}
+
+.back:hover {
+  opacity: 1;
+}
+
+/* ---------- Header ---------- */
+.header {
+  margin-block: var(--space-6) var(--space-7);
+  max-width: 22ch;
+}
+
+.kicker {
+  font-size: var(--text-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin-bottom: var(--space-4);
+}
+
+.title {
+  font-weight: 500;
+  font-size: clamp(2.25rem, 5.5vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+}
+
+.metaItem dt {
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.55;
+  margin-bottom: 2px;
+}
+
+.metaItem dd {
+  margin: 0;
+  font-size: var(--text-base);
+  font-weight: 500;
+}
+
+/* Intro sits in a readable column, larger than body. */
+.lead {
+  max-width: 46ch;
+  margin-top: var(--space-6);
+  font-size: var(--text-lg);
+  display: grid;
+  gap: var(--space-3);
+}
+
+/* ---------- Hero visual ---------- */
+.heroFigure {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  margin: 0 0 var(--space-8);
+  overflow: hidden;
+  background: var(--color-ink);
+}
+
+.heroImg {
+  object-fit: cover;
+}
+
+/* ---------- Sections ---------- */
+.section {
+  margin-bottom: var(--space-8);
+}
+
+.h2 {
+  font-weight: 500;
+  font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  max-width: 24ch;
+  margin: 0 0 var(--space-4);
+}
+
+.body {
+  max-width: 60ch;
+  display: grid;
+  gap: var(--space-3);
+  font-size: var(--text-lg);
+}
+
+.list {
+  margin: var(--space-1) 0 0;
+  padding-left: 1.4em;
+  display: grid;
+  gap: var(--space-1);
+}
+
+.list li {
+  padding-left: 0.3em;
+}
+
+/* ---------- Figures ---------- */
+.figure {
+  margin: var(--space-6) 0 0;
+}
+
+.imgWrap {
+  position: relative;
+  aspect-ratio: 3012 / 1471;
+  overflow: hidden;
+  background: var(--color-ink);
+}
+
+.img {
+  object-fit: cover;
+}
+
+/* Placeholder for chapters without imagery yet. */
+.placeholder {
+  aspect-ratio: 16 / 9;
+  display: grid;
+  place-items: center;
+}
+
+.placeholder span {
+  color: var(--color-bg);
+  font-size: var(--text-sm);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.45;
+}
+
+@media (max-width: 600px) {
+  .lead {
+    font-size: var(--text-base);
+  }
+  .body {
+    font-size: var(--text-base);
+  }
+}
