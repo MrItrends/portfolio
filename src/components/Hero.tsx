@@ -4,22 +4,28 @@ import { useEffect, useRef } from "react";
 import styles from "./Hero.module.css";
 
 /**
- * Scroll-driven hero. The monumental statement scales toward the top-left
- * lockup as you scroll, dissolving into the "Joshua Jumbo" wordmark, while the
- * reel stays anchored below — typography moves, the work provides continuity.
+ * Scroll-driven hero, two beats:
+ *  1. the monumental statement scales into the "Joshua Jumbo" wordmark;
+ *  2. immediately after, a large tagline rises up from behind the reel to fill
+ *     the whitespace the statement vacated.
+ * The reel stays anchored throughout — typography moves, the work is constant.
  */
 
 const STATEMENT = ["Understanding", "before", "interface"];
+const TAGLINE =
+  "6 years designing web and mobile products across edtech, fintech, healthtech and AI";
 const FINAL_SCALE = 0.14;
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 // Normalised 0→1 across a sub-range of the overall progress.
 const range = (v: number, a: number, b: number) => clamp((v - a) / (b - a), 0, 1);
+const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 
 export default function Hero() {
   const stage = useRef<HTMLElement>(null);
   const statement = useRef<HTMLHeadingElement>(null);
   const wordmark = useRef<HTMLDivElement>(null);
+  const tagline = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -30,20 +36,24 @@ export default function Hero() {
       const st = stage.current;
       const h1 = statement.current;
       const wm = wordmark.current;
-      if (!st || !h1 || !wm) return;
+      const tag = tagline.current;
+      if (!st || !h1 || !wm || !tag) return;
 
       const rect = st.getBoundingClientRect();
       const total = rect.height - window.innerHeight;
       const p = total > 0 ? clamp(-rect.top / total, 0, 1) : 0;
 
-      // Scales in place toward the top-left anchor — the statement recedes into
-      // the lockup. The reel below is untouched, so it stays anchored.
-      h1.style.transform = `scale(${1 + (FINAL_SCALE - 1) * p})`;
-      h1.style.opacity = String(1 - range(p, 0.45, 0.7));
+      // Beat 1 — statement recedes into the lockup, wordmark resolves in.
+      h1.style.transform = `scale(${1 + (FINAL_SCALE - 1) * range(p, 0, 0.42)})`;
+      h1.style.opacity = String(1 - range(p, 0.28, 0.42));
 
-      const w = range(p, 0.55, 0.82);
+      const w = range(p, 0.34, 0.5);
       wm.style.opacity = String(w);
       wm.style.transform = `translateY(${(1 - w) * 10}px)`;
+
+      // Beat 2 — tagline rises from behind the reel into the vacated whitespace.
+      const t = easeOut(range(p, 0.5, 0.92));
+      tag.style.transform = `translateY(${(1 - t) * 130}%)`;
     };
 
     const onScroll = () => {
@@ -76,6 +86,10 @@ export default function Hero() {
         <div ref={wordmark} className={styles.wordmark}>
           Joshua Jumbo
         </div>
+
+        <p ref={tagline} className={styles.tagline}>
+          {TAGLINE}
+        </p>
 
         <figure className={styles.reel} aria-label="Showreel — in production">
           <span className={styles.reelLabel}>Showreel</span>

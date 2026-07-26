@@ -1,35 +1,35 @@
 /* Scroll-driven hero. Stage provides the scroll distance; the pin holds the
-   typography fixed while the statement transforms into the identity. */
+   composition fixed while the statement transforms and the tagline rises. */
 
 .stage {
   position: relative;
-  height: 220vh;
+  height: 260vh;
 }
 
-/* Flex column: statement takes its natural height, the reel fills the rest. */
 .pin {
   position: sticky;
   top: 0;
   height: 100vh;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-  padding: var(--space-6) var(--page-margin);
+  /* Reel height, shared with the tagline so it can sit exactly above it. */
+  --reel-h: clamp(220px, 40vh, 480px);
 }
 
 /* Monumental statement, anchored to the grid margin (Swiss / architectural).
    transform-origin top-left so it shrinks toward the lockup, not away from it. */
 .statement {
-  align-self: flex-start;
+  position: absolute;
+  top: var(--space-6);
+  left: var(--page-margin);
+  z-index: 3;
   margin: 0;
   display: flex;
   flex-direction: column;
   transform-origin: left top;
   will-change: transform, opacity;
   font-weight: 500;
-  /* Width-driven, but capped by height so it leaves room for the reel. */
-  font-size: min(clamp(2.75rem, 11vw, 12rem), 16vh);
+  /* Width-driven, but capped by height so it clears the reel at full size. */
+  font-size: min(clamp(2.75rem, 11vw, 12rem), 14vh);
   line-height: 0.92;
   letter-spacing: -0.03em;
 }
@@ -38,13 +38,45 @@
   display: block;
 }
 
-/* Reel fills the remaining height below the statement. It is NOT part of the
-   scroll transform, so it stays put while the statement collapses above —
-   the work is the constant, the typography is the variable. */
+/* The identity, resting at the top-left anchor the statement collapses toward. */
+.wordmark {
+  position: absolute;
+  top: var(--space-6);
+  left: var(--page-margin);
+  z-index: 3;
+  opacity: 0;
+  will-change: transform, opacity;
+  font-weight: 500;
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+  letter-spacing: -0.01em;
+}
+
+/* Second-beat statement. Rests just above the reel; parked behind it (lower
+   z-index) so the opaque reel masks it until it rises into the whitespace. */
+.tagline {
+  position: absolute;
+  left: var(--page-margin);
+  right: var(--page-margin);
+  bottom: calc(var(--space-6) + var(--reel-h) + var(--space-3));
+  z-index: 1;
+  margin: 0;
+  max-width: 20ch;
+  transform: translateY(130%);
+  will-change: transform;
+  font-weight: 500;
+  font-size: clamp(1.6rem, 4vw, 3.5rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+}
+
+/* Reel, anchored to the bottom. Opaque, above the tagline, so it masks it. */
 .reel {
-  flex: 1 1 auto;
-  min-height: 0;
-  width: 100%;
+  position: absolute;
+  left: var(--page-margin);
+  right: var(--page-margin);
+  bottom: var(--space-6);
+  height: var(--reel-h);
+  z-index: 2;
   margin: 0;
   overflow: hidden;
   background: var(--color-ink);
@@ -71,19 +103,8 @@
   opacity: 0.5;
 }
 
-/* The identity, resting at the same anchor the statement collapses toward. */
-.wordmark {
-  position: absolute;
-  top: var(--space-6);
-  left: var(--page-margin);
-  opacity: 0;
-  will-change: transform, opacity;
-  font-weight: 500;
-  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
-  letter-spacing: -0.01em;
-}
-
-/* No scroll hijack when motion is unwelcome — a single static monument. */
+/* No scroll hijack when motion is unwelcome — static monument + reel. The
+   tagline stays in the DOM (readable by assistive tech) but out of view. */
 @media (prefers-reduced-motion: reduce) {
   .stage {
     height: 100vh;
@@ -94,5 +115,8 @@
   }
   .wordmark {
     display: none;
+  }
+  .tagline {
+    opacity: 0;
   }
 }
