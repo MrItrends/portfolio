@@ -61,16 +61,38 @@
   object-fit: cover;
 }
 
+/* Large case-study name on the placeholder. A slow, staggered fade makes the
+   emphasis travel through the grid, one thumbnail at a time. */
 .thumbLabel {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
+  padding: 0 var(--space-3);
+  text-align: center;
   color: var(--color-bg);
-  font-size: var(--text-sm);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  opacity: 0.4;
+  font-weight: 500;
+  font-size: clamp(1.75rem, 3.4vw, 3rem);
+  letter-spacing: -0.02em;
+  animation: fadeThrough 8s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.85s);
+}
+
+@keyframes fadeThrough {
+  0%,
+  100% {
+    opacity: 0.22;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thumbLabel {
+    animation: none;
+    opacity: 0.55;
+  }
 }
 
 .meta {
