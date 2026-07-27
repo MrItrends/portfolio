@@ -21,6 +21,8 @@
 /* ---------- Header ---------- */
 .header {
   margin-block: var(--space-6) var(--space-7);
+  /* 60% of a 1440px screen — a fixed cap, so it stays 864px on larger screens. */
+  max-width: 864px;
 }
 
 .kicker {
@@ -37,8 +39,6 @@
   line-height: 0.98;
   letter-spacing: -0.03em;
   margin: 0;
-  /* ch resolves against the title's own large font — a wide, readable wrap. */
-  max-width: 18ch;
 }
 
 .meta {
@@ -64,7 +64,6 @@
 
 /* Intro sits in a readable column, larger than body. */
 .lead {
-  max-width: 46ch;
   margin-top: var(--space-6);
   font-size: var(--text-lg);
   display: grid;
