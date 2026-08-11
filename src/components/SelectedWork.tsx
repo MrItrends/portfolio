@@ -60,7 +60,7 @@ export default function SelectedWork() {
                     src={p.image}
                     alt={`${p.title} — case study cover`}
                     fill
-                    sizes="(max-width: 600px) 100vw, 50vw"
+                    sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className={styles.thumbImg}
                   />
                 ) : (
