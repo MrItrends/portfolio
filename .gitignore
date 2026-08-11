@@ -41,5 +41,7 @@ yarn-error.log*
 next-env.d.ts
 COMMIT_MSG.tmp
 
-# large unused source clips
+# large source assets — optimized derivatives are committed instead
 public/images/*.mp4
+# heavy raster-embedded thumbnail SVGs (rasterized to public/images/thumbs/*.webp)
+public/images/*.svg
