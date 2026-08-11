@@ -23,9 +23,16 @@
 .grid {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   column-gap: var(--grid-gutter);
-  row-gap: var(--space-7);
+  row-gap: var(--space-6);
+}
+
+/* 2 across on tablet. */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* Each item rises in as it enters the viewport; columns stagger slightly. */

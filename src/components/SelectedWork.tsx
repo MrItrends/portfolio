@@ -51,7 +51,7 @@ export default function SelectedWork() {
           <li
             key={p.slug}
             className={styles.item}
-            style={{ "--col": i % 2 } as React.CSSProperties}
+            style={{ "--col": i % 3 } as React.CSSProperties}
           >
             <Link href={`/work/${p.slug}`} className={styles.link}>
               <figure className={styles.thumb}>
