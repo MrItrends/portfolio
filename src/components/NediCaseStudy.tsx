@@ -1,5 +1,5 @@
 import Link from "next/link";
-import styles from "./NediCaseStudy.module.css";
+import styles from "./CaseStudy.module.css";
 
 /**
  * NEDI case study. Copy is the author's own, verbatim — do not rewrite.

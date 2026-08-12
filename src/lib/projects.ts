@@ -18,6 +18,7 @@ export const PROJECTS: Project[] = [
   { slug: "create-receipt", title: "Create Receipt", category: "Fintech", image: "/images/thumbs/create-receipt.webp" },
   { slug: "ecohol", title: "Ecohol", category: "Events", image: "/images/thumbs/ecohol.webp" },
   { slug: "skillspace", title: "Skillspace", category: "HR Tech", image: "/images/thumbs/skillspace.webp" },
+  { slug: "nomnom", title: "NomNom", category: "Prediction Markets", image: "/images/thumbs/nomnom.webp" },
 ];
 
 export const getProject = (slug: string) =>
