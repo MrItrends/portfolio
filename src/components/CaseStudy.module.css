@@ -83,6 +83,23 @@
   object-fit: cover;
 }
 
+/* Wide hero (SPAL) — poster image swaps to a reel. */
+.heroWide {
+  position: relative;
+  aspect-ratio: 1267 / 550;
+  margin: 0 0 var(--space-8);
+  overflow: hidden;
+  background: var(--color-ink);
+}
+
+.heroVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 /* ---------- Sections ---------- */
 .section {
   margin-bottom: var(--space-8);

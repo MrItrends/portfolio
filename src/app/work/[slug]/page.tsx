@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { PROJECTS, getProject } from "@/lib/projects";
 import NediCaseStudy from "@/components/NediCaseStudy";
 import NomNomCaseStudy from "@/components/NomNomCaseStudy";
+import SpalCaseStudy from "@/components/SpalCaseStudy";
 import styles from "./page.module.css";
 
 export function generateStaticParams() {
@@ -32,6 +33,7 @@ export default async function CaseStudy({
   if (!project) notFound();
 
   // Fully-written case studies get their own layout; the rest show a stub.
+  if (slug === "spal") return <SpalCaseStudy />;
   if (slug === "nedi") return <NediCaseStudy />;
   if (slug === "nomnom") return <NomNomCaseStudy />;
 
