@@ -7,6 +7,7 @@ import NomNomCaseStudy from "@/components/NomNomCaseStudy";
 import SpalCaseStudy from "@/components/SpalCaseStudy";
 import RoboLearnCaseStudy from "@/components/RoboLearnCaseStudy";
 import ReliefNowCaseStudy from "@/components/ReliefNowCaseStudy";
+import MoodooCaseStudy from "@/components/MoodooCaseStudy";
 import styles from "./page.module.css";
 
 export function generateStaticParams() {
@@ -40,6 +41,7 @@ export default async function CaseStudy({
   if (slug === "nomnom") return <NomNomCaseStudy />;
   if (slug === "robolearn") return <RoboLearnCaseStudy />;
   if (slug === "relief-now") return <ReliefNowCaseStudy />;
+  if (slug === "moodoo") return <MoodooCaseStudy />;
 
   return (
     <main className={styles.page}>
