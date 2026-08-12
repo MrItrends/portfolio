@@ -131,14 +131,20 @@
   object-fit: cover;
 }
 
-/* Placeholder for chapters without imagery yet. */
+/* Placeholder for imagery not yet provided. .placeholder forces 16:9 (body
+   figures); .placeholderFill keeps the parent's own ratio (hero stays 3:2). */
 .placeholder {
   aspect-ratio: 16 / 9;
+}
+
+.placeholder,
+.placeholderFill {
   display: grid;
   place-items: center;
 }
 
-.placeholder span {
+.placeholder span,
+.placeholderFill span {
   color: var(--color-bg);
   font-size: var(--text-sm);
   letter-spacing: 0.14em;

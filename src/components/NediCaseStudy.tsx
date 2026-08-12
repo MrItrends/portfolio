@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import styles from "./NediCaseStudy.module.css";
 
 /**
@@ -46,16 +45,8 @@ export default function NediCaseStudy() {
           </div>
         </header>
 
-        <figure className={styles.heroFigure}>
-          <Image
-            src="/images/herofornedi.gif"
-            alt="NEDI platform hero"
-            fill
-            unoptimized
-            priority
-            sizes="(max-width: 1024px) 100vw, 1200px"
-            className={styles.heroImg}
-          />
+        <figure className={`${styles.heroFigure} ${styles.placeholderFill}`}>
+          <span>Hero</span>
         </figure>
 
         <section className={styles.section}>
@@ -83,14 +74,8 @@ export default function NediCaseStudy() {
           </div>
 
           <figure className={styles.figure}>
-            <div className={styles.imgWrap}>
-              <Image
-                src="/images/nedi-onboarding.png"
-                alt="NEDI onboarding — choose your access path"
-                fill
-                sizes="(max-width: 1024px) 100vw, 1200px"
-                className={styles.img}
-              />
+            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
+              <span>Onboarding</span>
             </div>
           </figure>
 
@@ -136,14 +121,8 @@ export default function NediCaseStudy() {
           </div>
 
           <figure className={styles.figure}>
-            <div className={styles.imgWrap}>
-              <Image
-                src="/images/nedi-dashboard.png"
-                alt="NEDI officials dashboard"
-                fill
-                sizes="(max-width: 1024px) 100vw, 1200px"
-                className={styles.img}
-              />
+            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
+              <span>Dashboard</span>
             </div>
           </figure>
         </section>
