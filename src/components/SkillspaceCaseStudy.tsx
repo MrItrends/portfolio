@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { caseNumber } from "@/lib/projects";
 import styles from "./CaseStudy.module.css";
 
 /**
@@ -14,7 +15,7 @@ export default function SkillspaceCaseStudy() {
         </Link>
 
         <header className={styles.header}>
-          <p className={styles.kicker}>Selected Work — 09</p>
+          <p className={styles.kicker}>Selected Work — {caseNumber("skillspace")}</p>
           <h1 className={styles.title}>Skillspace.ai</h1>
 
           <dl className={styles.meta}>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { caseNumber } from "@/lib/projects";
 import styles from "./CaseStudy.module.css";
 
 /**
@@ -14,7 +15,7 @@ export default function ReliefNowCaseStudy() {
         </Link>
 
         <header className={styles.header}>
-          <p className={styles.kicker}>Selected Work — 03</p>
+          <p className={styles.kicker}>Selected Work — {caseNumber("relief-now")}</p>
           <h1 className={styles.title}>
             Designing ReliefNow: Helping Patients Find Effective, Non-Surgical
             Pain Relief

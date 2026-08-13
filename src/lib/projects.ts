@@ -9,19 +9,23 @@ export type Project = {
   comingSoon?: boolean;
 };
 
-// Order = display order. SPAL leads. Add projects over time.
+// Order = display order.
 export const PROJECTS: Project[] = [
-  { slug: "spal", title: "SPAL", category: "Fintech · AI", image: "/images/thumbs/spal.webp" },
+  { slug: "nomnom", title: "NomNom", category: "Prediction Markets", image: "/images/thumbs/nomnom.webp" },
   { slug: "moodoo", title: "Moodoo", category: "Wellbeing", image: "/images/thumbs/moodoo.webp" },
+  { slug: "skillspace", title: "Skillspace", category: "HR Tech", image: "/images/thumbs/skillspace.webp" },
+  { slug: "robolearn", title: "RoboLearn", category: "EdTech · Robotics", image: "/images/thumbs/robolearn.webp" },
+  { slug: "spal", title: "SPAL", category: "Fintech · AI", image: "/images/thumbs/spal.webp" },
+  { slug: "nedi", title: "NEDI", category: "EdTech", image: "/images/thumbs/nedi.webp" },
   { slug: "relief-now", title: "Relief Now", category: "Healthtech", image: "/images/thumbs/relief-now.webp" },
   { slug: "anybuy", title: "Anybuy", category: "E-commerce", image: "/images/thumbs/anybuy.webp" },
-  { slug: "nedi", title: "NEDI", category: "EdTech", image: "/images/thumbs/nedi.webp" },
-  { slug: "robolearn", title: "RoboLearn", category: "EdTech · Robotics", image: "/images/thumbs/robolearn.webp" },
   { slug: "easyreceipt", title: "EasyReceipt", category: "Fintech", image: "/images/thumbs/easyreceipt.webp", comingSoon: true },
   { slug: "ecohol", title: "Ecohol", category: "Events", image: "/images/thumbs/ecohol.webp", comingSoon: true },
-  { slug: "skillspace", title: "Skillspace", category: "HR Tech", image: "/images/thumbs/skillspace.webp" },
-  { slug: "nomnom", title: "NomNom", category: "Prediction Markets", image: "/images/thumbs/nomnom.webp" },
 ];
 
 export const getProject = (slug: string) =>
   PROJECTS.find((p) => p.slug === slug);
+
+// Two-digit index in display order, e.g. "05". Keeps case-study kickers in sync.
+export const caseNumber = (slug: string) =>
+  String(PROJECTS.findIndex((p) => p.slug === slug) + 1).padStart(2, "0");

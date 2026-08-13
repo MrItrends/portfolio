@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { caseNumber } from "@/lib/projects";
 import styles from "./CaseStudy.module.css";
 
 /**
@@ -14,7 +15,7 @@ export default function MoodooCaseStudy() {
         </Link>
 
         <header className={styles.header}>
-          <p className={styles.kicker}>Selected Work — 02</p>
+          <p className={styles.kicker}>Selected Work — {caseNumber("moodoo")}</p>
           <h1 className={styles.title}>
             Designing a B2B Employee Mood Intelligence Platform That Helps
             Managers Understand Team Wellbeing Before Burnout Happens

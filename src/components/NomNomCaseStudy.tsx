@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { caseNumber } from "@/lib/projects";
 import styles from "./CaseStudy.module.css";
 
 /**
@@ -14,7 +15,7 @@ export default function NomNomCaseStudy() {
         </Link>
 
         <header className={styles.header}>
-          <p className={styles.kicker}>Selected Work — 10</p>
+          <p className={styles.kicker}>Selected Work — {caseNumber("nomnom")}</p>
           <h1 className={styles.title}>
             Designing NomNom: Helping People Forecast Real-World Events Through
             Prediction Markets

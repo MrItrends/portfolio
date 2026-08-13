@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SpalHero from "./SpalHero";
+import { caseNumber } from "@/lib/projects";
 import styles from "./CaseStudy.module.css";
 
 /**
@@ -15,7 +16,7 @@ export default function SpalCaseStudy() {
         </Link>
 
         <header className={styles.header}>
-          <p className={styles.kicker}>Selected Work — 01</p>
+          <p className={styles.kicker}>Selected Work — {caseNumber("spal")}</p>
           <h1 className={styles.title}>
             Helping Small Businesses See What Their Numbers Are Saying
           </h1>

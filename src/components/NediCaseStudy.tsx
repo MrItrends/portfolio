@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { caseNumber } from "@/lib/projects";
 import styles from "./CaseStudy.module.css";
 
 /**
@@ -14,7 +15,7 @@ export default function NediCaseStudy() {
         </Link>
 
         <header className={styles.header}>
-          <p className={styles.kicker}>Selected Work — 05</p>
+          <p className={styles.kicker}>Selected Work — {caseNumber("nedi")}</p>
           <h1 className={styles.title}>
             Designing the Minimum Viable Product for the Nigerian EDTECH
             Platform
