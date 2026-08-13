@@ -73,8 +73,14 @@ export default function NomNomCaseStudy() {
             <p>{`For users who bet on an outcome, they can increase their bets before the time runs out but cannot withdraw already placed bets before that time limit. However, the time of placing the bets decides what odds the bet will be worth, so placing a bet at exactly the start of a 5-hour market time count will be worth way more than placing it within 5 minutes to the close of that market.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Markets</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/nomnom-obsession.webp"
+                alt="NomNom — creating and betting on markets"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
           <div className={styles.body}>
