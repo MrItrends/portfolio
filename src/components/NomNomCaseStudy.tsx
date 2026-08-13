@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { caseNumber } from "@/lib/projects";
 import styles from "./CaseStudy.module.css";
 
@@ -52,8 +53,14 @@ export default function NomNomCaseStudy() {
             <p>{`So we asked about their interest from the onboarding.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Onboarding</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/nomnom-onboarding.webp"
+                alt="NomNom onboarding — capturing user interest"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
