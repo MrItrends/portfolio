@@ -39,8 +39,10 @@ export default function NomNomCaseStudy() {
           </div>
         </header>
 
-        <figure className={`${styles.heroFigure} ${styles.placeholderFill}`}>
-          <span>Hero</span>
+        <figure className={styles.heroFigure} style={{ aspectRatio: "1512 / 982" }}>
+          <video className={styles.heroVideo} autoPlay muted loop playsInline>
+            <source src="/images/NomNom.webm" type="video/webm" />
+          </video>
         </figure>
 
         <section className={styles.section}>
