@@ -47,13 +47,9 @@ export default function SelectedWork() {
       </header>
 
       <ol ref={listRef} className={styles.grid}>
-        {PROJECTS.map((p, i) => (
-          <li
-            key={p.slug}
-            className={styles.item}
-            style={{ "--col": i % 3 } as React.CSSProperties}
-          >
-            <Link href={`/work/${p.slug}`} className={styles.link}>
+        {PROJECTS.map((p, i) => {
+          const content = (
+            <>
               <figure className={styles.thumb}>
                 {p.image ? (
                   <Image
@@ -71,6 +67,11 @@ export default function SelectedWork() {
                     </span>
                   </span>
                 )}
+                {p.comingSoon && (
+                  <span className={styles.soon}>
+                    <span>Coming soon</span>
+                  </span>
+                )}
               </figure>
               <div className={styles.meta}>
                 <span className={styles.index}>
@@ -79,9 +80,26 @@ export default function SelectedWork() {
                 <h3 className={styles.title}>{p.title}</h3>
                 <span className={styles.category}>{p.category}</span>
               </div>
-            </Link>
-          </li>
-        ))}
+            </>
+          );
+          return (
+            <li
+              key={p.slug}
+              className={styles.item}
+              style={{ "--col": i % 3 } as React.CSSProperties}
+            >
+              {p.comingSoon ? (
+                <div className={`${styles.link} ${styles.disabled}`} aria-disabled>
+                  {content}
+                </div>
+              ) : (
+                <Link href={`/work/${p.slug}`} className={styles.link}>
+                  {content}
+                </Link>
+              )}
+            </li>
+          );
+        })}
       </ol>
     </section>
   );

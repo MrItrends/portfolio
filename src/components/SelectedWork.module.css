@@ -55,6 +55,27 @@
   color: inherit;
 }
 
+.disabled {
+  cursor: default;
+}
+
+/* "Coming soon" — dims the thumbnail and labels it; the tile isn't clickable. */
+.soon {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  background: rgba(7, 7, 7, 0.55);
+}
+
+.soon span {
+  color: var(--color-bg);
+  font-size: var(--text-sm);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
 /* Large editorial thumbnail — placeholder until real imagery is added. */
 .thumb {
   position: relative;
