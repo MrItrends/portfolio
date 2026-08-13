@@ -88,8 +88,10 @@ export default function NomNomCaseStudy() {
             <p>{`Moving candlesticks, a pulsing ‘volume change’ glow. This was inspired by the dynamism of tiktok.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Micro-interactions</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <video className={styles.heroVideo} autoPlay muted loop playsInline>
+                <source src="/images/Microinterations.webm" type="video/webm" />
+              </video>
             </div>
           </figure>
           <div className={styles.body}>
@@ -97,8 +99,10 @@ export default function NomNomCaseStudy() {
             <p>{`The aim was to create more than an order ticket so we needed to create a hook which also helps users build trust to place their bets.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Social hooks</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <video className={styles.heroVideo} autoPlay muted loop playsInline>
+                <source src="/images/Friendsinthemarket.webm" type="video/webm" />
+              </video>
             </div>
           </figure>
         </section>
