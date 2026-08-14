@@ -134,7 +134,7 @@
 
 /* ---------- Figures ---------- */
 .figure {
-  margin: var(--space-6) 0 0;
+  margin: var(--space-6) 0;
 }
 
 .imgWrap {

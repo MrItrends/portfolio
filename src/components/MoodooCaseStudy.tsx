@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { caseNumber } from "@/lib/projects";
 import styles from "./CaseStudy.module.css";
 
@@ -71,8 +72,14 @@ export default function MoodooCaseStudy() {
             <p>{`The aim was to build a simple tool that allows individuals to comfortably check in with their moods daily without feeling like they are within a working environment.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Valence–Arousal matrix</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/moodoo-valence.webp"
+                alt="Moodoo — emotional valence–arousal matrix"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
@@ -83,8 +90,14 @@ export default function MoodooCaseStudy() {
             <p>{`During benchmarking, we saw that traditional mood tracking applications focused on representing emotions with emojis and very linear concepts to me, it didn’t feel psychological or tied to any concept, it felt pretty bland. So having understood the emotional valence arousal matrix, we concluded that allowing users to check their emotions following the Pleasant/Unpleasant vs High Energy/Low Energy quadrant was more psychological but simple to relate to. That’s where we felt the Mandala would work best, in the sense that rather than work with the linear emoji pattern that clouds the market without deep rooted psychological knowledge, we decided to build around an abstract but relatable concept of a mandala which allowed us to match energy and pleasantness through the number of petals/the roundness of the petals shown on a quadrant selection.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>The Mandala</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/moodoo-mandala.webp"
+                alt="Moodoo — the mandala mood selector"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
           <div className={styles.body}>
@@ -93,8 +106,14 @@ export default function MoodooCaseStudy() {
             <p>{`The idea is to build a sense of ease and non-judgment, even if its for a team or individual within an organization, the app is made to feel very personal rather than a typical company platform with technical jargons.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Daily check-in</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/moodoo-checkin.webp"
+                alt="Moodoo — daily mood check-in"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
@@ -106,8 +125,14 @@ export default function MoodooCaseStudy() {
             <p>{`The individual can find patterns of his/her mood within the individual mood section`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Individual data</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/moodoo-individual.webp"
+                alt="Moodoo — individual mood patterns"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
@@ -118,6 +143,17 @@ export default function MoodooCaseStudy() {
             <p>{`Just like the individual data section, this section is specific to the team, so it’s an average of all the individuals (including the currently logged in user) data within the organization.`}</p>
             <p>{`So the team data shows the organization’s health.`}</p>
           </div>
+          <figure className={styles.figure}>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/moodoo-team.webp"
+                alt="Moodoo — team mood average"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
+            </div>
+          </figure>
         </section>
 
         <section className={styles.section}>
@@ -126,6 +162,17 @@ export default function MoodooCaseStudy() {
             <p>{`In Moodoo, we allow mood uplifting, individuals can share resources either as GIFs, Images, Videos, Quotes etc.`}</p>
             <p>{`The idea of how this works is that when an individual (anonymously) is feeling down, team members who are feeling great get notified to help raise the mood of the anonymous fellow in whatever media form that is accepted on the platform which means that if a fellow is feeling high Energy and Pleasant, then they can share resources.`}</p>
           </div>
+          <figure className={styles.figure}>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/moodoo-sharing.webp"
+                alt="Moodoo — sharing and receiving help"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
+            </div>
+          </figure>
         </section>
 
         <section className={styles.section}>
