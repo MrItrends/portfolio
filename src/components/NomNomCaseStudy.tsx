@@ -116,19 +116,12 @@ export default function NomNomCaseStudy() {
             <p>{`The experience was built to support existing mental model of community driven apps which these platforms (x, instagram, tiktok, facebook etc) already provide, so rather than focus on a heavy market look and feel, it was made to feel like the user was hoping on another x or instagram app to chat with their friends.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div
-              className={styles.imgWrap}
-              style={{
-                aspectRatio: "1024 / 1536",
-                maxWidth: "420px",
-                marginInline: "auto",
-              }}
-            >
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
               <Image
                 src="/images/nomnom-comments.webp"
                 alt="NomNom — commenting and replying within a market"
                 fill
-                sizes="420px"
+                sizes="(max-width: 1024px) 100vw, 1200px"
                 className={styles.img}
               />
             </div>
