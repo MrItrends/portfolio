@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { caseNumber } from "@/lib/projects";
 import styles from "./CaseStudy.module.css";
 
@@ -34,8 +35,15 @@ export default function SkillspaceCaseStudy() {
           </div>
         </header>
 
-        <figure className={`${styles.heroFigure} ${styles.placeholderFill}`}>
-          <span>Hero</span>
+        <figure className={styles.heroFigure} style={{ aspectRatio: "1512 / 982" }}>
+          <Image
+            src="/images/skillspace-hero.webp"
+            alt="Skillspace — technical hiring platform"
+            fill
+            priority
+            sizes="(max-width: 1024px) 100vw, 1200px"
+            className={styles.heroImg}
+          />
         </figure>
 
         <section className={styles.section}>
@@ -44,8 +52,14 @@ export default function SkillspaceCaseStudy() {
             <p>{`Technical hiring managers often face challenges with existing recruitment platforms, which are either overly complex or focus solely on creating tests, leaving other critical aspects of the hiring process unaddressed. This fragmented approach leads to inefficiencies, increased dependence on multiple tools, and a lack of a seamless workflow for managing the end-to-end recruitment journey.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Problem</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/skillspace-problem.webp"
+                alt="Skillspace — the fragmented hiring problem"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
           <div className={styles.body}>
@@ -60,8 +74,14 @@ export default function SkillspaceCaseStudy() {
             <p>{`The sitemap we followed`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Sitemap</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/skillspace-sitemap.webp"
+                alt="Skillspace — the sitemap we followed"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
           <div className={styles.body}>
@@ -84,8 +104,14 @@ export default function SkillspaceCaseStudy() {
         <section className={styles.section}>
           <h2 className={styles.h2}>High Fidelity Design</h2>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>High Fidelity Design</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/skillspace-highfidelity.webp"
+                alt="Skillspace — high fidelity design"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
