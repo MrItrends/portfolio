@@ -54,8 +54,10 @@ export default function MoodooCaseStudy() {
             <p>{`small studio managers, people/happiness managers, remote teams, ad agencies, and in-house creative/design teams.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Research</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <video className={styles.heroVideo} autoPlay muted loop playsInline>
+                <source src="/images/moodoo-research.webm" type="video/webm" />
+              </video>
             </div>
           </figure>
         </section>
