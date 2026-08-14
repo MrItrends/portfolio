@@ -142,8 +142,14 @@ export default function NomNomCaseStudy() {
             <p>{`Also, users can brag about their market position on other social platforms by sharing a snippet of their position in the market.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Leaderboard</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/nomnom-leaderboard.webp"
+                alt="NomNom leaderboard — ranked market position"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
@@ -163,8 +169,14 @@ export default function NomNomCaseStudy() {
             <p>{`Across the platform we ensured that actions taken by users were properly acknowledged using smart notifications and also nudges in non disruptive ways.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Notifications</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/nomnom-notifications.webp"
+                alt="NomNom — smart notifications and nudges"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
