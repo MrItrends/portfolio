@@ -99,9 +99,19 @@ export default function NomNomCaseStudy() {
             <p>{`The aim was to create more than an order ticket so we needed to create a hook which also helps users build trust to place their bets.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
-              <video className={styles.heroVideo} autoPlay muted loop playsInline>
-                <source src="/images/Friendsinthemarket.webm" type="video/webm" />
+            <div
+              className={styles.imgWrap}
+              style={{ aspectRatio: "1512 / 982", background: "#002A44" }}
+            >
+              <video
+                className={styles.heroVideo}
+                style={{ objectFit: "contain" }}
+                autoPlay
+                muted
+                loop
+                playsInline
+              >
+                <source src="/media/FriendsinMarket.mp4" type="video/mp4" />
               </video>
             </div>
           </figure>
