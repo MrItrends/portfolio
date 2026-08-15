@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { caseNumber } from "@/lib/projects";
 import styles from "./CaseStudy.module.css";
 
@@ -38,8 +39,15 @@ export default function RoboLearnCaseStudy() {
           </div>
         </header>
 
-        <figure className={`${styles.heroFigure} ${styles.placeholderFill}`}>
-          <span>Hero</span>
+        <figure className={styles.heroFigure} style={{ aspectRatio: "1512 / 982" }}>
+          <Image
+            src="/images/robolearn-hero.webp"
+            alt="RoboLearn — robotics learning platform"
+            fill
+            priority
+            sizes="(max-width: 1024px) 100vw, 1200px"
+            className={styles.heroImg}
+          />
         </figure>
 
         <section className={styles.section}>
@@ -50,8 +58,14 @@ export default function RoboLearnCaseStudy() {
             <p>{`Modules have lessons, quizzes, activities and projects. Completing a module allows the kid to unlock a module badge`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Modules</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/robolearn-modules.webp"
+                alt="RoboLearn — learning through modules"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
@@ -62,8 +76,14 @@ export default function RoboLearnCaseStudy() {
             <p>{`Based on the user, there are recommended lessons to help the learner with a continuous way to learn on the platform. It provides them an optional way to expand the knowledge gotten from completing their modules`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Recommended lessons</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/robolearn-recommended.webp"
+                alt="RoboLearn — recommended lessons"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
@@ -75,8 +95,14 @@ export default function RoboLearnCaseStudy() {
             <p>{`Modules are limited and can be completed without new modules but daily challenges are available on a daily basis.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Daily challenges</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/robolearn-daily.webp"
+                alt="RoboLearn — daily challenges"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
@@ -87,8 +113,10 @@ export default function RoboLearnCaseStudy() {
             <p>{`The virtual builder is where students attempt to carry out robotics projects, students drag components to the canvas and based on information, are directed on how to connect the components and when done, how to build the components in code and the run to see the simulation.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Virtual Builder</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <video className={styles.heroVideo} autoPlay muted loop playsInline>
+                <source src="/media/virtualbuilder.mp4" type="video/mp4" />
+              </video>
             </div>
           </figure>
         </section>
@@ -99,8 +127,14 @@ export default function RoboLearnCaseStudy() {
             <p>{`Learners get to ask questions anytime they feel stuck on the platform, asides the AI assisted voice that guides the learner through the platform, modules activity etc. Davinci is the ai bot, the student can interact with to get insight into whatever they want to ask about robolearn.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Davinci</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 1280" }}>
+              <Image
+                src="/images/robolearn-davinci.webp"
+                alt="RoboLearn — Davinci AI assistant"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
@@ -111,8 +145,14 @@ export default function RoboLearnCaseStudy() {
             <p>{`Knowing kids and teenagers are very aware, ‘have an appetite for excitement’, I decided to make the experience feel like a game. From the button mirroring a 3D style, adding a click sound to the button to feel like playing a game, making the avatar talk and move around, adding paper confetti for high scoring quizzes, assignment/project completion and also allowing the students unlock badges for completed modules and Quizzes.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Gamification</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 900" }}>
+              <Image
+                src="/images/robolearn-gamification.webp"
+                alt="RoboLearn — gamification and badges"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
@@ -124,8 +164,14 @@ export default function RoboLearnCaseStudy() {
             <p>{`There’s a leaderboard to show all learner progress across the day, week, month and year.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Community</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 900" }}>
+              <Image
+                src="/images/robolearn-community.webp"
+                alt="RoboLearn — the community and leaderboard"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
