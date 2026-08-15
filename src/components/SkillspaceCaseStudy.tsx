@@ -95,8 +95,14 @@ export default function SkillspaceCaseStudy() {
         <section className={styles.section}>
           <h2 className={styles.h2}>Design System</h2>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Design System</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/skillspace-design-system.webp"
+                alt="Skillspace — design system"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
