@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import SpalHero from "./SpalHero";
 import { caseNumber } from "@/lib/projects";
 import styles from "./CaseStudy.module.css";
@@ -48,8 +49,14 @@ export default function SpalCaseStudy() {
             <p>{`While conversing with a friend who sells food on the street ‘the street bukka’, I realized that one of her pain points was that she couldn’t manage her accounting, she found it difficult to track her sales and expenses daily in a convenient way. Her memory was what she relied on and sometimes when she felt overwhelmed, she’d scribble something on a paper that had no means of surviving a week.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>The street bukka</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/spal-bukka.webp"
+                alt="SPAL — the street bukka"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
           <div className={styles.body}>
@@ -57,8 +64,14 @@ export default function SpalCaseStudy() {
             <p>{`The problem wasn’t a lack of data. It was a lack of clarity`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Clarity</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/spal-clarity.webp"
+                alt="SPAL — a lack of clarity"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
@@ -71,8 +84,14 @@ export default function SpalCaseStudy() {
             <p>{`‘This is too complex for me, I don’t want to feel like an accountant, I just need something simple enough for me to understand`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Simplicity</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/spal-opportunity.webp"
+                alt="SPAL — something simple enough to understand"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
           <div className={styles.body}>
@@ -86,8 +105,14 @@ export default function SpalCaseStudy() {
             <p>{`SPAL isn’t a direct accounting software, it’s basically a financial intelligent platform that can help anyone who runs a daily business gain clarity about what their sales and expenses are through various means, voice, text, image etc.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Voice · Text · Image</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/spal-defining.webp"
+                alt="SPAL — data entry by voice, text or image"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
           <div className={styles.body}>
@@ -107,8 +132,14 @@ export default function SpalCaseStudy() {
             <p>{`What business does the user run and what they were struggling with and would love to achieve with SPAL.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Onboarding</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/spal-onboarding.webp"
+                alt="SPAL — onboarding captures the business"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
           <div className={styles.body}>
@@ -117,8 +148,14 @@ export default function SpalCaseStudy() {
             <p>{`So, I had to ensure data entry in those forms were catered for.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Data entry</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/spal-dataentry.webp"
+                alt="SPAL — data entry by write, voice or image"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
@@ -130,8 +167,14 @@ export default function SpalCaseStudy() {
             <p>{`Spark can analyse their sales history and based on aggregate data, it would provide the best possible answer to how the user might improve their sales record.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Spark</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/spal-spark.webp"
+                alt="SPAL — Spark, the AI partner"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
@@ -143,8 +186,14 @@ export default function SpalCaseStudy() {
             <p>{`Built a waiting list page where I collected data from interested users and have been sending them email newsletters about SPAL while over 10 users have been onboarded on the beta app where we occasionally go and engage with them on their experience and how we can improve the app before we launch.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Impact</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/spal-impact.webp"
+                alt="SPAL — the impact"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
           <div className={styles.body}>
