@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { caseNumber } from "@/lib/projects";
 import styles from "./CaseStudy.module.css";
 
@@ -36,8 +37,10 @@ export default function AnybuyCaseStudy() {
           </div>
         </header>
 
-        <figure className={`${styles.heroFigure} ${styles.placeholderFill}`}>
-          <span>Hero</span>
+        <figure className={styles.heroFigure} style={{ aspectRatio: "1512 / 982" }}>
+          <video className={styles.heroVideo} autoPlay muted loop playsInline>
+            <source src="/images/anybuy-hero.webm" type="video/webm" />
+          </video>
         </figure>
 
         <section className={styles.section}>
@@ -47,8 +50,14 @@ export default function AnybuyCaseStudy() {
             <p>{`When they shop, they get lost in the concept of choice, what they came for vs when and how they checkout.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Analysis paralysis</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/anybuy-analysis.webp"
+                alt="Anybuy — analysis paralysis"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
           <div className={styles.body}>
@@ -65,8 +74,14 @@ export default function AnybuyCaseStudy() {
             <p>{`For both the seller and rider to get their money, they need to update the status which is what the system uses to know if either should get paid or not.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Escrow flow</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/anybuy-escrow.webp"
+                alt="Anybuy — the escrow release flow"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
@@ -78,6 +93,17 @@ export default function AnybuyCaseStudy() {
             <p>{`However, regular users can still scroll and search like existing patterns of most e-commerce platforms.`}</p>
             <p>{`So far, the distinguishable headers do not show so many products at once but a limited number with a see all button to allow users to visit that specific category and search a broader list of that category rather than all categories.`}</p>
           </div>
+          <figure className={styles.figure}>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/anybuy-purchase.webp"
+                alt="Anybuy — solving the purchase paralysis problem"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
+            </div>
+          </figure>
         </section>
 
         <section className={styles.section}>
@@ -86,6 +112,17 @@ export default function AnybuyCaseStudy() {
             <p>{`Added an auction feature where sellers can auction their items on the platform, the idea is to allow user create buzz for specific products they might want to sell off either for a lower or higher price.`}</p>
             <p>{`We allow them to set a starting bidding price and an ending price based on if the auction will be closed on price, or if its a set time.`}</p>
           </div>
+          <figure className={styles.figure}>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/anybuy-auction.webp"
+                alt="Anybuy — the nice-to-have auction feature"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
+            </div>
+          </figure>
         </section>
 
         <section className={styles.section}>
