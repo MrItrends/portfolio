@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { caseNumber } from "@/lib/projects";
 import styles from "./CaseStudy.module.css";
 
@@ -38,8 +39,10 @@ export default function ReliefNowCaseStudy() {
           </div>
         </header>
 
-        <figure className={`${styles.heroFigure} ${styles.placeholderFill}`}>
-          <span>Hero</span>
+        <figure className={styles.heroFigure} style={{ aspectRatio: "1512 / 982" }}>
+          <video className={styles.heroVideo} autoPlay muted loop playsInline>
+            <source src="/images/reliefnow-hero.webm" type="video/webm" />
+          </video>
         </figure>
 
         <section className={styles.section}>
@@ -49,6 +52,17 @@ export default function ReliefNowCaseStudy() {
             <p>{`From the homepage, they see the type of pain the consultants specialize in, and how they treat the pain, the clients who they’ve treated and their location.`}</p>
             <p>{`So in essence it helps prospects see professionalism and build trust quickly.`}</p>
           </div>
+          <figure className={styles.figure}>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/reliefnow-homepage.webp"
+                alt="ReliefNow — the homepage"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
+            </div>
+          </figure>
         </section>
 
         <section className={styles.section}>
@@ -71,8 +85,14 @@ export default function ReliefNowCaseStudy() {
             <p>{`The whole structure provides quick knowledge and also helps the prospects understand that they would get value for their money and time due to the expertise and type of clients that are associated with the clinic.`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Pages</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/reliefnow-pages.webp"
+                alt="ReliefNow — the other pages structure"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
@@ -85,8 +105,14 @@ export default function ReliefNowCaseStudy() {
             <p>{`By the time they were in the clinic physically, the physician would have had good information about the client and that would speeden the initial phase of communication`}</p>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Booking form</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/reliefnow-booking.webp"
+                alt="ReliefNow — the booking consultation form"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
@@ -102,6 +128,17 @@ export default function ReliefNowCaseStudy() {
             </ol>
             <p>{`And every other pain Relief treats were occasionally used as hooks for ads destination.`}</p>
           </div>
+          <figure className={styles.figure}>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/reliefnow-marketing.webp"
+                alt="ReliefNow — the marketing pages"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
+            </div>
+          </figure>
         </section>
 
         <section className={styles.section}>
