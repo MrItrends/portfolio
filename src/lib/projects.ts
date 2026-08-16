@@ -19,6 +19,8 @@ export const PROJECTS: Project[] = [
   { slug: "nedi", title: "NEDI", category: "EdTech", image: "/images/thumbs/nedi.webp" },
   { slug: "relief-now", title: "Relief Now", category: "Healthtech", image: "/images/thumbs/relief-now.webp" },
   { slug: "anybuy", title: "Anybuy", category: "E-commerce", image: "/images/thumbs/anybuy.webp" },
+  { slug: "elon-musk", title: "Elon Musk", category: "Branding · Web", image: "/images/thumbs/elon.webp", comingSoon: true },
+  { slug: "bookhive", title: "Bookhive", category: "Consumer · Social", image: "/images/thumbs/bookhive.webp", comingSoon: true },
   { slug: "easyreceipt", title: "EasyReceipt", category: "Fintech", image: "/images/thumbs/easyreceipt.webp", comingSoon: true },
   { slug: "ecohol", title: "Ecohol", category: "Events", image: "/images/thumbs/ecohol.webp", comingSoon: true },
 ];
