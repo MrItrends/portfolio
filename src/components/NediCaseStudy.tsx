@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import SwapMedia from "./SwapMedia";
 import { caseNumber } from "@/lib/projects";
 import styles from "./CaseStudy.module.css";
 
@@ -84,12 +85,14 @@ export default function NediCaseStudy() {
 
           <figure className={styles.figure}>
             <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
-              <Image
-                src="/images/nedi-onboarding.webp"
+              <SwapMedia
+                poster="/images/nedi-onboarding.webp"
+                video="/images/nedi-onboarding.webm"
                 alt="NEDI — onboarding, choose your access path"
-                fill
+                delay={10000}
                 sizes="(max-width: 1024px) 100vw, 1200px"
-                className={styles.img}
+                imgClass={styles.img}
+                videoClass={styles.heroVideo}
               />
             </div>
           </figure>
