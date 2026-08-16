@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { caseNumber } from "@/lib/projects";
 import styles from "./CaseStudy.module.css";
 
@@ -46,8 +47,15 @@ export default function NediCaseStudy() {
           </div>
         </header>
 
-        <figure className={`${styles.heroFigure} ${styles.placeholderFill}`}>
-          <span>Hero</span>
+        <figure className={styles.heroFigure} style={{ aspectRatio: "1512 / 982" }}>
+          <Image
+            src="/images/nedi-hero.webp"
+            alt="NEDI — national education data platform"
+            fill
+            priority
+            sizes="(max-width: 1024px) 100vw, 1200px"
+            className={styles.heroImg}
+          />
         </figure>
 
         <section className={styles.section}>
@@ -75,8 +83,14 @@ export default function NediCaseStudy() {
           </div>
 
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Onboarding</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/nedi-onboarding.webp"
+                alt="NEDI — onboarding, choose your access path"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
 
@@ -122,8 +136,14 @@ export default function NediCaseStudy() {
           </div>
 
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Dashboard</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/nedi-dashboard.webp"
+                alt="NEDI — officials dashboard"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
@@ -141,8 +161,14 @@ export default function NediCaseStudy() {
           </div>
 
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>AI Sandbox</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/nedi-sandbox.webp"
+                alt="NEDI — AI Sandbox"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
         </section>
@@ -159,8 +185,14 @@ export default function NediCaseStudy() {
           </div>
 
           <figure className={styles.figure}>
-            <div className={`${styles.imgWrap} ${styles.placeholder}`}>
-              <span>Edtech Portal</span>
+            <div className={styles.imgWrap} style={{ aspectRatio: "1512 / 982" }}>
+              <Image
+                src="/images/nedi-portal.webp"
+                alt="NEDI — the Edtech Portal"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className={styles.img}
+              />
             </div>
           </figure>
 
