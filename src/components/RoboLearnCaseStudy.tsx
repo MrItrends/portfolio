@@ -12,7 +12,7 @@ export default function RoboLearnCaseStudy() {
     <article className={styles.page}>
       <div className="container">
         <Link href="/" className={styles.back}>
-          Index
+          Home
         </Link>
 
         <header className={styles.header}>
@@ -193,7 +193,7 @@ export default function RoboLearnCaseStudy() {
         </section>
 
         <Link href="/" className={styles.back}>
-          Index
+          Home
         </Link>
       </div>
     </article>

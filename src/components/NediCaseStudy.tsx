@@ -13,7 +13,7 @@ export default function NediCaseStudy() {
     <article className={styles.page}>
       <div className="container">
         <Link href="/" className={styles.back}>
-          Index
+          Home
         </Link>
 
         <header className={styles.header}>
@@ -225,7 +225,7 @@ export default function NediCaseStudy() {
         </section>
 
         <Link href="/" className={styles.back}>
-          Index
+          Home
         </Link>
       </div>
     </article>

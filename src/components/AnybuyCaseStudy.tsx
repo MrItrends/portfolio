@@ -12,7 +12,7 @@ export default function AnybuyCaseStudy() {
     <article className={styles.page}>
       <div className="container">
         <Link href="/" className={styles.back}>
-          Index
+          Home
         </Link>
 
         <header className={styles.header}>
@@ -142,7 +142,7 @@ export default function AnybuyCaseStudy() {
         </section>
 
         <Link href="/" className={styles.back}>
-          Index
+          Home
         </Link>
       </div>
     </article>

@@ -12,7 +12,7 @@ export default function SkillspaceCaseStudy() {
     <article className={styles.page}>
       <div className="container">
         <Link href="/" className={styles.back}>
-          Index
+          Home
         </Link>
 
         <header className={styles.header}>
@@ -132,7 +132,7 @@ export default function SkillspaceCaseStudy() {
         </section>
 
         <Link href="/" className={styles.back}>
-          Index
+          Home
         </Link>
       </div>
     </article>
