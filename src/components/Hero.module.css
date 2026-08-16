@@ -44,12 +44,15 @@
   position: absolute;
   top: var(--space-6);
   left: var(--page-margin);
+  right: var(--page-margin);
   z-index: 3;
   opacity: 0;
   /* Not clickable until the name has resolved in (toggled by the scroll code). */
   pointer-events: none;
+  /* Name sits at the left anchor; the contact button is pushed to the far right. */
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--space-4);
   will-change: transform, opacity;
   font-weight: 500;
@@ -57,14 +60,16 @@
   letter-spacing: -0.01em;
 }
 
-/* Contact link — a small pill sitting to the right of the name. */
+/* Contact button — solid fill, anchored to the far-right margin. */
 .contact {
   display: inline-flex;
   align-items: center;
   gap: 0.4em;
-  padding: 0.45em 0.9em;
+  padding: 0.55em 1.1em;
   border: 1px solid var(--color-ink);
   border-radius: 999px;
+  background: var(--color-ink);
+  color: var(--color-bg);
   font-size: var(--text-sm);
   letter-spacing: 0.02em;
   line-height: 1;
@@ -77,9 +82,10 @@
   content: "↗";
 }
 
+/* Hover inverts to an outline. */
 .contact:hover {
-  background: var(--color-ink);
-  color: var(--color-bg);
+  background: transparent;
+  color: var(--color-ink);
 }
 
 /* Second-beat statement. Rests just above the reel; parked behind it (lower
@@ -149,8 +155,7 @@
   .wordmark {
     opacity: 1;
     pointer-events: auto;
-    left: auto;
-    right: var(--page-margin);
+    justify-content: flex-end;
   }
   .wordmarkName {
     display: none;
