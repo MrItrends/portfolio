@@ -78,10 +78,6 @@
     color var(--duration-base) var(--ease);
 }
 
-.contact::after {
-  content: "↗";
-}
-
 /* Hover inverts to an outline. */
 .contact:hover {
   background: transparent;
