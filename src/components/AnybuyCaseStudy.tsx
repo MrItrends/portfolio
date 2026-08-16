@@ -35,6 +35,15 @@ export default function AnybuyCaseStudy() {
           <div className={styles.lead}>
             <p>{`Anybuy is a platform for selling pre-loved items, the idea isn’t novel but the aim was to resolve the concept of ‘what you buy isn’t what you get’ and also to ease the problem most users face, not getting overwhelmed with a lot of choice.`}</p>
           </div>
+
+          <a
+            className={styles.visit}
+            href="https://anybuy-web.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Visit site
+          </a>
         </header>
 
         <figure className={styles.heroFigure} style={{ aspectRatio: "1512 / 982" }}>

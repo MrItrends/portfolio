@@ -37,6 +37,15 @@ export default function RoboLearnCaseStudy() {
             <p>{`Robolearn is a platform for kids and teenagers who are interested in learning Robotics on their own.`}</p>
             <p>{`The platform provides a guided approach to allow kids to get the basics of robotics and try out simulated challenges through modules and daily challenges.`}</p>
           </div>
+
+          <a
+            className={styles.visit}
+            href="https://robolearn.nigenius.ng/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Visit site
+          </a>
         </header>
 
         <figure className={styles.heroFigure} style={{ aspectRatio: "1512 / 982" }}>

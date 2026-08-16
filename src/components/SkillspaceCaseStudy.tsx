@@ -33,6 +33,15 @@ export default function SkillspaceCaseStudy() {
           <div className={styles.lead}>
             <p>{`A platform designed for technical hiring managers to efficiently track and manage the recruitment of technical talent, eliminating the need for third-party software.`}</p>
           </div>
+
+          <a
+            className={styles.visit}
+            href="https://skillspace.ai/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Visit site
+          </a>
         </header>
 
         <figure className={styles.heroFigure} style={{ aspectRatio: "1512 / 982" }}>

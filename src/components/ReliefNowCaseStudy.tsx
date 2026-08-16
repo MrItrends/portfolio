@@ -37,6 +37,15 @@ export default function ReliefNowCaseStudy() {
             <p>{`Reliefnow is a healthcare consulting platform for top athletes and highly placed individuals in New York.`}</p>
             <p>{`Patients or prospective patients can book a non-surgical appointment centered around pain relief and can get the best insight from top doctors and physicians into the type of pain they might be dealing with.`}</p>
           </div>
+
+          <a
+            className={styles.visit}
+            href="https://www.reliefnow.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Visit site
+          </a>
         </header>
 
         <figure className={styles.heroFigure} style={{ aspectRatio: "1512 / 982" }}>

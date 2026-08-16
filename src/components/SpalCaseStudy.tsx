@@ -36,6 +36,15 @@ export default function SpalCaseStudy() {
           <div className={styles.lead}>
             <p>{`SPAL is a business intelligence application for small businesses to help them easily manage their sales and expenses while providing intelligent insights about the business based on the data provided.`}</p>
           </div>
+
+          <a
+            className={styles.visit}
+            href="https://spal-five.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Visit site
+          </a>
         </header>
 
         <SpalHero />

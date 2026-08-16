@@ -70,6 +70,31 @@
   gap: var(--space-3);
 }
 
+/* Live-site link — sits under the intro in the header. */
+.visit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  margin-top: var(--space-6);
+  padding: 0.7em 1.3em;
+  border: 1px solid var(--color-ink);
+  border-radius: 999px;
+  font-size: var(--text-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: background var(--duration-base) var(--ease),
+    color var(--duration-base) var(--ease);
+}
+
+.visit::after {
+  content: "↗";
+}
+
+.visit:hover {
+  background: var(--color-ink);
+  color: var(--color-bg);
+}
+
 /* ---------- Hero visual ---------- */
 .heroFigure {
   position: relative;

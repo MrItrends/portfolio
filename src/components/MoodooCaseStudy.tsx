@@ -37,6 +37,15 @@ export default function MoodooCaseStudy() {
             <p>{`Moodoo is a mood tracking app that helps teams and individuals within an organization to see their mood patterns.`}</p>
             <p>{`With Moodoo, teams get to find visual cues on what their moods are on what day and how often they either have a positive, neutral or negative mood.`}</p>
           </div>
+
+          <a
+            className={styles.visit}
+            href="https://moodoo.in/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Visit site
+          </a>
         </header>
 
         <figure className={styles.heroFigure} style={{ aspectRatio: "1512 / 982" }}>
