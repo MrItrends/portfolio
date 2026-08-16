@@ -50,6 +50,9 @@ export default function Hero() {
       const w = range(p, 0.34, 0.5);
       wm.style.opacity = String(w);
       wm.style.transform = `translateY(${(1 - w) * 10}px)`;
+      // Only clickable once the name has resolved in — keeps the invisible
+      // early pill from swallowing clicks over the statement.
+      wm.style.pointerEvents = w > 0.6 ? "auto" : "none";
 
       // Beat 2 — tagline rises from behind the reel into the vacated whitespace.
       const t = easeOut(range(p, 0.5, 0.92));
@@ -84,7 +87,15 @@ export default function Hero() {
         </h1>
 
         <div ref={wordmark} className={styles.wordmark}>
-          Joshua Jumbo
+          <span className={styles.wordmarkName}>Joshua Jumbo</span>
+          <a
+            className={styles.contact}
+            href="https://cal.com/joshua-jumbo/project-discussion?overlayCalendar=true"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Contact me
+          </a>
         </div>
 
         <p ref={tagline} className={styles.tagline}>
