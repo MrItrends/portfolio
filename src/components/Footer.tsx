@@ -18,7 +18,7 @@ export default function Footer() {
         </a>
         <a
           className={styles.link}
-          href="https://joshuajumbo.cv/"
+          href="https://drive.google.com/file/d/1f9mzoK3kZXwdv2zWUHgDgznXO5A7pwWP/view?usp=sharing"
           target="_blank"
           rel="noopener noreferrer"
         >
