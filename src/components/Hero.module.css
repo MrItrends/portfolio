@@ -3,7 +3,7 @@
 
 .stage {
   position: relative;
-  height: 200vh;
+  height: 160vh;
 }
 
 .pin {
@@ -26,8 +26,9 @@
   transform-origin: left top;
   will-change: transform, opacity;
   font-weight: 500;
-  /* Width-driven, but capped by height so it clears the reel at full size. */
-  font-size: min(clamp(2.75rem, 11vw, 12rem), 14vh);
+  /* As large as the widest line ("Understanding") allows, so it fills the first
+     screen at any resolution; height cap keeps 3 lines on short/tall viewports. */
+  font-size: clamp(2.75rem, min(13vw, 27vh), 22rem);
   line-height: 0.92;
   letter-spacing: -0.03em;
 }
@@ -88,7 +89,9 @@
   position: absolute;
   left: var(--page-margin);
   right: var(--page-margin);
-  bottom: var(--space-6);
+  /* Rests just below the wordmark — name + tagline read as one top-left group,
+     so the tagline never sits under a big empty band. */
+  top: calc(var(--space-6) + 3.5rem);
   z-index: 1;
   margin: 0;
   max-width: 20ch;
@@ -144,6 +147,8 @@
     transform: none;
     opacity: 1;
     margin: 0 var(--page-margin);
+    /* Smaller cap on phones — the narrow margins can't take the 13vw size. */
+    font-size: clamp(2.25rem, 10.5vw, 3.5rem);
   }
   .wordmark {
     position: static;
