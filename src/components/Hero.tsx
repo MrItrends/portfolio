@@ -54,9 +54,10 @@ export default function Hero() {
       // early pill from swallowing clicks over the statement.
       wm.style.pointerEvents = w > 0.6 ? "auto" : "none";
 
-      // Beat 2 — tagline rises from behind the reel into the vacated whitespace.
+      // Beat 2 — tagline fades and rises into the whitespace the statement left.
       const t = easeOut(range(p, 0.5, 0.92));
       tag.style.transform = `translateY(${(1 - t) * 130}%)`;
+      tag.style.opacity = String(range(p, 0.5, 0.62));
     };
 
     const onScroll = () => {
@@ -101,10 +102,6 @@ export default function Hero() {
         <p ref={tagline} className={styles.tagline}>
           {TAGLINE}
         </p>
-
-        <figure className={styles.reel} aria-label="Showreel — in production">
-          <span className={styles.reelLabel}>Showreel</span>
-        </figure>
       </div>
     </section>
   );

@@ -3,7 +3,7 @@
 
 .stage {
   position: relative;
-  height: 260vh;
+  height: 200vh;
 }
 
 .pin {
@@ -11,8 +11,6 @@
   top: 0;
   height: 100vh;
   overflow: hidden;
-  /* Reel height, shared with the tagline so it can sit exactly above it. */
-  --reel-h: clamp(220px, 40vh, 480px);
 }
 
 /* Monumental statement, anchored to the grid margin (Swiss / architectural).
@@ -84,59 +82,26 @@
   color: var(--color-ink);
 }
 
-/* Second-beat statement. Rests just above the reel; parked behind it (lower
-   z-index) so the opaque reel masks it until it rises into the whitespace. */
+/* Second-beat statement. Hidden at rest — the scroll code fades and lifts it in
+   during beat 2, so it only appears once the scroll is triggered. */
 .tagline {
   position: absolute;
   left: var(--page-margin);
   right: var(--page-margin);
-  bottom: calc(var(--space-6) + var(--reel-h) + var(--space-3));
+  bottom: var(--space-6);
   z-index: 1;
   margin: 0;
   max-width: 20ch;
+  opacity: 0;
   transform: translateY(130%);
-  will-change: transform;
+  will-change: transform, opacity;
   font-weight: 500;
   font-size: clamp(1.6rem, 4vw, 3.5rem);
   line-height: 1.06;
   letter-spacing: -0.02em;
 }
 
-/* Reel, anchored to the bottom. Opaque, above the tagline, so it masks it. */
-.reel {
-  position: absolute;
-  left: var(--page-margin);
-  right: var(--page-margin);
-  bottom: var(--space-6);
-  height: var(--reel-h);
-  z-index: 2;
-  margin: 0;
-  overflow: hidden;
-  background: var(--color-ink);
-}
-
-/* Placeholder until a custom reel is added. A 16:9 video dropped in here will
-   show in full (16:9 panel = 16:9 source, no crop). */
-.video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.reelLabel {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  color: var(--color-bg);
-  font-size: var(--text-sm);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  opacity: 0.5;
-}
-
-/* No scroll hijack when motion is unwelcome — static monument + reel. The
+/* No scroll hijack when motion is unwelcome — static monument. The
    tagline stays in the DOM (readable by assistive tech) but out of view. */
 @media (prefers-reduced-motion: reduce) {
   .stage {

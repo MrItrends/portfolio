@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Intro from "@/components/Intro";
 import AmbientSound from "@/components/AmbientSound";
+import CursorFace from "@/components/CursorFace";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -34,6 +35,7 @@ export default function RootLayout({
       <body>
         <Intro>{children}</Intro>
         <AmbientSound />
+        <CursorFace />
       </body>
     </html>
   );
