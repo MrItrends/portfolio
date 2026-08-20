@@ -1,69 +1,30 @@
-/* Scroll-driven hero. Stage provides the scroll distance; the pin holds the
-   composition fixed while the statement transforms and the tagline rises. */
+/* Landing hero. The statement fills the first screen (fixed, centred) and is
+   shrunk + faded by the scroll code while the intro scrolls up over it — the
+   reveal costs no reserved whitespace because the intro directly covers it. */
 
-.stage {
+.heroWrap {
   position: relative;
-  height: 160vh;
 }
 
-.pin {
+/* Persistent header — name at the left, contact button at the far right. */
+.header {
   position: sticky;
   top: 0;
-  height: 100vh;
-  overflow: hidden;
-}
-
-/* Monumental statement, anchored to the grid margin (Swiss / architectural).
-   transform-origin top-left so it shrinks toward the lockup, not away from it. */
-.statement {
-  position: absolute;
-  top: var(--space-6);
-  left: var(--page-margin);
-  z-index: 3;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  transform-origin: left top;
-  will-change: transform, opacity;
-  font-weight: 500;
-  /* As large as the widest line ("Understanding") allows, so it fills the first
-     screen at any resolution; height cap keeps 3 lines on short/tall viewports. */
-  font-size: clamp(2.75rem, min(13vw, 27vh), 22rem);
-  line-height: 0.92;
-  letter-spacing: -0.03em;
-}
-
-.line {
-  display: block;
-}
-
-/* The identity, resting at the top-left anchor the statement collapses toward.
-   The contact link rides alongside the name, so it resolves in on the same beat. */
-.wordmark {
-  position: absolute;
-  top: var(--space-6);
-  left: var(--page-margin);
-  right: var(--page-margin);
-  z-index: 3;
-  opacity: 0;
-  /* Not clickable until the name has resolved in (toggled by the scroll code). */
-  pointer-events: none;
-  /* Name sits at the left anchor; the contact button is pushed to the far right. */
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  will-change: transform, opacity;
+  padding: var(--space-5) var(--page-margin);
+  background: var(--color-bg);
   font-weight: 500;
   font-size: clamp(1.1rem, 1.5vw, 1.35rem);
   letter-spacing: -0.01em;
 }
 
-/* Contact button — solid fill, anchored to the far-right margin. */
 .contact {
   display: inline-flex;
   align-items: center;
-  gap: 0.4em;
   padding: 0.55em 1.1em;
   border: 1px solid var(--color-ink);
   border-radius: 999px;
@@ -77,95 +38,129 @@
     color var(--duration-base) var(--ease);
 }
 
-/* Hover inverts to an outline. */
 .contact:hover {
   background: transparent;
   color: var(--color-ink);
 }
 
-/* Second-beat statement. Hidden at rest — the scroll code fades and lifts it in
-   during beat 2, so it only appears once the scroll is triggered. */
-.tagline {
-  position: absolute;
-  left: var(--page-margin);
-  right: var(--page-margin);
-  /* Rests just below the wordmark — name + tagline read as one top-left group,
-     so the tagline never sits under a big empty band. */
-  top: calc(var(--space-6) + 3.5rem);
+/* Full-screen statement, fixed behind the flow. */
+.statementLayer {
+  position: fixed;
+  inset: 0;
   z-index: 1;
+  pointer-events: none;
+  display: grid;
+  align-content: center;
+  padding: 0 var(--page-margin);
+  will-change: opacity;
+}
+
+.statement {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  transform-origin: left center;
+  will-change: transform, opacity;
+  font-weight: 500;
+  /* As large as the widest line ("Understanding") allows, so it fills the first
+     screen at any resolution; height cap keeps 3 lines on short viewports. */
+  font-size: clamp(2.75rem, min(13vw, 27vh), 22rem);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+}
+
+.line {
+  display: block;
+}
+
+/* Scroll indicator, pinned to the bottom of the first screen. */
+.cue {
+  position: fixed;
+  left: 50%;
+  bottom: var(--space-6);
+  transform: translateX(-50%);
+  z-index: 1;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.cue::after {
+  content: "";
+  width: 1px;
+  height: var(--space-5);
+  background: var(--color-ink);
+  transform-origin: top;
+  animation: cueSlide 1.8s ease-in-out infinite;
+}
+
+@keyframes cueSlide {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+    opacity: 0.25;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* First-screen spacer — the fixed statement shows through it. */
+.spacer {
+  height: 100svh;
+}
+
+/* The intro rises over the fading statement; opaque so it masks it cleanly. */
+.intro {
+  position: relative;
+  z-index: 2;
+  background: var(--color-bg);
+  padding: var(--space-6) var(--page-margin) var(--space-5);
+}
+
+.tagline {
   margin: 0;
   max-width: 20ch;
-  opacity: 0;
-  transform: translateY(130%);
-  will-change: transform, opacity;
   font-weight: 500;
   font-size: clamp(1.6rem, 4vw, 3.5rem);
   line-height: 1.06;
   letter-spacing: -0.02em;
 }
 
-/* No scroll hijack when motion is unwelcome — static monument. The
-   tagline stays in the DOM (readable by assistive tech) but out of view. */
-@media (prefers-reduced-motion: reduce) {
-  .stage {
-    height: 100vh;
-  }
+/* Smaller statement cap on narrow screens — the margins can't take 13vw. */
+@media (max-width: 768px) {
   .statement {
-    transform: none;
-    opacity: 1;
-  }
-  /* No wordmark beat here, but keep the contact link reachable — park it
-     top-right, clear of the full-size statement, and drop the name. */
-  .wordmark {
-    opacity: 1;
-    pointer-events: auto;
-    justify-content: flex-end;
-  }
-  .wordmarkName {
-    display: none;
-  }
-  .tagline {
-    opacity: 0;
+    font-size: clamp(2.25rem, 10.5vw, 6rem);
   }
 }
 
-/* Mobile — the pinned scroll composition leaves a huge empty band on a tall,
-   narrow screen. Collapse to a compact static stack (statement → name + contact
-   → tagline) that flows straight into the work. The scroll code also bails here. */
-@media (max-width: 768px) {
-  .stage {
-    height: auto;
+@media (max-width: 600px) {
+  .tagline {
+    max-width: none;
   }
-  .pin {
+}
+
+/* Reduced motion — no fixed/fade choreography, just a clean static stack. */
+@media (prefers-reduced-motion: reduce) {
+  .statementLayer {
     position: static;
-    height: auto;
-    overflow: visible;
-    padding: var(--space-7) 0 var(--space-7);
+    padding: var(--space-7) var(--page-margin) 0;
   }
   .statement {
-    position: static;
-    transform: none;
-    opacity: 1;
-    margin: 0 var(--page-margin);
-    /* Smaller cap on phones — the narrow margins can't take the 13vw size. */
-    font-size: clamp(2.25rem, 10.5vw, 3.5rem);
+    transform: none !important;
+    opacity: 1 !important;
   }
-  .wordmark {
-    position: static;
-    transform: none;
-    opacity: 1;
-    pointer-events: auto;
-    margin: var(--space-5) var(--page-margin) 0;
-    justify-content: space-between;
+  .cue {
+    display: none;
   }
-  .wordmarkName {
-    display: inline;
-  }
-  .tagline {
-    position: static;
-    transform: none;
-    opacity: 1;
-    max-width: none;
-    margin: var(--space-6) var(--page-margin) 0;
+  .spacer {
+    display: none;
   }
 }

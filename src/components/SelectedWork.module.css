@@ -1,5 +1,8 @@
 .work {
-  padding: var(--space-5) var(--page-margin) var(--space-9);
+  position: relative;
+  z-index: 2;
+  background: var(--color-bg);
+  padding: var(--space-4) var(--page-margin) var(--space-9);
 }
 
 .head {
