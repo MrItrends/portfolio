@@ -125,3 +125,42 @@
     opacity: 0;
   }
 }
+
+/* Mobile — the pinned scroll composition leaves a huge empty band on a tall,
+   narrow screen. Collapse to a compact static stack (statement → name + contact
+   → tagline) that flows straight into the work. The scroll code also bails here. */
+@media (max-width: 768px) {
+  .stage {
+    height: auto;
+  }
+  .pin {
+    position: static;
+    height: auto;
+    overflow: visible;
+    padding: var(--space-7) 0 var(--space-7);
+  }
+  .statement {
+    position: static;
+    transform: none;
+    opacity: 1;
+    margin: 0 var(--page-margin);
+  }
+  .wordmark {
+    position: static;
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+    margin: var(--space-5) var(--page-margin) 0;
+    justify-content: space-between;
+  }
+  .wordmarkName {
+    display: inline;
+  }
+  .tagline {
+    position: static;
+    transform: none;
+    opacity: 1;
+    max-width: none;
+    margin: var(--space-6) var(--page-margin) 0;
+  }
+}

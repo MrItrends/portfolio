@@ -28,7 +28,12 @@ export default function Hero() {
   const tagline = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // Mobile gets a compact static hero (CSS) — skip the scroll choreography.
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      window.matchMedia("(max-width: 768px)").matches
+    )
+      return;
 
     let ticking = false;
     const apply = () => {
