@@ -91,6 +91,18 @@ export default function Hero() {
 
       <section className={styles.intro}>
         <p className={styles.tagline}>{TAGLINE}</p>
+        <figure className={styles.reel} aria-label="Showreel">
+          <video
+            className={styles.reelVideo}
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster="/media/joshuajumbo-reel-poster.webp"
+          >
+            <source src="/media/joshuajumbovideointro.mp4" type="video/mp4" />
+          </video>
+        </figure>
       </section>
     </div>
   );

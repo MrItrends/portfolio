@@ -134,6 +134,21 @@
   letter-spacing: -0.02em;
 }
 
+/* Showreel — full-width 16:9 panel below the intro. */
+.reel {
+  margin: var(--space-6) 0 0;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--color-ink);
+}
+
+.reelVideo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 /* Smaller statement cap on narrow screens — the margins can't take 13vw. */
 @media (max-width: 768px) {
   .statement {
