@@ -1,12 +1,11 @@
-/* Landing hero. The statement fills the first screen (fixed, centred) and is
-   shrunk + faded by the scroll code while the intro scrolls up over it — the
-   reveal costs no reserved whitespace because the intro directly covers it. */
+/* Landing hero — centred statement with a refined collage of project cards
+   arranged around it, plus the reel as a portrait video card. */
 
 .heroWrap {
   position: relative;
 }
 
-/* Persistent header — name at the left, contact button at the far right. */
+/* Persistent header — name + role at the left, contact button at the right. */
 .header {
   position: sticky;
   top: 0;
@@ -22,12 +21,23 @@
   letter-spacing: -0.01em;
 }
 
+.identity {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+}
+
+.role {
+  font-weight: 400;
+  opacity: 0.5;
+}
+
 .contact {
   display: inline-flex;
   align-items: center;
   padding: 0.55em 1.1em;
   border: 1px solid var(--color-ink);
-  border-radius: 999px;
+  border-radius: 0;
   background: var(--color-ink);
   color: var(--color-bg);
   font-size: var(--text-sm);
@@ -43,167 +53,266 @@
   color: var(--color-ink);
 }
 
-/* Name + role — instant identity for a skimming visitor. */
-.identity {
+/* ---------- Stage ---------- */
+.stage {
+  position: relative;
+  min-height: 88vh;
   display: flex;
-  align-items: baseline;
-  gap: 0.6em;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) 0 var(--space-9);
 }
 
-.role {
-  font-weight: 400;
-  opacity: 0.5;
+.center {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
 }
 
-@media (max-width: 560px) {
-  .role {
-    display: none;
+/* Single oversized line scrolling across the centre, edges softly masked. */
+.marquee {
+  margin: 0;
+  width: 100%;
+  overflow: hidden;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 7%,
+    #000 93%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 7%,
+    #000 93%,
+    transparent
+  );
+}
+
+.marqueeTrack {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marquee 32s linear infinite;
+  will-change: transform;
+}
+
+.marqueeItem {
+  display: inline-flex;
+  align-items: center;
+  font-size: clamp(3rem, 13vw, 17rem);
+}
+
+.dot {
+  margin: 0 0.4em;
+  opacity: 0.3;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
   }
 }
 
-/* Full-screen statement, fixed behind the flow. */
-.statementLayer {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  display: grid;
-  align-content: center;
-  padding: 0 var(--page-margin);
-  will-change: opacity;
+@media (prefers-reduced-motion: reduce) {
+  .marqueeTrack,
+  .card {
+    animation: none;
+  }
 }
 
-.statement {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  transform-origin: left center;
-  will-change: transform, opacity;
-  font-weight: 500;
-  /* As large as the widest line ("Understanding") allows, so it fills the first
-     screen at any resolution; height cap keeps 3 lines on short viewports. */
-  font-size: clamp(2.75rem, min(13vw, 27vh), 22rem);
-  line-height: 0.92;
-  letter-spacing: -0.03em;
-}
-
-.line {
-  display: block;
-}
-
-/* Value-prop line under the statement — what you do, in plain words, on screen 1. */
 .lede {
-  margin: var(--space-5) 0 0;
-  max-width: 42ch;
-  font-size: clamp(1rem, 1.5vw, 1.4rem);
+  margin: var(--space-6) auto 0;
+  max-width: 62ch;
+  padding: 0 var(--page-margin);
+  font-size: clamp(1.15rem, 1.7vw, 1.6rem);
   line-height: 1.35;
   font-weight: 400;
-  opacity: 0.72;
+  opacity: 0.82;
 }
 
-/* Scroll indicator, pinned to the bottom of the first screen. */
-.cue {
-  position: fixed;
-  left: 50%;
-  bottom: var(--space-6);
-  transform: translateX(-50%);
-  z-index: 1;
+/* ---------- Card collage ---------- */
+.cards {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
   pointer-events: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-3);
-  font-size: var(--text-sm);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  opacity: 0.55;
 }
 
-.cue::after {
-  content: "";
-  width: 1px;
-  height: var(--space-5);
+.card {
+  position: absolute;
+  overflow: hidden;
+  padding: 0;
+  border: none;
+  border-radius: 0;
   background: var(--color-ink);
-  transform-origin: top;
-  animation: cueSlide 1.8s ease-in-out infinite;
+  box-shadow: 0 10px 34px rgba(7, 7, 7, 0.16);
+  pointer-events: auto;
+  cursor: pointer;
+  animation: cardFloat 7s ease-in-out infinite;
 }
 
-@keyframes cueSlide {
+/* Subtle, staggered drift so the collage feels alive. Pauses on hover. */
+@keyframes cardFloat {
   0%,
   100% {
-    transform: scaleY(0.3);
-    opacity: 0.25;
+    transform: translateY(0);
   }
   50% {
-    transform: scaleY(1);
-    opacity: 1;
+    transform: translateY(-9px);
   }
 }
 
-/* First-screen spacer — the fixed statement shows through it. */
-.spacer {
-  height: 100svh;
+.card:hover {
+  animation-play-state: paused;
 }
 
-/* The intro rises over the fading statement; opaque so it masks it cleanly. */
-.intro {
-  position: relative;
-  z-index: 2;
-  background: var(--color-bg);
-  padding: var(--space-6) var(--page-margin) var(--space-5);
+.cardMedia {
+  position: absolute;
+  inset: 0;
 }
 
-.tagline {
-  margin: 0;
-  max-width: 20ch;
-  font-weight: 500;
-  font-size: clamp(1.6rem, 4vw, 3.5rem);
-  line-height: 1.06;
-  letter-spacing: -0.02em;
-}
-
-/* Showreel — full-width 16:9 panel below the intro. */
-.reel {
-  margin: var(--space-6) 0 0;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  background: var(--color-ink);
-}
-
-.reelVideo {
-  display: block;
+.cardImg {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform var(--duration-base) var(--ease);
 }
 
-/* Smaller statement cap on narrow screens — the margins can't take 13vw. */
+.card:hover .cardImg {
+  transform: scale(1.04);
+}
+
+/* Popup overlay — fades in on hover, does not resize the card. */
+.cardPopup {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--space-3);
+  background: linear-gradient(
+    to top,
+    rgba(7, 7, 7, 0.88),
+    rgba(7, 7, 7, 0.3)
+  );
+  color: var(--color-bg);
+  opacity: 0;
+  transition: opacity var(--duration-base) var(--ease);
+}
+
+.card:hover .cardPopup,
+.card:focus-within .cardPopup {
+  opacity: 1;
+}
+
+.cardName {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.viewBtn {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5em 0.9em;
+  border-radius: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* Card positions (desktop) — two along the top, three along the bottom, so the
+   scrolling line runs clean through the middle. Sizes clamp with the viewport. */
+.c1 {
+  width: clamp(200px, 19vw, 300px);
+  aspect-ratio: 4 / 3;
+  top: 8%;
+  left: 4%;
+  animation-duration: 8s;
+  animation-delay: -1.5s;
+}
+.c2 {
+  width: clamp(150px, 14vw, 220px);
+  aspect-ratio: 3 / 4;
+  top: 7%;
+  right: 4%;
+  animation-duration: 6.5s;
+  animation-delay: -3.2s;
+}
+.c3 {
+  width: clamp(150px, 14vw, 215px);
+  aspect-ratio: 3 / 4;
+  bottom: 8%;
+  left: 5%;
+  animation-duration: 7.5s;
+  animation-delay: -0.6s;
+}
+.c5 {
+  width: clamp(210px, 20vw, 310px);
+  aspect-ratio: 4 / 3;
+  bottom: 9%;
+  left: 38%;
+  animation-duration: 9s;
+  animation-delay: -4s;
+}
+.c6 {
+  width: clamp(150px, 14vw, 215px);
+  aspect-ratio: 3 / 4;
+  bottom: 7%;
+  right: 5%;
+  animation-duration: 6.8s;
+  animation-delay: -2.3s;
+}
+
+/* Touch devices can't hover — show each card's name + link, and don't scale. */
+@media (hover: none) {
+  .cardPopup {
+    opacity: 1;
+    background: linear-gradient(to top, rgba(7, 7, 7, 0.85), rgba(7, 7, 7, 0));
+  }
+}
+
+/* ---------- Mobile: collage becomes a tidy grid under the statement ---------- */
 @media (max-width: 768px) {
-  .statement {
-    font-size: clamp(2.25rem, 10.5vw, 6rem);
+  .stage {
+    flex-direction: column;
+    min-height: auto;
+    padding-top: var(--space-6);
   }
-}
-
-@media (max-width: 600px) {
-  .tagline {
-    max-width: none;
+  .center {
+    pointer-events: auto;
   }
-}
-
-/* Reduced motion — no fixed/fade choreography, just a clean static stack. */
-@media (prefers-reduced-motion: reduce) {
-  .statementLayer {
+  .cards {
     position: static;
-    padding: var(--space-7) var(--page-margin) 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+    width: 100%;
+    margin-top: var(--space-7);
   }
-  .statement {
+  .card {
+    position: static !important;
+    width: auto !important;
+    inset: auto !important;
     transform: none !important;
-    opacity: 1 !important;
+    animation: none !important;
+    aspect-ratio: 4 / 3 !important;
   }
-  .cue {
-    display: none;
-  }
-  .spacer {
-    display: none;
+  .c2,
+  .c3,
+  .c6 {
+    aspect-ratio: 3 / 4 !important;
   }
 }

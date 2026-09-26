@@ -11,7 +11,7 @@
   padding: var(--space-5);
   background: var(--color-ink);
   color: var(--color-bg);
-  border-radius: 6px;
+  border-radius: 0;
   box-shadow: 0 12px 44px rgba(7, 7, 7, 0.28);
 }
 
@@ -30,7 +30,7 @@
 .accept,
 .decline {
   padding: 0.65em 1.3em;
-  border-radius: 999px;
+  border-radius: 0;
   font-size: var(--text-sm);
   letter-spacing: 0.02em;
   cursor: pointer;
