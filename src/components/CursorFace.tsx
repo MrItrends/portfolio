@@ -1,42 +1,41 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "./CursorFace.module.css";
 
 /**
- * Replaces the pointer with a small circular portrait of Joshua.
- *
- * Idle choreography (only when motion is allowed):
- *   • active      — 56px circle following the pointer.
- *   • after 1 min — begins growing, reaching 240px over the next 5 min; as it
- *                   grows the corners square off (radius 28px → 24px).
- *   • +5 min      — at full size it bursts and fades out.
- *   • gone        — hidden until the next pointer movement, which resets it.
- *
- * Tip: add "#cursor-fast" to the URL to watch the whole cycle ~20× faster.
+ * Opt-in face cursor. Off by default (recruiters get a normal pointer); a small
+ * face avatar bottom-right toggles it on. When on, the pointer becomes a 56px
+ * portrait that — if the mouse sits still — grows into a 240px card and bursts,
+ * reappearing on the next move. The choice is remembered.
  */
+
+const KEY = "face-cursor";
 
 const BASE = 56;
 const MAX = 240;
-const R_BASE = 28; // 50% of BASE → a full circle
-const R_MAX = 24; // at MAX → a rounded card
-
-const GROW_START = 60_000; // 1 min idle before it starts to grow
-const GROW_DURATION = 5 * 60_000; // grows to MAX over 5 min
-const HOLD_BEFORE_BURST = 5 * 60_000; // 5 min at MAX, then it explodes
+const R_BASE = 28;
+const R_MAX = 24;
+const GROW_START = 60_000;
+const GROW_DURATION = 5 * 60_000;
+const HOLD_BEFORE_BURST = 5 * 60_000;
 const EXPLODE_AT = GROW_START + GROW_DURATION + HOLD_BEFORE_BURST;
 
 export default function CursorFace() {
+  const [ready, setReady] = useState(false);
+  const [enabled, setEnabled] = useState(false);
+
   useEffect(() => {
     if (!window.matchMedia("(pointer: fine)").matches) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setReady(true);
+    try {
+      if (localStorage.getItem(KEY) === "on") setEnabled(true);
+    } catch {}
+  }, []);
 
-    // Optional fast demo mode — compresses the whole cycle for verification.
-    const fast = window.location.hash.includes("cursor-fast");
-    const k = fast ? 20 : 1;
-    const growStart = GROW_START / k;
-    const growDur = GROW_DURATION / k;
-    const explodeAt = EXPLODE_AT / k;
+  useEffect(() => {
+    if (!enabled) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const el = document.createElement("div");
     el.className = styles.cursor;
@@ -79,12 +78,12 @@ export default function CursorFace() {
 
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
-      if (reduce || phase !== "active") return; // no idle growth/burst
+      if (reduce || phase !== "active") return;
       const idle = now - lastMove;
-      if (idle < growStart) {
+      if (idle < GROW_START) {
         setSize(BASE, R_BASE);
-      } else if (idle < explodeAt) {
-        const p = Math.min((idle - growStart) / growDur, 1);
+      } else if (idle < EXPLODE_AT) {
+        const p = Math.min((idle - GROW_START) / GROW_DURATION, 1);
         setSize(BASE + (MAX - BASE) * p, R_BASE + (R_MAX - R_BASE) * p);
       } else {
         phase = "exploding";
@@ -118,7 +117,24 @@ export default function CursorFace() {
       document.documentElement.classList.remove("faceCursorOn");
       el.remove();
     };
-  }, []);
+  }, [enabled]);
 
-  return null;
+  if (!ready) return null;
+
+  return (
+    <button
+      type="button"
+      className={`${styles.toggle} ${enabled ? styles.on : ""}`}
+      aria-label={enabled ? "Turn off face cursor" : "Turn on face cursor"}
+      aria-pressed={enabled}
+      title={enabled ? "Face cursor: on" : "Face cursor: off"}
+      onClick={() => {
+        const next = !enabled;
+        setEnabled(next);
+        try {
+          localStorage.setItem(KEY, next ? "on" : "off");
+        } catch {}
+      }}
+    />
+  );
 }

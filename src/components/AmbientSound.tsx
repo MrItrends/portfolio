@@ -4,11 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import styles from "./AmbientSound.module.css";
 
 /**
- * Ambient music. On each load one track is chosen at random (shuffle, avoiding
- * an immediate repeat). It attempts to autoplay the moment the page loads; if
- * the browser blocks audio (it does until a user gesture) it starts on the
- * first interaction instead. Click to mute / play; the choice is remembered.
- * When a track ends, another is shuffled in so music keeps going.
+ * Ambient music — opt-in and off on load (a portfolio shouldn't surprise a
+ * visitor with sound). One track is shuffled in per load; the visitor presses
+ * the button to play. When a track ends, another is shuffled in so it keeps
+ * going. Pauses when the tab is hidden.
  */
 
 const KEY = "ambient-sound";
@@ -97,43 +96,7 @@ export default function AmbientSound() {
     };
     audio.addEventListener("ended", onEnded);
 
-    let started = false;
-    // The widest net of "first interaction" events — whichever fires first
-    // unlocks audio. Browsers block audible autoplay until one of these; a
-    // click/tap/keypress qualifies, and we also try on the first scroll/wheel
-    // (works on browsers that have granted the site media engagement).
-    const GESTURES = [
-      "pointerdown",
-      "mousedown",
-      "touchstart",
-      "keydown",
-      "click",
-      "wheel",
-      "scroll",
-    ];
-    const cleanup = () =>
-      GESTURES.forEach((e) => window.removeEventListener(e, onGesture, true));
-    const attempt = async () => {
-      if (started) return;
-      if (await play()) {
-        started = true;
-        cleanup();
-      }
-    };
-    const onGesture = () => {
-      if (localStorage.getItem(KEY) === "off") return cleanup();
-      attempt();
-    };
-
-    if (localStorage.getItem(KEY) !== "off") {
-      attempt(); // try immediately; usually blocked until a gesture
-      GESTURES.forEach((e) =>
-        window.addEventListener(e, onGesture, { capture: true, passive: true })
-      );
-    }
-
     return () => {
-      cleanup();
       audio.removeEventListener("ended", onEnded);
       audio.pause();
       audio.src = "";

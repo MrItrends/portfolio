@@ -43,6 +43,24 @@
   color: var(--color-ink);
 }
 
+/* Name + role — instant identity for a skimming visitor. */
+.identity {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+}
+
+.role {
+  font-weight: 400;
+  opacity: 0.5;
+}
+
+@media (max-width: 560px) {
+  .role {
+    display: none;
+  }
+}
+
 /* Full-screen statement, fixed behind the flow. */
 .statementLayer {
   position: fixed;
@@ -71,6 +89,16 @@
 
 .line {
   display: block;
+}
+
+/* Value-prop line under the statement — what you do, in plain words, on screen 1. */
+.lede {
+  margin: var(--space-5) 0 0;
+  max-width: 42ch;
+  font-size: clamp(1rem, 1.5vw, 1.4rem);
+  line-height: 1.35;
+  font-weight: 400;
+  opacity: 0.72;
 }
 
 /* Scroll indicator, pinned to the bottom of the first screen. */

@@ -20,6 +20,7 @@ const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 export default function Hero() {
   const layer = useRef<HTMLDivElement>(null);
   const statement = useRef<HTMLHeadingElement>(null);
+  const lede = useRef<HTMLParagraphElement>(null);
   const cue = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -39,6 +40,7 @@ export default function Hero() {
 
       h1.style.transform = `scale(${1 - 0.45 * p})`;
       h1.style.opacity = String(1 - clamp(p / 0.8, 0, 1));
+      if (lede.current) lede.current.style.opacity = String(1 - clamp(p / 0.5, 0, 1));
       if (c) c.style.opacity = String(clamp(1 - p * 4, 0, 1) * 0.55);
       // Once faded, drop it out entirely so it can never overlay later content.
       lay.style.visibility = p >= 1 ? "hidden" : "visible";
@@ -63,7 +65,10 @@ export default function Hero() {
   return (
     <div className={styles.heroWrap}>
       <header className={styles.header}>
-        <span>Joshua Jumbo</span>
+        <span className={styles.identity}>
+          Joshua Jumbo
+          <span className={styles.role}>Product Designer</span>
+        </span>
         <a
           className={styles.contact}
           href="https://cal.com/joshua-jumbo/project-discussion?overlayCalendar=true"
@@ -82,6 +87,10 @@ export default function Hero() {
             </span>
           ))}
         </h1>
+        <p ref={lede} className={styles.lede}>
+          Product Designer with 6 years shaping web and mobile products across
+          edtech, fintech, healthtech and AI.
+        </p>
         <div ref={cue} className={styles.cue}>
           Scroll
         </div>
