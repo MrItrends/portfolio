@@ -19,12 +19,12 @@ export const PROJECTS: Project[] = [
   { slug: "spal", title: "SPAL", category: "Fintech · AI", image: "/images/decor/cover-spal.webp" },
   { slug: "robolearn", title: "RoboLearn", category: "EdTech · Robotics", image: "/images/decor/cover-robolearn.webp", wide: true },
   { slug: "relief-now", title: "Relief Now", category: "Healthtech", image: "/images/decor/cover-relief.webp", wide: true },
-  { slug: "anybuy", title: "Anybuy", category: "E-commerce", image: "/images/thumbs/anybuy.webp", wide: true },
-  { slug: "nedi", title: "NEDI", category: "EdTech", image: "/images/thumbs/nedi.webp", wide: true },
+  { slug: "anybuy", title: "Anybuy", category: "E-commerce", image: "/images/decor/cover-anybuy.webp", wide: true },
+  { slug: "nedi", title: "NEDI", category: "EdTech", image: "/images/decor/cover-nedi.webp", wide: true },
   { slug: "bookhive", title: "Bookhive", category: "Consumer · Social", image: "/images/decor/cover-bookhive.webp", comingSoon: true },
   { slug: "elon-musk", title: "Elon Musk", category: "Branding · Web", image: "/images/decor/cover-elon.webp", wide: true, comingSoon: true },
-  { slug: "easyreceipt", title: "EasyReceipt", category: "Fintech", image: "/images/thumbs/easyreceipt.webp", wide: true, comingSoon: true },
-  { slug: "ecohol", title: "Ecohol", category: "Events", image: "/images/thumbs/ecohol.webp", wide: true, comingSoon: true },
+  { slug: "easyreceipt", title: "EasyReceipt", category: "Fintech", image: "/images/decor/cover-easyreceipt.webp", wide: true, comingSoon: true },
+  { slug: "ecohol", title: "Ecohol", category: "Events", image: "/images/decor/cover-ecohol.webp", wide: true, comingSoon: true },
 ];
 
 export const getProject = (slug: string) =>
