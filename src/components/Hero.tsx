@@ -36,6 +36,11 @@ export default function Hero() {
       </header>
 
       <div className={styles.stage}>
+        <p className={styles.lede}>
+          Product Designer with 6 years across edtech, fintech, healthtech and
+          AI.
+        </p>
+
         <div className={styles.center}>
           <h1 className={styles.marquee} aria-label={PHRASE}>
             <span className={styles.marqueeTrack} aria-hidden="true">
@@ -47,10 +52,6 @@ export default function Hero() {
               ))}
             </span>
           </h1>
-          <p className={styles.lede}>
-            Product Designer with 6 years shaping web and mobile products across
-            edtech, fintech, healthtech and AI.
-          </p>
         </div>
 
         <div className={styles.cards}>
