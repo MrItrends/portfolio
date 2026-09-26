@@ -1,30 +1,39 @@
-import HeroCard from "./HeroCard";
 import styles from "./Hero.module.css";
 
 /**
  * Landing hero — a single oversized line of the brand phrase scrolling across
- * the centre (reference-style), framed by a clean, evenly-placed set of project
- * cards. Each card reveals its name + "View case study" on hover.
+ * the centre, with a refined collage of stickers and project stills floating
+ * around it (reference-style). Header carries the nav + contact.
  */
 
 const PHRASE = "Understanding before interface";
 
-const CARDS = [
-  { slug: "nomnom", title: "NomNom", image: "/images/thumbs/nomnom.webp", cls: styles.c1 },
-  { slug: "spal", title: "SPAL", image: "/images/thumbs/spal.webp", cls: styles.c2 },
-  { slug: "moodoo", title: "Moodoo", image: "/images/thumbs/moodoo.webp", cls: styles.c3 },
-  { slug: "anybuy", title: "Anybuy", image: "/images/thumbs/anybuy.webp", cls: styles.c5 },
-  { slug: "nedi", title: "NEDI", image: "/images/thumbs/nedi.webp", cls: styles.c6 },
+const RESUME_URL =
+  "https://drive.google.com/file/d/1HiwxVZHbhg37MiNFBmEBiKmhSVLSZSCw/view?usp=sharing";
+
+const DECOR = [
+  { src: "/images/decor/decor-spal.png", cls: styles.d1 },
+  { src: "/images/decor/decor-balloon.webp", cls: styles.d2 },
+  { src: "/images/decor/decor-skfans.png", cls: styles.d3 },
+  { src: "/images/decor/decor-figma.png", cls: styles.d4 },
+  { src: "/images/decor/decor-face.png", cls: styles.d5 },
+  { src: "/images/decor/decor-monster.png", cls: styles.d6 },
+  { src: "/images/decor/decor-moodoo.png", cls: styles.d7 },
+  { src: "/images/decor/decor-grass.webp", cls: styles.d8 },
 ];
 
 export default function Hero() {
   return (
     <section className={styles.heroWrap}>
       <header className={styles.header}>
-        <span className={styles.identity}>
-          Joshua Jumbo
-          <span className={styles.role}>Product Designer</span>
-        </span>
+        <span className={styles.identity}>Joshua Jumbo</span>
+        <nav className={styles.nav}>
+          <a href="#work">Work</a>
+          <a href="#about">About</a>
+          <a href={RESUME_URL} target="_blank" rel="noopener noreferrer">
+            Resume
+          </a>
+        </nav>
         <a
           className={styles.contact}
           href="https://cal.com/joshua-jumbo/project-discussion?overlayCalendar=true"
@@ -36,35 +45,23 @@ export default function Hero() {
       </header>
 
       <div className={styles.stage}>
-        <p className={styles.lede}>
-          Product Designer with 6 years across edtech, fintech, healthtech and
-          AI.
-        </p>
-
-        <div className={styles.center}>
-          <h1 className={styles.marquee} aria-label={PHRASE}>
-            <span className={styles.marqueeTrack} aria-hidden="true">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <span key={i} className={styles.marqueeItem}>
-                  {PHRASE}
-                  <span className={styles.dot}>&bull;</span>
-                </span>
-              ))}
-            </span>
-          </h1>
-        </div>
-
-        <div className={styles.cards}>
-          {CARDS.map((c) => (
-            <HeroCard
-              key={c.slug}
-              slug={c.slug}
-              title={c.title}
-              image={c.image}
-              className={c.cls}
-            />
+        <div className={styles.collage} aria-hidden="true">
+          {DECOR.map((d) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={d.cls} src={d.src} alt="" className={`${styles.decor} ${d.cls}`} />
           ))}
         </div>
+
+        <h1 className={styles.marquee} aria-label={PHRASE}>
+          <span className={styles.marqueeTrack} aria-hidden="true">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <span key={i} className={styles.marqueeItem}>
+                {PHRASE}
+                <span className={styles.dot}>&bull;</span>
+              </span>
+            ))}
+          </span>
+        </h1>
       </div>
     </section>
   );

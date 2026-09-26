@@ -2,14 +2,14 @@
   position: relative;
   z-index: 2;
   background: var(--color-bg);
-  padding: var(--space-4) var(--page-margin) var(--space-9);
+  padding: var(--space-6) var(--page-margin) var(--space-9);
 }
 
 .head {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-5);
 }
 
 .label {
@@ -25,166 +25,103 @@
 
 .grid {
   list-style: none;
+  margin: 0;
+  padding: 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  column-gap: var(--grid-gutter);
-  row-gap: var(--space-6);
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+  grid-auto-flow: dense;
 }
 
-/* 2 across on tablet. */
-@media (max-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Each item rises in as it enters the viewport; columns stagger slightly. */
 .item {
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity var(--duration-slow) var(--ease),
-    transform var(--duration-slow) var(--ease);
-  transition-delay: calc(var(--col, 0) * 90ms);
+  grid-column: span 1;
 }
 
-.inView {
-  opacity: 1;
-  transform: none;
+.wide {
+  grid-column: span 2;
 }
 
 .link {
   display: block;
-  color: inherit;
 }
 
-.disabled {
-  cursor: default;
-}
-
-/* "Coming soon" — dims the thumbnail and labels it; the tile isn't clickable. */
-.soon {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  background: rgba(7, 7, 7, 0.55);
-}
-
-.soon span {
-  color: var(--color-bg);
-  font-size: var(--text-sm);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-/* Large editorial thumbnail — placeholder until real imagery is added. */
-.thumb {
+/* Portrait tile 3:4, landscape (wide) tile 3:2 — equal heights on a 4-col grid. */
+.media {
   position: relative;
-  aspect-ratio: 4 / 3;
-  margin: 0 0 var(--space-3);
+  aspect-ratio: 3 / 4;
   overflow: hidden;
   background: var(--color-ink);
 }
 
-/* Thumbnail image + placeholder both zoom in on hover (clipped by .thumb). */
-.thumbImg {
+.wide .media {
+  aspect-ratio: 3 / 2;
+}
+
+.img {
   object-fit: cover;
-  transition: transform 600ms var(--ease);
+  transition: transform 0.5s var(--ease);
 }
 
-.thumb:hover .thumbImg,
-.thumb:hover .marquee {
-  transform: scale(1.06);
+.link:hover .img {
+  transform: scale(1.03);
 }
 
-/* Flowing name marquee on the placeholder — a seamless GSAP-style loop. */
-.marquee {
+.overlay {
   position: absolute;
   inset: 0;
   display: flex;
-  align-items: center;
-  overflow: hidden;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+  padding: var(--space-3);
+  background: linear-gradient(to top, rgba(7, 7, 7, 0.82), transparent 55%);
   color: var(--color-bg);
-  transition: transform 600ms var(--ease);
+  opacity: 0;
+  transition: opacity var(--duration-base) var(--ease);
 }
 
-.marqueeTrack {
-  display: flex;
-  flex-wrap: nowrap;
-  white-space: nowrap;
-  will-change: transform;
-  animation: flow 26s linear infinite;
-}
-
-/* Right-column tiles flow the other way, for rhythm. */
-.item:nth-child(even) .marqueeTrack {
-  animation-direction: reverse;
-}
-
-.marqueeGroup {
-  display: inline-flex;
-  align-items: center;
-  padding-right: 0.3em;
-  font-weight: 500;
-  font-size: clamp(1.6rem, 3.2vw, 2.75rem);
-  letter-spacing: -0.02em;
-  opacity: 0.5;
-}
-
-@keyframes flow {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marqueeTrack {
-    animation: none;
-  }
-  .thumbImg,
-  .marquee {
-    transition: none;
-  }
-}
-
-.meta {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: baseline;
-  gap: var(--space-2);
-}
-
-.index {
-  font-size: var(--text-sm);
-  opacity: 0.55;
+.link:hover .overlay,
+.isSoon .overlay {
+  opacity: 1;
 }
 
 .title {
-  margin: 0;
   font-weight: 500;
-  font-size: var(--text-lg);
   letter-spacing: -0.01em;
 }
 
 .category {
   font-size: var(--text-sm);
-  opacity: 0.55;
-  text-align: right;
+  opacity: 0.8;
 }
 
-/* Subtle hover affordance — the work fades up to full presence. */
-.link:hover .thumbLabel {
-  opacity: 0.6;
+.soon {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  padding: 0.35em 0.7em;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-size: var(--text-sm);
+  letter-spacing: 0.02em;
 }
 
-@media (max-width: 600px) {
-  .grid {
-    grid-template-columns: 1fr;
-    row-gap: var(--space-6);
+.isSoon .img {
+  opacity: 0.5;
+}
+
+@media (hover: none) {
+  .overlay {
+    opacity: 1;
   }
-  .item {
-    transition-delay: 0ms;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+  }
+  .wide {
+    grid-column: span 2;
   }
 }

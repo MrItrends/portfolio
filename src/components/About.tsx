@@ -7,7 +7,7 @@ import styles from "./About.module.css";
  */
 export default function About() {
   return (
-    <section className={styles.about} aria-label="About Joshua Jumbo">
+    <section id="about" className={styles.about} aria-label="About Joshua Jumbo">
       <div className={styles.grid}>
         <div className={styles.portraitWrap}>
           <Image

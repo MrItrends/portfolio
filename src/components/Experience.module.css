@@ -1,0 +1,49 @@
+.experience {
+  position: relative;
+  z-index: 2;
+  background: var(--color-bg);
+  padding: var(--space-6) var(--page-margin) var(--space-7);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-1);
+  max-width: 720px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 5rem 15rem 1fr;
+  gap: var(--space-4);
+  align-items: baseline;
+  padding: var(--space-2) 0;
+  font-size: var(--text-base);
+}
+
+.year {
+  opacity: 0.5;
+  font-variant-numeric: tabular-nums;
+}
+
+.company {
+  font-weight: 500;
+}
+
+.role {
+  opacity: 0.7;
+}
+
+@media (max-width: 640px) {
+  .row {
+    grid-template-columns: 3.5rem 1fr;
+    gap: var(--space-2) var(--space-4);
+  }
+  .role {
+    grid-column: 2;
+    opacity: 0.55;
+    font-size: var(--text-sm);
+  }
+}
