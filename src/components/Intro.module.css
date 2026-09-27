@@ -5,7 +5,9 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: var(--color-bg);
+  background-color: var(--color-bg);
+  background-image: var(--bg-grain);
+  background-repeat: repeat;
   opacity: 1;
   transition: opacity var(--duration-slow) var(--ease);
 }

@@ -1,0 +1,40 @@
+.pill {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  border-radius: 999px;
+  background: var(--color-ink);
+  color: var(--color-bg);
+  font-size: var(--text-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(var(--x, -200px), var(--y, -200px)) translate(-50%, -50%)
+    scale(0.6);
+  transition: opacity var(--duration-base) var(--ease),
+    transform var(--duration-base) var(--ease);
+}
+
+.pill.active {
+  opacity: 1;
+  transform: translate(var(--x, -200px), var(--y, -200px)) translate(-50%, -50%)
+    scale(1);
+}
+
+/* Native pointer stays hidden only over the tiles this pill is tracking. */
+:global(#work a[href^="/work/"]) {
+  cursor: none;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .pill {
+    display: none;
+  }
+}

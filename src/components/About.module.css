@@ -1,7 +1,9 @@
 .about {
   position: relative;
   z-index: 2;
-  background: var(--color-bg);
+  background-color: var(--color-bg);
+  background-image: var(--bg-grain);
+  background-repeat: repeat;
   padding: var(--space-8) var(--page-margin);
 }
 
