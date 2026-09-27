@@ -27,7 +27,12 @@ export default function SelectedWork() {
                   src={p.image}
                   alt={p.title}
                   fill
-                  sizes="(max-width: 768px) 50vw, 33vw"
+                  quality={90}
+                  sizes={
+                    p.wide
+                      ? "(max-width: 768px) 100vw, 50vw"
+                      : "(max-width: 768px) 50vw, 25vw"
+                  }
                   className={styles.img}
                 />
               )}
