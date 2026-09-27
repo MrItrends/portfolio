@@ -19,11 +19,21 @@
   transform: translate(-50%, -50%) translate(var(--x), var(--y)) rotate(var(--rot));
   transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
-  pointer-events: none;
+  /* Each photo is individually grabbable — pick one up and drop it anywhere. */
+  cursor: grab;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.dragging {
+  cursor: grabbing;
+  box-shadow: 0 26px 60px rgba(7, 7, 7, 0.32);
 }
 
 .img {
   object-fit: cover;
+  -webkit-user-drag: none;
 }
 
 /* No hover on touch — JS sets a partly-open resting fan on mount instead
