@@ -127,10 +127,55 @@
   pointer-events: none;
 }
 
+/* Wrapper — carries position/size/float animation; drag it to move. */
 .decor {
   position: absolute;
   display: block;
   animation: decorFloat 7s ease-in-out infinite;
+  transform-origin: center;
+  /* .collage is pointer-events:none so the marquee stays scrollable/clickable
+     underneath; each sticker opts back in so it can be picked up. */
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.decorImg {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* Corner handle — drag to resize + rotate together. Hidden until hover so
+   the collage doesn't look cluttered with eight visible controls at once. */
+.handle {
+  position: absolute;
+  right: -7px;
+  bottom: -7px;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--color-ink);
+  border: 2px solid var(--color-bg);
+  padding: 0;
+  cursor: grab;
+  opacity: 0;
+  transition: opacity var(--duration-base) var(--ease);
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.decor:hover .handle,
+.decor:focus-within .handle {
+  opacity: 0.85;
+}
+
+.handle:active {
+  cursor: grabbing;
 }
 
 @keyframes decorFloat {
