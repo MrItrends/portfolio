@@ -5,13 +5,24 @@
   padding: var(--space-6) var(--page-margin) var(--space-7);
 }
 
+/* Three genuinely separate columns spread across the full row — jobs take
+   the flexible first column, Tools and Languages sit further out with a
+   generous gap between them, matching the reference's wide spread. */
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  column-gap: clamp(3rem, 7vw, 7.5rem);
+  row-gap: var(--space-6);
+  align-items: start;
+}
+
 .list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
   gap: var(--space-1);
-  max-width: 720px;
+  align-content: start;
 }
 
 .row {
@@ -34,6 +45,42 @@
 
 .role {
   opacity: 0.7;
+}
+
+.group {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  min-width: 9rem;
+}
+
+.heading {
+  margin: 0;
+  font-size: var(--text-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.tags {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-1);
+  font-size: var(--text-base);
+  opacity: 0.75;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+    row-gap: var(--space-5);
+  }
+  .group {
+    min-width: 0;
+  }
 }
 
 @media (max-width: 640px) {
