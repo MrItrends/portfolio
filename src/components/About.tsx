@@ -1,30 +1,27 @@
-import Image from "next/image";
+import AboutStack from "./AboutStack";
 import styles from "./About.module.css";
 
 /**
- * About — a short positioning statement so a recruiter can gauge fit quickly.
- * Portrait is a stand-in crop until a studio photo is provided.
+ * About — a photo-pile "experience" up top (see AboutStack), then a short
+ * positioning statement split across two columns so a recruiter can gauge
+ * fit quickly: the headline on the left, the supporting detail + CTA right.
  */
 export default function About() {
   return (
     <section id="about" className={styles.about} aria-label="About Joshua Jumbo">
-      <div className={styles.grid}>
-        <div className={styles.portraitWrap}>
-          <Image
-            src="/media/about-portrait.webp"
-            alt="Joshua Jumbo"
-            fill
-            sizes="(max-width: 768px) 100vw, 40vw"
-            className={styles.portrait}
-          />
-        </div>
+      <p className={styles.kicker}>About</p>
 
-        <div className={styles.body}>
-          <p className={styles.kicker}>About</p>
+      <AboutStack />
+
+      <div className={styles.split}>
+        <div className={styles.left}>
           <p className={styles.lead}>
             I&rsquo;m a product designer who starts with understanding &mdash;
             framing the real problem before touching an interface.
           </p>
+        </div>
+
+        <div className={styles.right}>
           <p className={styles.text}>
             Over the past six years I&rsquo;ve shaped web and mobile products
             across edtech, fintech, healthtech and AI &mdash; from a government

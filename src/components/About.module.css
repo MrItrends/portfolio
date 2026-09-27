@@ -5,45 +5,41 @@
   padding: var(--space-8) var(--page-margin);
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  gap: var(--space-7);
-  align-items: center;
-  max-width: 1120px;
-}
-
-.portraitWrap {
-  position: relative;
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
-  background: var(--color-ink);
-}
-
-.portrait {
-  object-fit: cover;
-}
-
-.body {
-  display: grid;
-  gap: var(--space-4);
-  max-width: 54ch;
-}
-
 .kicker {
-  margin: 0;
+  margin: 0 0 var(--space-5);
   font-size: var(--text-sm);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   opacity: 0.55;
 }
 
+/* Text row, right after the photo-pile experience. */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: var(--space-7);
+  max-width: 1200px;
+  margin-top: var(--space-8);
+}
+
+.left {
+  display: flex;
+}
+
 .lead {
   margin: 0;
-  font-size: clamp(1.4rem, 2.6vw, 2.2rem);
+  max-width: 20ch;
+  font-size: clamp(1.75rem, 3.4vw, 3rem);
   font-weight: 500;
-  line-height: 1.16;
+  line-height: 1.12;
   letter-spacing: -0.02em;
+}
+
+.right {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  max-width: 46ch;
 }
 
 .text {
@@ -66,7 +62,6 @@
   align-items: center;
   padding: 0.7em 1.4em;
   border: 1px solid var(--color-ink);
-  border-radius: 0;
   font-size: var(--text-sm);
   letter-spacing: 0.02em;
   transition: background var(--duration-base) var(--ease),
@@ -79,12 +74,15 @@
 }
 
 @media (max-width: 768px) {
-  .grid {
+  .split {
     grid-template-columns: 1fr;
-    gap: var(--space-6);
+    gap: var(--space-5);
+    margin-top: var(--space-6);
   }
-  .portraitWrap {
-    max-width: 340px;
-    aspect-ratio: 4 / 5;
+  .lead {
+    max-width: none;
+  }
+  .right {
+    max-width: none;
   }
 }

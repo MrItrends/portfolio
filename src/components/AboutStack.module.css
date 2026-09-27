@@ -1,0 +1,41 @@
+.stage {
+  position: relative;
+  width: 100%;
+  height: clamp(340px, 44vw, 560px);
+  /* Generous hit-area — the bloom should react well before the cursor
+     reaches the photos themselves. */
+  cursor: default;
+}
+
+.card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(150px, 15vw, 230px);
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--color-ink);
+  box-shadow: 0 14px 34px rgba(7, 7, 7, 0.22);
+  transform: translate(-50%, -50%) translate(var(--x), var(--y)) rotate(var(--rot));
+  transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+  pointer-events: none;
+}
+
+.img {
+  object-fit: cover;
+}
+
+/* No hover on touch — JS sets a partly-open resting fan on mount instead
+   (see AboutStack.tsx) so it still reads as a deliberate pile. */
+@media (hover: none) {
+  .stage {
+    height: clamp(280px, 70vw, 420px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+}
