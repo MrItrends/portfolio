@@ -7,8 +7,9 @@ import styles from "./AboutStack.module.css";
 /**
  * A loosely stacked pile of portraits that blooms open as the cursor moves
  * across it, and settles back into a stack when it leaves. Each photo can
- * also be picked up and dragged anywhere on screen — once dropped it stays
- * put (and stops reacting to the cursor bloom), like a real scattered print.
+ * also be picked up and dragged anywhere on screen; once dropped it becomes
+ * ordinary page content again — it stays where you left it and scrolls with
+ * the rest of the page, like a real scattered print, rather than floating.
  */
 
 type Card = {
@@ -38,7 +39,13 @@ export default function AboutStack() {
   const detached = useRef<boolean[]>(CARDS.map(() => false));
   const raf = useRef(0);
   const pending = useRef<{ x: number; y: number } | null>(null);
-  const drag = useRef<{ index: number; offsetX: number; offsetY: number } | null>(null);
+  const drag = useRef<{
+    index: number;
+    startClientX: number;
+    startClientY: number;
+    startLeft: number;
+    startTop: number;
+  } | null>(null);
 
   const applyBloom = (nx: number, ny: number) => {
     const intensity = Math.min(1, Math.hypot(nx, ny));
@@ -86,19 +93,33 @@ export default function AboutStack() {
 
   const onPointerDown = (index: number) => (e: React.PointerEvent<HTMLDivElement>) => {
     const el = cardRefs.current[index];
-    if (!el) return;
+    const stageEl = containerRef.current;
+    if (!el || !stageEl) return;
     e.preventDefault();
 
-    const rect = el.getBoundingClientRect();
-    drag.current = { index, offsetX: e.clientX - rect.left, offsetY: e.clientY - rect.top };
+    // Position relative to the stage (a normal-flow ancestor), not the
+    // viewport — so once dropped, the photo is ordinary page content again
+    // and scrolls with everything else instead of staying screen-pinned.
+    const cardRect = el.getBoundingClientRect();
+    const stageRect = stageEl.getBoundingClientRect();
+    const startLeft = cardRect.left - stageRect.left;
+    const startTop = cardRect.top - stageRect.top;
+
+    drag.current = {
+      index,
+      startClientX: e.clientX,
+      startClientY: e.clientY,
+      startLeft,
+      startTop,
+    };
     detached.current[index] = true;
 
     // Freeze mid-bloom exactly where it visually sits, then hand it fully
-    // to the pointer — fixed to the viewport, so it can go anywhere on screen.
+    // to the pointer — it can be dragged anywhere on screen while held.
     el.style.transition = "none";
-    el.style.position = "fixed";
-    el.style.left = `${rect.left}px`;
-    el.style.top = `${rect.top}px`;
+    el.style.position = "absolute";
+    el.style.left = `${startLeft}px`;
+    el.style.top = `${startTop}px`;
     el.style.margin = "0";
     el.style.transform = "none";
     el.style.zIndex = String(DRAG_Z);
@@ -109,8 +130,8 @@ export default function AboutStack() {
       if (!d) return;
       const cardEl = cardRefs.current[d.index];
       if (!cardEl) return;
-      cardEl.style.left = `${ev.clientX - d.offsetX}px`;
-      cardEl.style.top = `${ev.clientY - d.offsetY}px`;
+      cardEl.style.left = `${d.startLeft + (ev.clientX - d.startClientX)}px`;
+      cardEl.style.top = `${d.startTop + (ev.clientY - d.startClientY)}px`;
     };
     const onUp = () => {
       const d = drag.current;
