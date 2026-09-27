@@ -4,29 +4,23 @@ import { useEffect, useState } from "react";
 import styles from "./Intro.module.css";
 
 /**
- * Opening sequence — not a loading state.
- * A deliberate counter (000 → 100) with a single progressive line that
- * dissolves into the homepage on the same canvas. See preloader brief.
+ * Opening sequence, modelled on studio-wilhelm.com's preloader:
+ * a bottom line in a 3-line masked stack counts 000% → 100% while a bar
+ * grows from the bottom edge; at 100% the percent line exits and the two
+ * name lines above it reveal in its place; after a hold, everything recedes
+ * into the homepage underneath.
  */
 
-const STATEMENTS = [
-  "Designing clarity from complexity",
-  "Building products people understand",
-  "Fintech • Healthtech • AI • SaaS",
-  "Joshua Jumbo",
-];
+const NAME = ["Joshua", "Jumbo"];
+const YEAR = new Date().getFullYear();
 
-const COUNT_DURATION = 4200; // ms — within the 3–5s window
-const HOLD = 700; // pause on the name once 100 is reached
-const DISSOLVE = 650; // overlay fade / homepage reveal overlap
+const COUNT_DURATION = 2200; // ms — the 000→100 count
+const NAME_STAGGER = 100; // ms between the two name lines revealing
+const HOLD = 600; // ms holding on the full name before exit
+const DISSOLVE = 650; // ms overlay/bar exit, overlapping the homepage reveal
 
 type Phase = "loading" | "revealing" | "done";
-
-// Statement index from the current count: equal thirds, then the name at 100.
-function statementFor(count: number) {
-  if (count >= 100) return 3;
-  return Math.min(2, Math.floor(count / 34));
-}
+type Stage = "count" | "name";
 
 // easeInOutQuad — slow, steady, slow. Reads as intentional, never mechanical.
 function ease(t: number) {
@@ -35,6 +29,7 @@ function ease(t: number) {
 
 export default function Intro({ children }: { children: React.ReactNode }) {
   const [phase, setPhase] = useState<Phase>("loading");
+  const [stage, setStage] = useState<Stage>("count");
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -61,6 +56,7 @@ export default function Intro({ children }: { children: React.ReactNode }) {
     if (reduce) {
       // No counting — settle on the name, then reveal calmly.
       setCount(100);
+      setStage("name");
       pending.push(setTimeout(finish, 900));
       return () => pending.forEach(clearTimeout);
     }
@@ -73,7 +69,10 @@ export default function Intro({ children }: { children: React.ReactNode }) {
       if (t < 1) {
         raf = requestAnimationFrame(tick);
       } else {
-        pending.push(setTimeout(finish, HOLD));
+        setStage("name");
+        pending.push(
+          setTimeout(finish, NAME_STAGGER * NAME.length + HOLD)
+        );
       }
     };
     raf = requestAnimationFrame(tick);
@@ -93,7 +92,7 @@ export default function Intro({ children }: { children: React.ReactNode }) {
     };
   }, [phase]);
 
-  const active = statementFor(count);
+  const counting = stage === "count";
 
   return (
     <>
@@ -113,27 +112,40 @@ export default function Intro({ children }: { children: React.ReactNode }) {
           role="presentation"
           aria-hidden="true"
         >
-          <div className={styles.inner}>
-            <div className={styles.counter}>
-              {String(count).padStart(3, "0")}
-            </div>
-            <div className={styles.captions}>
-              {STATEMENTS.map((line, i) => (
+          <div
+            className={`${styles.bar} ${
+              phase !== "loading" ? styles.barRecede : ""
+            }`}
+            style={{ height: phase === "loading" ? `${count * 0.14}vh` : "0vh" }}
+          />
+
+          <div className={styles.stack}>
+            {NAME.map((line, i) => (
+              <div className={styles.mask} key={line}>
                 <span
-                  key={line}
-                  className={`${styles.statement} ${
-                    i === active
-                      ? styles.statementActive
-                      : i < active
-                        ? styles.statementBefore
-                        : styles.statementAfter
-                  }`}
+                  className={`${styles.text} ${!counting ? styles.textIn : ""}`}
+                  style={{ transitionDelay: !counting ? `${i * NAME_STAGGER}ms` : "0ms" }}
                 >
                   {line}
                 </span>
-              ))}
+              </div>
+            ))}
+            <div className={styles.mask}>
+              <span
+                className={`${styles.text} ${styles.percentLine} ${
+                  counting ? styles.textIn : styles.textOut
+                }`}
+              >
+                {String(count).padStart(3, "0")}
+                <em className={styles.percentSign}>%</em>
+              </span>
             </div>
           </div>
+
+          <span className={styles.brand}>Joshua Jumbo</span>
+          <span className={styles.copyright}>
+            <em>&copy;</em> {YEAR}
+          </span>
         </div>
       )}
     </>

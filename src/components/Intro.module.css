@@ -1,13 +1,11 @@
-/* Opening sequence — shares the homepage canvas so the reveal is seamless. */
+/* Opening sequence — modelled on studio-wilhelm.com's preloader. Shares the
+   homepage canvas so the reveal is seamless. */
 
 .overlay {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  display: grid;
-  place-items: center;
   background: var(--color-bg);
-  padding: var(--page-margin);
   opacity: 1;
   transition: opacity var(--duration-slow) var(--ease);
 }
@@ -17,67 +15,91 @@
   pointer-events: none;
 }
 
-.inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: transform var(--duration-slow) var(--ease);
+/* Bar grows from the bottom edge in step with the count, then recedes on exit. */
+.bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--color-ink);
+  height: 0;
 }
 
-/* Counter dominates the viewport. Tabular figures keep digit width steady. */
-.counter {
+.barRecede {
+  transition: height var(--duration-slow) var(--ease);
+}
+
+/* Three-line masked stack: two name lines sit hidden above the percent line
+   until it finishes counting, then swap places with it. Bottom-anchored (not
+   vertically centred) with a fixed clearance above the bar's max height (14vh)
+   so the two never collide, regardless of viewport height. */
+.stack {
+  position: absolute;
+  left: var(--page-margin);
+  bottom: calc(14vh + 5rem);
+  display: flex;
+  flex-direction: column;
+}
+
+.mask {
+  overflow: hidden;
+}
+
+.text {
+  display: block;
   font-weight: 500;
-  font-size: clamp(6rem, 30vw, 28rem);
-  line-height: 0.9;
-  letter-spacing: -0.04em;
+  font-size: clamp(2.75rem, 11vw, 9rem);
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  transform: translateY(115%);
+  transition: transform var(--duration-slow) var(--ease);
+  will-change: transform;
+}
+
+.percentLine {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
 }
 
-.exiting .inner {
-  transform: translateY(-12px);
+.percentSign {
+  margin-left: 0.08em;
+  font-style: italic;
+  font-weight: 400;
+  opacity: 0.55;
 }
 
-/* Single-line mask. Statements roll up through it, one at a time. */
-.captions {
-  position: relative;
-  width: min(90vw, 40rem);
-  height: 1.6em;
-  margin-top: clamp(var(--space-3), 4vw, var(--space-5));
-  overflow: hidden;
-}
-
-.statement {
-  position: absolute;
-  left: 0;
-  right: 0;
-  text-align: center;
-  white-space: nowrap;
-  font-size: clamp(0.7rem, 2.4vw, 0.95rem);
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  opacity: 0;
-  transform: translateY(110%);
-  transition:
-    transform var(--duration-slow) var(--ease),
-    opacity var(--duration-slow) var(--ease);
-  will-change: transform, opacity;
-}
-
-.statementActive {
-  opacity: 1;
+.textIn {
   transform: translateY(0);
 }
 
-.statementBefore {
-  opacity: 0;
-  transform: translateY(-110%);
+.textOut {
+  transform: translateY(-115%);
 }
 
-.statementAfter {
-  opacity: 0;
-  transform: translateY(110%);
+/* Small persistent corner labels — echo the real header before it mounts. */
+.brand {
+  position: absolute;
+  top: var(--space-5);
+  left: var(--page-margin);
+  font-weight: 500;
+  font-size: clamp(0.95rem, 1.1vw, 1.1rem);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.copyright {
+  position: absolute;
+  /* Sits just above the bar's max height (14vh), clear of the stack above it. */
+  bottom: calc(14vh + 1.5rem);
+  left: var(--page-margin);
+  font-size: var(--text-sm);
+  opacity: 0.55;
+}
+
+.copyright em {
+  font-style: normal;
 }
 
 /* Homepage fades up as the overlay fades out — a cross-dissolve, not a swap. */
@@ -95,13 +117,14 @@
 }
 
 @media (max-width: 600px) {
-  .statement {
-    letter-spacing: 0.1em;
+  .text {
+    font-size: clamp(2.25rem, 15vw, 5rem);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .statement {
+  .text,
+  .bar {
     transition: opacity 1ms linear;
   }
 }
