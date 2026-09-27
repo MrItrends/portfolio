@@ -4,7 +4,7 @@
   background-color: var(--color-bg);
   background-image: var(--bg-grain);
   background-repeat: repeat;
-  padding: var(--space-6) var(--page-margin) var(--space-7);
+  padding: var(--space-4) var(--page-margin) var(--space-7);
 }
 
 /* Three genuinely separate columns spread across the full row — jobs take
