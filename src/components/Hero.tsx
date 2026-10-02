@@ -26,6 +26,7 @@ const DECOR = [
   { src: "/images/decor/decor-monster.png", cls: "d6" },
   { src: "/images/decor/decor-moodoo.png", cls: "d7" },
   { src: "/images/decor/decor-grass.webp", cls: "d8" },
+  { src: "/images/decor/decor-jj.png", cls: "d9" },
 ] as const;
 
 const DRAG_Z = 999;

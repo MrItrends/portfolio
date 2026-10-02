@@ -252,6 +252,14 @@
   animation-duration: 9s;
   animation-delay: -3.6s;
 }
+/* JJ monogram, lower-centre-right */
+.d9 {
+  width: clamp(60px, 6.5vw, 110px);
+  top: 40%;
+  left: 55%;
+  animation-duration: 7.8s;
+  animation-delay: -4.4s;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .marqueeTrack,
@@ -274,5 +282,13 @@
   .d4,
   .d6 {
     display: none;
+  }
+  /* JJ monogram sits lower-centre on desktop, which lands it directly on
+     the marquee line (and camouflages it — same ink colour as the text)
+     once the stage shrinks for mobile. Move it up into the open cluster. */
+  .d9 {
+    top: 16%;
+    left: auto;
+    right: 6%;
   }
 }
