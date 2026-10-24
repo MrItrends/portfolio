@@ -10,11 +10,16 @@ import type {
 } from "@/lib/chat/types";
 import { GREETING, SUGGESTIONS } from "@/lib/chat/greeting";
 import { BOOKING_URL, RESUME_URL } from "@/lib/site";
+import type { BodyPose, HeadExpr } from "@/lib/avatar/sprites";
+import AvatarBody from "./avatar/AvatarBody";
+import AvatarHead from "./avatar/AvatarHead";
+import { ensureLipSync, useMouthOpen } from "./avatar/lipsync";
+import { useLauncherReactions } from "./avatar/useLauncherReactions";
+import { useMirror } from "./avatar/useMirror";
 import styles from "./ChatWidget.module.css";
 
 const STORAGE_KEY = "jj-chat-id";
 const VOICE_KEY = "jj-chat-voice";
-const FACE = "/images/joshua/face-smile.webp";
 
 // Tiny silent clip, played on a user tap to unlock audio on iOS/Safari so
 // replies can speak automatically afterwards.
@@ -104,6 +109,19 @@ export default function ChatWidget() {
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [voiceNote, setVoiceNote] = useState("");
+
+  // Avatar: transient reactions, camera mirroring, launcher personality.
+  const [flash, setFlash] = useState<{ expr?: HeadExpr; pose?: BodyPose } | null>(null);
+  const [mirrorAsk, setMirrorAsk] = useState(false);
+  const flashTimer = useRef(0);
+  const mirror = useMirror();
+  const reactions = useLauncherReactions(!open, pathname === "/");
+
+  const react = useCallback((expr?: HeadExpr, pose?: BodyPose, ms = 2200) => {
+    window.clearTimeout(flashTimer.current);
+    setFlash({ expr, pose });
+    flashTimer.current = window.setTimeout(() => setFlash(null), ms);
+  }, []);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioCache = useRef(new Map<string, string>());
@@ -202,6 +220,7 @@ export default function ChatWidget() {
           url = URL.createObjectURL(await res.blob());
           audioCache.current.set(messageId, url);
         }
+        await ensureLipSync(audio);
         audio.src = url;
         await audio.play();
         setPlayingId(messageId);
@@ -357,9 +376,12 @@ export default function ChatWidget() {
               break;
             case "card":
               patchPending((m) => ({ ...m, cards: [...(m.cards ?? []), e.card] }));
+              if (e.card.type === "project") react("smile", "lean", 3200);
+              else react("wink", "laptop", 3200);
               break;
             case "status":
               setStatus(e.status);
+              if (e.status === "escalated") react("surprised", "jump", 2800);
               break;
             case "done":
               setStatus(e.status);
@@ -401,16 +423,56 @@ export default function ChatWidget() {
         setMessages((all) => all.filter((m) => m.id !== pendingId || m.text || m.cards));
       }
     },
-    [busy, status, pathname, speak, stopAudio],
+    [busy, status, pathname, speak, stopAudio, react],
   );
 
   const humanHere = status === "human";
   const showChips = messages.length === 0 && !busy;
+  const [launcherHeight, setLauncherHeight] = useState(168);
+  const [mirrorSupported, setMirrorSupported] = useState(false);
+
+  useEffect(() => {
+    const update = () => setLauncherHeight(window.innerWidth <= 768 ? 118 : 168);
+    update();
+    window.addEventListener("resize", update);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMirrorSupported(Boolean(navigator.mediaDevices?.getUserMedia));
+    return () => window.removeEventListener("resize", update);
+  }, []);
   const shownMood: Mood = playingId ? "talking" : mood;
+
+  // What the avatar shows, in priority order: the visitor's own expression
+  // (mirror mode) > a one-off reaction > lip-sync > thinking > attentive > calm.
+  const mouthOpen = useMouthOpen(audioRef.current, Boolean(playingId));
+  const mirroring = mirror.status === "on";
+  const typing = input.trim().length > 0;
+  const headExpr: HeadExpr =
+    (mirroring && mirror.expression) ||
+    flash?.expr ||
+    (playingId ? (mouthOpen ? "laugh" : "smile") : null) ||
+    (busy && mood === "thinking" ? "think" : null) ||
+    (status === "closed" || typing ? "serious" : null) ||
+    "smile";
+  const bodyPose: BodyPose =
+    (mirroring && mirror.pose) ||
+    flash?.pose ||
+    (playingId ? "laptop" : null) ||
+    (busy && mood === "thinking" ? "crouch" : null) ||
+    (typing ? "threeQuarter" : null) ||
+    "front";
 
   return (
     <div className={styles.dock} data-open={open || undefined}>
       {open && (
+        <div className={styles.panelWrap}>
+        {/* He stands on the top edge of the window and acts out the conversation. */}
+        <div className={styles.stage} aria-hidden="true">
+          <AvatarBody
+            pose={bodyPose}
+            height={150}
+            yawRef={mirroring ? mirror.yawRef : undefined}
+          />
+        </div>
         <section
           className={styles.panel}
           role="dialog"
@@ -418,8 +480,11 @@ export default function ChatWidget() {
         >
           <header className={styles.header}>
             <span className={styles.avatarWrap} data-mood={shownMood}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className={styles.headerFace} src={FACE} alt="" />
+              <AvatarHead
+                expression={headExpr}
+                height={56}
+                yawRef={mirroring ? mirror.yawRef : undefined}
+              />
             </span>
             <span className={styles.who}>
               <span className={styles.name}>
@@ -430,11 +495,40 @@ export default function ChatWidget() {
                   ? "The real one is here"
                   : status === "escalated"
                     ? "Joshua's been pinged"
-                    : mood === "thinking"
-                      ? "Thinking…"
-                      : "Replies instantly"}
+                    : mirror.status === "loading"
+                      ? "Loading vision model…"
+                      : mirroring
+                        ? "Watching on your device only"
+                        : mood === "thinking"
+                          ? "Thinking…"
+                          : "Replies instantly"}
               </span>
             </span>
+            {mirror.status === "on" || mirror.status === "loading" ? (
+              <button
+                type="button"
+                className={styles.selfView}
+                onClick={mirror.stop}
+                aria-label="Turn camera off"
+                title="Camera on, processed on your device only. Click to stop."
+              >
+                <SelfView stream={mirror.stream} />
+                <span className={styles.rec} aria-hidden="true" />
+              </button>
+            ) : mirrorSupported ? (
+              <button
+                type="button"
+                className={styles.voice}
+                onClick={() => setMirrorAsk((v) => !v)}
+                aria-label="Let him react to your expressions with your camera"
+                title="Camera mode: he reacts to your smile or a wave"
+              >
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <rect x="3" y="7" width="12" height="10" rx="2" fill="currentColor" />
+                  <path d="M16 11l5-3v8l-5-3z" fill="currentColor" />
+                </svg>
+              </button>
+            ) : null}
             {voiceAvailable && (
               <button
                 type="button"
@@ -474,6 +568,8 @@ export default function ChatWidget() {
               className={styles.close}
               onClick={() => {
                 stopAudio();
+                mirror.stop();
+                setMirrorAsk(false);
                 setOpen(false);
               }}
               aria-label="Close chat"
@@ -538,6 +634,38 @@ export default function ChatWidget() {
 
             {voiceNote && <p className={styles.notice}>{voiceNote}</p>}
 
+            {mirrorAsk && mirror.status === "off" && (
+              <div className={styles.ask}>
+                <p className={styles.askTitle}>Want me to see you?</p>
+                <p className={styles.askText}>
+                  I can react to your smile, a wave or a thumbs-up. Your camera runs only
+                  in this tab: nothing is recorded or uploaded, and you can stop any time.
+                </p>
+                <div className={styles.askActions}>
+                  <button
+                    type="button"
+                    className={styles.askYes}
+                    onClick={() => {
+                      setMirrorAsk(false);
+                      void mirror.start();
+                    }}
+                  >
+                    Turn on camera
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.noticeBtn}
+                    onClick={() => setMirrorAsk(false)}
+                  >
+                    Not now
+                  </button>
+                </div>
+              </div>
+            )}
+            {mirror.status === "error" && mirror.error && (
+              <p className={styles.notice}>{mirror.error}</p>
+            )}
+
             {status === "escalated" && (
               <p className={styles.notice}>
                 Joshua has been notified and can jump into this chat — or follow up
@@ -600,25 +728,52 @@ export default function ChatWidget() {
             </button>
           </form>
         </section>
+        </div>
       )}
 
       {!open && (
-        <button
-          type="button"
-          className={styles.launcher}
-          onClick={() => {
-            setUnread(0);
-            setOpen(true);
-          }}
-          aria-label="Chat with Joshua's digital version"
-          data-mood={shownMood}
-        >
-          <span className={styles.hello}>Chat with my digital self</span>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className={styles.launcherFace} src={FACE} alt="" />
-          {unread > 0 && <span className={styles.badge}>{unread}</span>}
-        </button>
+        <div className={styles.launcherWrap}>
+          {reactions.bubble && (
+            <button
+              type="button"
+              className={styles.bubbleTip}
+              onClick={() => {
+                reactions.dismiss();
+                setUnread(0);
+                setOpen(true);
+              }}
+            >
+              {reactions.bubble}
+            </button>
+          )}
+          <button
+            type="button"
+            className={styles.launcher}
+            onClick={() => {
+              reactions.dismiss();
+              setUnread(0);
+              setOpen(true);
+            }}
+            aria-label="Chat with Joshua's digital version"
+          >
+            <span className={styles.hello}>Chat with my digital self</span>
+            <AvatarBody pose={reactions.pose} height={launcherHeight} follow />
+            {unread > 0 && <span className={styles.badge}>{unread}</span>}
+          </button>
+        </div>
       )}
     </div>
   );
+}
+
+/** Small live preview so the visitor can always see their camera is on. */
+function SelfView({ stream }: { stream: MediaStream | null }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    v.srcObject = stream;
+    if (stream) v.play().catch(() => {});
+  }, [stream]);
+  return <video ref={ref} className={styles.selfVideo} muted playsInline aria-hidden="true" />;
 }
