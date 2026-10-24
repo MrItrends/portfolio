@@ -77,8 +77,14 @@
   --duration-slow: 480ms;
 
   /* Cardboard paper-grain texture, tiled under the base color everywhere a
-     section paints its own opaque background (see globals.css body rule). */
-  --bg-grain: url("/images/cardboard-texture.webp");
+     section paints its own opaque background. --grain-softness is how much of
+     the page colour is washed over it: 0% = raw texture, 100% = flat. At 50%
+     the speckle contrast is halved so the work and type lead, not the paper. */
+  --grain-softness: 50%;
+  --grain-wash: color-mix(in srgb, var(--color-bg) var(--grain-softness), transparent);
+  --bg-grain:
+    linear-gradient(var(--grain-wash), var(--grain-wash)),
+    url("/images/cardboard-texture.webp");
 }
 
 /* ---------- Reset ---------- */
