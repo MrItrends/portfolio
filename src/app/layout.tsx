@@ -4,6 +4,7 @@ import Intro from "@/components/Intro";
 import AmbientSound from "@/components/AmbientSound";
 import CursorFace from "@/components/CursorFace";
 import CookieConsent from "@/components/CookieConsent";
+import ChatWidget from "@/components/ChatWidget";
 import "./globals.css";
 
 const GA_ID = "G-RE14FKKR6L";
@@ -41,6 +42,7 @@ export default function RootLayout({
         <AmbientSound />
         <CursorFace />
         <CookieConsent />
+        <ChatWidget />
 
         {/* Google Analytics (gtag.js) — loads on every route. */}
         <Script

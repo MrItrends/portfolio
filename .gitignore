@@ -45,3 +45,6 @@ COMMIT_MSG.tmp
 public/images/*.mp4
 # heavy raster-embedded thumbnail SVGs (rasterized to public/images/thumbs/*.webp)
 public/images/*.svg
+
+# local chat store (dev)
+/.data/

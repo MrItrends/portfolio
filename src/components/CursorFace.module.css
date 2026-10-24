@@ -54,7 +54,7 @@
    accent that doubles as the opt-in toggle for the face cursor. */
 .toggle {
   position: fixed;
-  right: calc(clamp(20px, 4vw, 40px) + 56px);
+  right: calc(clamp(16px, 3vw, 32px) + 84px + 56px);
   bottom: clamp(20px, 4vw, 40px);
   z-index: 90;
   width: 40px;
