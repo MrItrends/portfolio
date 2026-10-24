@@ -8,12 +8,14 @@ import {
   ID_RE,
   getConversation,
   hit,
+  mutateConversation,
   saveConversation,
 } from "@/lib/chat/store";
 import type {
   Card,
   ChatMessage,
   Conversation,
+  Escalation,
   StreamEvent,
 } from "@/lib/chat/types";
 
@@ -85,13 +87,19 @@ function toApiMessages(messages: ChatMessage[]): Anthropic.Beta.BetaMessageParam
   }));
 }
 
+type EscalationData = {
+  escalation: Escalation;
+  name?: string;
+  email?: string;
+};
+
 function runTool(
   name: string,
   input: Record<string, unknown>,
-  convo: Conversation,
   emit: (e: StreamEvent) => void,
   cards: Card[],
-): { text: string; escalated?: boolean } {
+  pending: { current?: EscalationData },
+): { text: string } {
   if (name === "share_resource") {
     const kind = input.kind;
     if (kind === "cv") {
@@ -126,21 +134,19 @@ function runTool(
 
   if (name === "escalate_to_joshua") {
     const email = clip(input.visitor_email, 254);
-    const name_ = clip(input.visitor_name, 80);
-    if (name_) convo.visitor.name = name_;
-    if (EMAIL_RE.test(email)) convo.visitor.email = email;
-    convo.escalation = {
-      reason: clip(input.reason, 300),
-      summary: clip(input.summary, 800),
-      urgency: input.urgency === "urgent" ? "urgent" : "normal",
-      at: Date.now(),
+    pending.current = {
+      name: clip(input.visitor_name, 80) || undefined,
+      email: EMAIL_RE.test(email) ? email : undefined,
+      escalation: {
+        reason: clip(input.reason, 300),
+        summary: clip(input.summary, 800),
+        urgency: input.urgency === "urgent" ? "urgent" : "normal",
+        at: Date.now(),
+      },
     };
-    if (convo.status === "ai") convo.status = "escalated";
-    convo.unread = true;
-    emit({ type: "status", status: convo.status });
+    emit({ type: "status", status: "escalated" });
     return {
       text: "Joshua has been notified by email and on his phone. Tell the visitor he'll see this chat and can jump in or follow up by email.",
-      escalated: true,
     };
   }
 
@@ -190,7 +196,8 @@ export async function POST(req: Request) {
   }
 
   convo.messages.push({ id: randomUUID(), role: "visitor", text, at: Date.now() });
-  convo.unread = true;
+  // Chats the AI is handling alone don't need Joshua's attention; escalation sets this later.
+  if (convo.status !== "ai") convo.unread = true;
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream<Uint8Array>({
@@ -213,17 +220,20 @@ export async function POST(req: Request) {
       const c = convo!;
       emit({ type: "meta", conversationId: c.id });
 
-      const maybeNotify = async (kind: "escalation" | "message") => {
+      const maybeNotify = async (conv: Conversation, kind: "escalation" | "message") => {
         const now = Date.now();
-        if (kind === "message" && c.notifiedAt && now - c.notifiedAt < NOTIFY_COOLDOWN_MS) return;
-        c.notifiedAt = now;
-        await notifyOwner(c, kind);
+        if (kind === "message" && conv.notifiedAt && now - conv.notifiedAt < NOTIFY_COOLDOWN_MS) return;
+        conv.notifiedAt = now;
+        await mutateConversation(conv.id, (x) => {
+          x.notifiedAt = now;
+        });
+        await notifyOwner(conv, kind);
       };
 
       // Joshua has taken over — the AI stays out of it.
       if (c.status === "human" || c.status === "closed") {
         await saveConversation(c);
-        if (c.status === "human") await maybeNotify("message");
+        if (c.status === "human") await maybeNotify(c, "message");
         emit({ type: "done", messageId: null, status: c.status });
         return finish();
       }
@@ -244,8 +254,8 @@ export async function POST(req: Request) {
       const history = toApiMessages(c.messages);
       const system = buildSystemPrompt(c.page);
       const cards: Card[] = [];
+      const pendingEscalation: { current?: EscalationData } = {};
       let reply = "";
-      let escalatedNow = false;
 
       try {
         for (let step = 0; step < MAX_TOOL_STEPS; step++) {
@@ -294,11 +304,10 @@ export async function POST(req: Request) {
             const out = runTool(
               block.name,
               (block.input ?? {}) as Record<string, unknown>,
-              c,
               emit,
               cards,
+              pendingEscalation,
             );
-            if (out.escalated) escalatedNow = true;
             results.push({ type: "tool_result", tool_use_id: block.id, content: out.text });
           }
           history.push({ role: "user", content: results });
@@ -322,13 +331,25 @@ export async function POST(req: Request) {
         at: Date.now(),
         cards: cards.length ? cards : undefined,
       };
-      if (aiMessage.text || aiMessage.cards) c.messages.push(aiMessage);
-      await saveConversation(c);
+      // Re-read before writing: Joshua may have replied or taken over while the
+      // model was generating, and a stale copy would erase that.
+      const esc = pendingEscalation.current;
+      const latest =
+        (await mutateConversation(c.id, (x) => {
+          if (aiMessage.text || aiMessage.cards) x.messages.push(aiMessage);
+          if (esc) {
+            if (esc.name) x.visitor.name = esc.name;
+            if (esc.email) x.visitor.email = esc.email;
+            x.escalation = esc.escalation;
+            if (x.status === "ai") x.status = "escalated";
+            x.unread = true;
+          }
+        })) ?? c;
 
-      if (escalatedNow) await maybeNotify("escalation");
-      else if (c.status === "escalated") await maybeNotify("message");
+      if (esc) await maybeNotify(latest, "escalation");
+      else if (latest.status === "escalated") await maybeNotify(latest, "message");
 
-      emit({ type: "done", messageId: aiMessage.id, status: c.status });
+      emit({ type: "done", messageId: aiMessage.id, status: latest.status });
       finish();
     },
   });

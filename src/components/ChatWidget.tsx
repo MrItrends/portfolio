@@ -127,9 +127,13 @@ export default function ChatWidget() {
       .catch(() => writeId(null));
   }, []);
 
-  // While Joshua is (or may be) in the chat, listen for his replies.
+  const hasConvo = messages.length > 0;
+
+  // While Joshua is (or may be) in the chat, listen for his replies. An open
+  // panel always listens, since he can take over from the inbox at any time.
   useEffect(() => {
-    if (status === "ai" || status === "closed") return;
+    if (status === "closed" || !hasConvo) return;
+    if (status === "ai" && !open) return;
     const tick = async () => {
       const id = convoId.current;
       if (!id || document.hidden) return;
@@ -150,7 +154,16 @@ export default function ChatWidget() {
     };
     const t = window.setInterval(tick, open ? 3000 : 8000);
     return () => window.clearInterval(t);
-  }, [status, open, mergeOwner]);
+  }, [status, open, hasConvo, mergeOwner]);
+
+  const newChat = useCallback(() => {
+    writeId(null);
+    convoId.current = null;
+    lastSeen.current = 0;
+    setMessages([]);
+    setStatus("ai");
+    setInput("");
+  }, []);
 
   useEffect(() => {
     if (open) inputRef.current?.focus();
@@ -370,7 +383,12 @@ export default function ChatWidget() {
               <p className={styles.notice}>Joshua has joined the conversation.</p>
             )}
             {status === "closed" && (
-              <p className={styles.notice}>This chat has ended. Thanks for stopping by.</p>
+              <p className={styles.notice}>
+                This chat has ended. Thanks for stopping by.{" "}
+                <button type="button" className={styles.noticeBtn} onClick={newChat}>
+                  Start a new chat
+                </button>
+              </p>
             )}
 
             {showChips && (

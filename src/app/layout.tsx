@@ -1,13 +1,6 @@
 import type { Metadata } from "next";
-import Script from "next/script";
-import Intro from "@/components/Intro";
-import AmbientSound from "@/components/AmbientSound";
-import CursorFace from "@/components/CursorFace";
-import CookieConsent from "@/components/CookieConsent";
-import ChatWidget from "@/components/ChatWidget";
+import SiteChrome from "@/components/SiteChrome";
 import "./globals.css";
-
-const GA_ID = "G-RE14FKKR6L";
 
 export const metadata: Metadata = {
   title: "Joshua Jumbo — Selected Work",
@@ -38,31 +31,7 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <Intro>{children}</Intro>
-        <AmbientSound />
-        <CursorFace />
-        <CookieConsent />
-        <ChatWidget />
-
-        {/* Google Analytics (gtag.js) — loads on every route. */}
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-// Consent Mode v2 — deny by default until the visitor accepts (see CookieConsent).
-gtag('consent', 'default', {
-  ad_storage: 'denied',
-  ad_user_data: 'denied',
-  ad_personalization: 'denied',
-  analytics_storage: 'denied',
-  wait_for_update: 500
-});
-gtag('config', '${GA_ID}');`}
-        </Script>
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

@@ -13,6 +13,8 @@ interface KV {
   incr(key: string, ttlSec: number): Promise<number>;
   zadd(key: string, score: number, member: string): Promise<void>;
   zrevrange(key: string, start: number, stop: number): Promise<string[]>;
+  del(key: string): Promise<void>;
+  zrem(key: string, member: string): Promise<void>;
 }
 
 class UpstashKV implements KV {
@@ -55,6 +57,12 @@ class UpstashKV implements KV {
   }
   zrevrange(key: string, start: number, stop: number) {
     return this.cmd<string[]>("ZREVRANGE", key, start, stop);
+  }
+  async del(key: string) {
+    await this.cmd("DEL", key);
+  }
+  async zrem(key: string, member: string) {
+    await this.cmd("ZREM", key, member);
   }
 }
 
@@ -109,6 +117,14 @@ class MemoryKV implements KV {
     if (!z) return [];
     const sorted = [...z.entries()].sort((a, b) => b[1] - a[1]).map(([m]) => m);
     return sorted.slice(start, stop < 0 ? undefined : stop + 1);
+  }
+  async del(key: string) {
+    this.state.kv.delete(key);
+    this.persist();
+  }
+  async zrem(key: string, member: string) {
+    this.state.z.get(key)?.delete(member);
+    this.persist();
   }
 }
 
@@ -178,6 +194,46 @@ export async function saveConversation(c: Conversation): Promise<void> {
   c.updatedAt = Date.now();
   await kv().set(key(c.id), JSON.stringify(c), CONVO_TTL);
   await kv().zadd(INDEX, c.updatedAt, c.id);
+}
+
+export async function deleteConversation(id: string): Promise<boolean> {
+  if (!ID_RE.test(id)) return false;
+  await kv().del(key(id));
+  await kv().zrem(INDEX, id);
+  return true;
+}
+
+/**
+ * Re-reads the latest copy, applies `fn`, saves. Use for any write that may
+ * race another actor (visitor stream vs. Joshua replying) so a stale copy
+ * held during a multi-second AI reply can't overwrite newer messages.
+ */
+export async function mutateConversation(
+  id: string,
+  fn: (c: Conversation) => void,
+): Promise<Conversation | null> {
+  const c = await getConversation(id);
+  if (!c) return null;
+  fn(c);
+  await saveConversation(c);
+  return c;
+}
+
+export type PushSub = {
+  endpoint: string;
+  expirationTime?: number | null;
+  keys: { p256dh: string; auth: string };
+};
+
+const PUSH_KEY = "chat:push-subs";
+
+export async function getPushSubs(): Promise<PushSub[]> {
+  const raw = await kv().get(PUSH_KEY);
+  return raw ? (JSON.parse(raw) as PushSub[]) : [];
+}
+
+export async function savePushSubs(subs: PushSub[]): Promise<void> {
+  await kv().set(PUSH_KEY, JSON.stringify(subs));
 }
 
 export async function listConversations(limit = 50): Promise<Conversation[]> {

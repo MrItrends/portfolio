@@ -286,6 +286,17 @@
   line-height: 1.4;
 }
 
+.noticeBtn {
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
 /* ---------- Cards ---------- */
 .card {
   display: flex;
