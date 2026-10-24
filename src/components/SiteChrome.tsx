@@ -6,6 +6,7 @@ import Intro from "./Intro";
 import AmbientSound from "./AmbientSound";
 import CookieConsent from "./CookieConsent";
 import ChatWidget from "./ChatWidget";
+import MotionReveal from "./MotionReveal";
 
 const GA_ID = "G-RE14FKKR6L";
 
@@ -24,6 +25,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
       <AmbientSound />
       <CookieConsent />
       <ChatWidget />
+      <MotionReveal />
 
       {/* Google Analytics (gtag.js) — loads on every public route. */}
       <Script

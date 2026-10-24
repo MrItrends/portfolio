@@ -66,7 +66,12 @@
   --grid-gutter: clamp(16px, 2vw, 32px);
 
   /* Motion — invisible, 200–500ms max */
-  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  /* One easing for everything: fast out of the blocks, long soft landing
+     (expo-out). Hovers feel immediate, reveals feel settled. */
+  --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --reveal-distance: 18px;
+  --reveal-duration: 680ms;
   --duration-fast: 200ms;
   --duration-base: 320ms;
   --duration-slow: 480ms;
@@ -131,6 +136,43 @@ video {
   display: block;
   max-width: 100%;
   height: auto;
+}
+
+/* ---------- Motion ----------
+   Elements tagged data-reveal rise 18px and fade in, once, as they enter the
+   viewport (see MotionReveal). The js-motion class is added by an inline
+   script before first paint, so without JavaScript — or with reduced motion —
+   nothing is ever hidden. */
+html.js-motion [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, var(--reveal-distance), 0);
+  transition:
+    opacity var(--reveal-duration) var(--ease),
+    transform var(--reveal-duration) var(--ease);
+  transition-delay: calc(var(--d, 0) * 1ms);
+  will-change: opacity, transform;
+}
+
+html.js-motion [data-reveal='fade'] {
+  transform: none;
+}
+
+html.js-motion [data-reveal][data-in] {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* Sub-pages ease in as a whole when you navigate to them. */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-distance), 0);
+  }
+}
+
+main {
+  animation: page-in var(--reveal-duration) var(--ease) both;
 }
 
 /* ---------- Layout utilities ---------- */

@@ -13,8 +13,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Enables reveal-on-scroll before first paint (no flash). Skipped for reduced motion; undone if the app never starts, so content can never stay hidden. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var d=document.documentElement;if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;d.classList.add("js-motion");setTimeout(function(){if(!window.__motionReady)d.classList.remove("js-motion")},5000)})()`,
+          }}
+        />
         <link
           rel="preload"
           href="/fonts/PPMori-Regular.woff2"

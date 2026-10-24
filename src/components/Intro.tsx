@@ -49,6 +49,7 @@ export default function Intro({ children }: { children: React.ReactNode }) {
 
     const finish = () => {
       sessionStorage.setItem("intro-seen", "1");
+      window.dispatchEvent(new Event("intro:done"));
       setPhase("revealing");
       pending.push(setTimeout(() => setPhase("done"), DISSOLVE));
     };

@@ -21,7 +21,7 @@ export default function Experience() {
       <div className={styles.grid}>
         <ul className={styles.list}>
           {ROLES.map((r) => (
-            <li key={r.year + r.company} className={styles.row}>
+            <li key={r.year + r.company} className={styles.row} data-reveal="">
               <span className={styles.year}>{r.year}</span>
               <span className={styles.company}>{r.company}</span>
               <span className={styles.role}>{r.role}</span>
@@ -29,7 +29,7 @@ export default function Experience() {
           ))}
         </ul>
 
-        <div className={styles.group}>
+        <div className={styles.group} data-reveal="" data-d="135">
           <p className={styles.heading}>Tools</p>
           <ul className={styles.tags}>
             {TOOLS.map((t) => (
@@ -38,7 +38,7 @@ export default function Experience() {
           </ul>
         </div>
 
-        <div className={styles.group}>
+        <div className={styles.group} data-reveal="" data-d="135">
           <p className={styles.heading}>Languages</p>
           <ul className={styles.tags}>
             {LANGUAGES.map((l) => (

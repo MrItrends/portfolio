@@ -9,19 +9,21 @@ import styles from "./About.module.css";
 export default function About() {
   return (
     <section id="about" className={styles.about} aria-label="About Joshua Jumbo">
-      <p className={styles.kicker}>About</p>
+      <p className={styles.kicker} data-reveal="fade">
+        About
+      </p>
 
       <AboutStack />
 
       <div className={styles.split}>
-        <div className={styles.left}>
+        <div className={styles.left} data-reveal="">
           <p className={styles.lead}>
             I&rsquo;m a product designer who starts with understanding &mdash;
             framing the real problem before touching an interface.
           </p>
         </div>
 
-        <div className={styles.right}>
+        <div className={styles.right} data-reveal="" data-d="90">
           <p className={styles.text}>
             Over the past six years I&rsquo;ve shaped web and mobile products
             across edtech, fintech, healthtech and AI &mdash; from a government

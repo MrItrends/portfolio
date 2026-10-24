@@ -52,6 +52,11 @@
   position: relative;
   aspect-ratio: 3 / 4;
   overflow: hidden;
+  /* Quiet placeholder while the picture loads (coming-soon tiles keep ink). */
+  background: color-mix(in srgb, var(--color-ink) 8%, var(--color-bg));
+}
+
+.isSoon .media {
   background: var(--color-ink);
 }
 
@@ -61,7 +66,41 @@
 
 .img {
   object-fit: cover;
-  transition: transform 0.5s var(--ease);
+  transition:
+    transform 0.5s var(--ease),
+    opacity 0.5s var(--ease);
+}
+
+/* Fade each picture in as it arrives (only when JS is driving the motion). */
+:global(html.js-motion) .img:not([data-loaded]) {
+  opacity: 0;
+}
+
+/* Soft light sweep over the placeholder until the picture is in. */
+:global(html.js-motion) .media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.5) 50%, transparent 70%);
+  background-size: 250% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease);
+}
+
+:global(html.js-motion) .media:has(.img[data-loaded])::after,
+:global(html.js-motion) .isSoon .media::after {
+  opacity: 0;
+  animation: none;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 140% 0;
+  }
+  to {
+    background-position: -40% 0;
+  }
 }
 
 .link:hover .img {

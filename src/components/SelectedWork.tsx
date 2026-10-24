@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
 import { PROJECTS } from "@/lib/projects";
+import FadeImage from "./FadeImage";
 import WorkCursor from "./WorkCursor";
 import styles from "./SelectedWork.module.css";
 
@@ -16,7 +16,7 @@ export default function SelectedWork() {
   return (
     <section id="work" className={styles.work} aria-label="Selected work">
       <WorkCursor />
-      <div className={styles.head}>
+      <div className={styles.head} data-reveal="fade">
         <span className={styles.label}>Selected Work</span>
         <span className={styles.count}>{live} case studies</span>
       </div>
@@ -26,7 +26,7 @@ export default function SelectedWork() {
           const inner = (
             <div className={styles.media}>
               {p.image && (
-                <Image
+                <FadeImage
                   src={p.image}
                   alt={p.title}
                   fill
@@ -50,6 +50,7 @@ export default function SelectedWork() {
           return (
             <li
               key={p.slug}
+              data-reveal=""
               className={`${styles.item} ${p.wide ? styles.wide : ""} ${
                 p.comingSoon ? styles.isSoon : ""
               }`}

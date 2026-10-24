@@ -179,7 +179,7 @@ export default function Hero() {
 
   return (
     <section className={styles.heroWrap}>
-      <header className={styles.header}>
+      <header className={styles.header} data-reveal="fade">
         <span className={styles.identity}>Joshua Jumbo</span>
         <nav className={styles.nav}>
           <a href="#work">Work</a>
@@ -199,7 +199,7 @@ export default function Hero() {
       </header>
 
       <div ref={stageRef} className={styles.stage}>
-        <div className={styles.collage} aria-hidden="true">
+        <div className={styles.collage} aria-hidden="true" data-reveal="" data-d="220">
           {DECOR.map((d, i) => (
             <div
               key={d.cls}
@@ -222,7 +222,7 @@ export default function Hero() {
           ))}
         </div>
 
-        <h1 className={styles.marquee} aria-label={PHRASE}>
+        <h1 className={styles.marquee} aria-label={PHRASE} data-reveal="" data-d="90">
           <span className={styles.marqueeTrack} aria-hidden="true">
             {Array.from({ length: 4 }).map((_, i) => (
               <span key={i} className={styles.marqueeItem}>

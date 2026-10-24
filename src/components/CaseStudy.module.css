@@ -1,5 +1,14 @@
 .page {
   padding-block: var(--space-7) var(--space-9);
+  /* Eases in as a whole when you arrive from the work grid. */
+  animation: pageIn var(--reveal-duration) var(--ease) both;
+}
+
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-distance), 0);
+  }
 }
 
 .back {

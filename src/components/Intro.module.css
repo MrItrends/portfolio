@@ -104,18 +104,14 @@
   font-style: normal;
 }
 
-/* Homepage fades up as the overlay fades out — a cross-dissolve, not a swap. */
+/* The homepage is already in place under the overlay; its own sections rise in
+   (see MotionReveal) as the overlay fades out. */
 .content {
-  opacity: 0;
-  transform: translateY(12px);
-  transition:
-    opacity 700ms var(--ease),
-    transform 700ms var(--ease);
+  opacity: 1;
 }
 
 .revealed {
   opacity: 1;
-  transform: none;
 }
 
 @media (max-width: 600px) {
