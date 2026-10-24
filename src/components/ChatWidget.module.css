@@ -189,6 +189,45 @@
   opacity: 1;
 }
 
+.voice {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: none;
+  color: var(--color-ink);
+  opacity: 0.55;
+  cursor: pointer;
+  transition: opacity var(--duration-fast) var(--ease);
+}
+
+.voice:hover,
+.voiceOn {
+  opacity: 1;
+}
+
+.listen {
+  padding: 0.2em 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: var(--text-xs);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  cursor: pointer;
+}
+
+.listen:hover:not(:disabled) {
+  opacity: 1;
+}
+
+.listen:disabled {
+  cursor: default;
+}
+
 /* ---------- Messages ---------- */
 .list {
   flex: 1;

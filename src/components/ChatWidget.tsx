@@ -13,7 +13,13 @@ import { BOOKING_URL, RESUME_URL } from "@/lib/site";
 import styles from "./ChatWidget.module.css";
 
 const STORAGE_KEY = "jj-chat-id";
+const VOICE_KEY = "jj-chat-voice";
 const FACE = "/images/joshua/face-smile.webp";
+
+// Tiny silent clip, played on a user tap to unlock audio on iOS/Safari so
+// replies can speak automatically afterwards.
+const SILENCE =
+  "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
 
 type Mood = "idle" | "thinking" | "talking";
 
@@ -93,6 +99,17 @@ export default function ChatWidget() {
   const [mood, setMood] = useState<Mood>("idle");
   const [unread, setUnread] = useState(0);
 
+  const [voiceAvailable, setVoiceAvailable] = useState(false);
+  const [voiceOn, setVoiceOn] = useState(false);
+  const [playingId, setPlayingId] = useState<string | null>(null);
+  const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [voiceNote, setVoiceNote] = useState("");
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioCache = useRef(new Map<string, string>());
+  const voiceOnRef = useRef(false);
+  voiceOnRef.current = voiceOn;
+
   const convoId = useRef<string | null>(null);
   const lastSeen = useRef(0);
   const listRef = useRef<HTMLDivElement>(null);
@@ -126,6 +143,94 @@ export default function ChatWidget() {
       })
       .catch(() => writeId(null));
   }, []);
+
+  // Audio element + whether the server has a voice configured.
+  useEffect(() => {
+    const audio = new Audio();
+    audio.addEventListener("ended", () => setPlayingId(null));
+    audio.addEventListener("error", () => setPlayingId(null));
+    audioRef.current = audio;
+    const cache = audioCache.current;
+
+    try {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setVoiceOn(localStorage.getItem(VOICE_KEY) === "on");
+    } catch {}
+
+    fetch("/api/chat/tts", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d: { enabled: boolean }) => setVoiceAvailable(Boolean(d.enabled)))
+      .catch(() => setVoiceAvailable(false));
+
+    return () => {
+      audio.pause();
+      cache.forEach((u) => URL.revokeObjectURL(u));
+      cache.clear();
+    };
+  }, []);
+
+  const stopAudio = useCallback(() => {
+    audioRef.current?.pause();
+    setPlayingId(null);
+  }, []);
+
+  const speak = useCallback(
+    async (messageId: string) => {
+      const audio = audioRef.current;
+      const convo = convoId.current;
+      if (!audio || !convo) return;
+      audio.pause();
+      setVoiceNote("");
+      setLoadingId(messageId);
+      try {
+        let url = audioCache.current.get(messageId);
+        if (!url) {
+          const res = await fetch("/api/chat/tts", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ conversationId: convo, messageId }),
+          });
+          if (res.status === 204) return;
+          if (!res.ok) {
+            setVoiceNote(
+              res.status === 429
+                ? "Voice is taking a breather — try again later."
+                : "My voice isn't available right now.",
+            );
+            return;
+          }
+          url = URL.createObjectURL(await res.blob());
+          audioCache.current.set(messageId, url);
+        }
+        audio.src = url;
+        await audio.play();
+        setPlayingId(messageId);
+      } catch {
+        setVoiceNote("Couldn't play that. Tap Listen to try again.");
+      } finally {
+        setLoadingId(null);
+      }
+    },
+    [],
+  );
+
+  const toggleVoice = useCallback(() => {
+    const next = !voiceOnRef.current;
+    setVoiceOn(next);
+    try {
+      localStorage.setItem(VOICE_KEY, next ? "on" : "off");
+    } catch {}
+    if (next) {
+      // This tap is the user gesture that unlocks audio for later auto-play.
+      const audio = audioRef.current;
+      if (audio) {
+        audio.src = SILENCE;
+        audio.play().catch(() => {});
+      }
+    } else {
+      stopAudio();
+    }
+  }, [stopAudio]);
 
   const hasConvo = messages.length > 0;
 
@@ -188,6 +293,7 @@ export default function ChatWidget() {
       const text = raw.trim();
       if (!text || busy || status === "closed") return;
 
+      stopAudio();
       const now = Date.now();
       const visitorMsg: ChatMessage = { id: `v-${now}`, role: "visitor", text, at: now };
       const pendingId = `p-${now}`;
@@ -259,6 +365,7 @@ export default function ChatWidget() {
               setStatus(e.status);
               if (e.messageId) {
                 patchPending((m) => ({ ...m, id: e.messageId as string }));
+                if (voiceOnRef.current) void speak(e.messageId);
               } else {
                 setMessages((all) => all.filter((m) => m.id !== pendingId));
               }
@@ -294,11 +401,12 @@ export default function ChatWidget() {
         setMessages((all) => all.filter((m) => m.id !== pendingId || m.text || m.cards));
       }
     },
-    [busy, status, pathname],
+    [busy, status, pathname, speak, stopAudio],
   );
 
   const humanHere = status === "human";
   const showChips = messages.length === 0 && !busy;
+  const shownMood: Mood = playingId ? "talking" : mood;
 
   return (
     <div className={styles.dock} data-open={open || undefined}>
@@ -309,7 +417,7 @@ export default function ChatWidget() {
           aria-label="Chat with Joshua's digital version"
         >
           <header className={styles.header}>
-            <span className={styles.avatarWrap} data-mood={mood}>
+            <span className={styles.avatarWrap} data-mood={shownMood}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img className={styles.headerFace} src={FACE} alt="" />
             </span>
@@ -327,10 +435,47 @@ export default function ChatWidget() {
                       : "Replies instantly"}
               </span>
             </span>
+            {voiceAvailable && (
+              <button
+                type="button"
+                className={`${styles.voice} ${voiceOn ? styles.voiceOn : ""}`}
+                onClick={toggleVoice}
+                aria-pressed={voiceOn}
+                aria-label={voiceOn ? "Turn voice off" : "Turn voice on"}
+                title={voiceOn ? "Voice on — replies are spoken" : "Hear replies in Joshua's voice"}
+              >
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path
+                    d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z"
+                    fill="currentColor"
+                  />
+                  {voiceOn ? (
+                    <path
+                      d="M15 9a4 4 0 0 1 0 6M17.5 6.5a8 8 0 0 1 0 11"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                    />
+                  ) : (
+                    <path
+                      d="M16 9.5l5 5M21 9.5l-5 5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                    />
+                  )}
+                </svg>
+              </button>
+            )}
             <button
               type="button"
               className={styles.close}
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                stopAudio();
+                setOpen(false);
+              }}
               aria-label="Close chat"
             >
               ×
@@ -370,8 +515,28 @@ export default function ChatWidget() {
                   </p>
                 )}
                 {m.cards?.map((c, i) => <CardView key={i} card={c} />)}
+                {voiceAvailable &&
+                  m.role === "ai" &&
+                  m.text &&
+                  !busy &&
+                  /^[0-9a-f-]{36}$/.test(m.id) && (
+                    <button
+                      type="button"
+                      className={styles.listen}
+                      onClick={() => (playingId === m.id ? stopAudio() : speak(m.id))}
+                      disabled={loadingId === m.id}
+                    >
+                      {loadingId === m.id
+                        ? "Loading voice…"
+                        : playingId === m.id
+                          ? "■ Stop"
+                          : "▶ Listen"}
+                    </button>
+                  )}
               </div>
             ))}
+
+            {voiceNote && <p className={styles.notice}>{voiceNote}</p>}
 
             {status === "escalated" && (
               <p className={styles.notice}>
@@ -446,7 +611,7 @@ export default function ChatWidget() {
             setOpen(true);
           }}
           aria-label="Chat with Joshua's digital version"
-          data-mood={mood}
+          data-mood={shownMood}
         >
           <span className={styles.hello}>Chat with my digital self</span>
           {/* eslint-disable-next-line @next/next/no-img-element */}
