@@ -1,10 +1,11 @@
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
+import { env } from "@/lib/env";
 
 export const COOKIE = "jj_admin";
 const SESSION_DAYS = 30;
 
-const password = () => process.env.ADMIN_PASSWORD || "";
+const password = () => env("ADMIN_PASSWORD") ?? "";
 
 /** Admin is disabled (login refused) until ADMIN_PASSWORD is set. */
 export const adminConfigured = () => password().length >= 8;
@@ -12,7 +13,7 @@ export const adminConfigured = () => password().length >= 8;
 // Sessions are signed with a key derived from the password, so changing the
 // password signs everyone out. ADMIN_SESSION_SECRET overrides if you want it.
 const secret = () =>
-  process.env.ADMIN_SESSION_SECRET ||
+  env("ADMIN_SESSION_SECRET") ||
   createHash("sha256").update(`jj-admin-session:${password()}`).digest("hex");
 
 const sign = (data: string) =>

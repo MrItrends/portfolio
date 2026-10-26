@@ -1,9 +1,11 @@
 import { createHash, randomUUID } from "node:crypto";
 import Anthropic from "@anthropic-ai/sdk";
+import { after } from "next/server";
+import { env } from "@/lib/env";
 import { PROJECTS, getProject } from "@/lib/projects";
 import { BOOKING_URL, RESUME_URL, SITE_URL } from "@/lib/site";
 import { buildSystemPrompt } from "@/lib/chat/persona";
-import { notifyOwner } from "@/lib/chat/notify";
+import { alertOwnerOffline, notifyOwner } from "@/lib/chat/notify";
 import {
   ID_RE,
   getConversation,
@@ -21,7 +23,7 @@ import type {
 
 export const maxDuration = 60;
 
-const MODEL = process.env.CHAT_MODEL || "claude-opus-5-5";
+const MODEL = env("CHAT_MODEL") || "claude-opus-5-5";
 const MAX_MESSAGE_CHARS = 1000;
 const MAX_MESSAGES_PER_CONVERSATION = 80;
 const MAX_TOOL_STEPS = 4;
@@ -154,6 +156,15 @@ function runTool(
 }
 
 export async function POST(req: Request) {
+  try {
+    return await handle(req);
+  } catch (err) {
+    console.error("[chat] unhandled error in POST /api/chat", err);
+    return Response.json({ error: "server_error" }, { status: 500 });
+  }
+}
+
+async function handle(req: Request) {
   let body: { conversationId?: unknown; message?: unknown; page?: unknown };
   try {
     body = await req.json();
@@ -165,17 +176,25 @@ export async function POST(req: Request) {
   if (!text) return Response.json({ error: "empty_message" }, { status: 400 });
 
   const ipHash = createHash("sha256").update(clientIp(req)).digest("hex").slice(0, 24);
-  if ((await hit(`ip:${ipHash}`, RATE_LIMIT.windowSec)) > RATE_LIMIT.perIp) {
+  const apiKey = env("ANTHROPIC_API_KEY");
+  const authToken = env("ANTHROPIC_AUTH_TOKEN");
+  const hasKey = Boolean(apiKey || authToken);
+
+  const givenId = typeof body.conversationId === "string" ? body.conversationId : null;
+  if (givenId && !ID_RE.test(givenId)) {
+    return Response.json({ error: "bad_request" }, { status: 400 });
+  }
+
+  // Independent lookups — run together rather than one after the other.
+  const [hits, existing] = await Promise.all([
+    hit(`ip:${ipHash}`, RATE_LIMIT.windowSec),
+    givenId ? getConversation(givenId) : Promise.resolve(null),
+  ]);
+  if (hits > RATE_LIMIT.perIp) {
     return Response.json({ error: "rate_limited" }, { status: 429 });
   }
 
-  const hasKey = Boolean(process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN);
-
-  let convo =
-    typeof body.conversationId === "string" ? await getConversation(body.conversationId) : null;
-  if (typeof body.conversationId === "string" && !ID_RE.test(body.conversationId)) {
-    return Response.json({ error: "bad_request" }, { status: 400 });
-  }
+  let convo = existing;
   if (!convo) {
     const now = Date.now();
     convo = {
@@ -229,11 +248,14 @@ export async function POST(req: Request) {
         });
         await notifyOwner(conv, kind);
       };
+      // Email + push take a second or two; do them after the reply is sent.
+      const notifyLater = (conv: Conversation, kind: "escalation" | "message") =>
+        after(() => maybeNotify(conv, kind));
 
       // Joshua has taken over — the AI stays out of it.
       if (c.status === "human" || c.status === "closed") {
         await saveConversation(c);
-        if (c.status === "human") await maybeNotify(c, "message");
+        if (c.status === "human") notifyLater(c, "message");
         emit({ type: "done", messageId: null, status: c.status });
         return finish();
       }
@@ -248,9 +270,12 @@ export async function POST(req: Request) {
         return finish();
       }
 
-      await saveConversation(c);
+      // Persist the visitor's message in parallel with the model call, not before it.
+      const preSave = saveConversation(c).catch((err) => {
+        console.error("[chat] saving visitor message failed", err);
+      });
 
-      const client = new Anthropic();
+      const client = new Anthropic({ apiKey, authToken });
       const history = toApiMessages(c.messages);
       const system = buildSystemPrompt(c.page);
       const cards: Card[] = [];
@@ -314,12 +339,27 @@ export async function POST(req: Request) {
         }
       } catch (err) {
         console.error("[chat] model call failed", err);
+        // Billing/credential problems aren't the visitor's to retry: show the
+        // quick routes to Joshua, and let him know the chat is down.
+        const unavailable =
+          err instanceof Anthropic.APIError &&
+          (/credit balance|billing/i.test(err.message) ||
+            err.status === 401 ||
+            err.status === 403);
+        if (unavailable) {
+          const why =
+            err instanceof Anthropic.APIError
+              ? `${err.status}: ${err.message.slice(0, 200)}`
+              : "unknown";
+          after(() => alertOwnerOffline(why));
+        }
         if (!reply) {
           emit({
             type: "error",
-            code: "model_error",
+            code: unavailable ? "unavailable" : "model_error",
             message: "Something went wrong on my end. Try again in a moment?",
           });
+          await preSave;
           return finish();
         }
       }
@@ -331,6 +371,7 @@ export async function POST(req: Request) {
         at: Date.now(),
         cards: cards.length ? cards : undefined,
       };
+      await preSave;
       // Re-read before writing: Joshua may have replied or taken over while the
       // model was generating, and a stale copy would erase that.
       const esc = pendingEscalation.current;
@@ -346,8 +387,8 @@ export async function POST(req: Request) {
           }
         })) ?? c;
 
-      if (esc) await maybeNotify(latest, "escalation");
-      else if (latest.status === "escalated") await maybeNotify(latest, "message");
+      if (esc) notifyLater(latest, "escalation");
+      else if (latest.status === "escalated") notifyLater(latest, "message");
 
       emit({ type: "done", messageId: aiMessage.id, status: latest.status });
       finish();

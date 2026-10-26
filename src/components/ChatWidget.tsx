@@ -352,7 +352,10 @@ export default function ChatWidget() {
           return;
         }
         if (!res.ok || !res.body) {
-          fail("Something went wrong on my end. Try again in a moment?");
+          fail(
+            "I hit a snag on my end. In the meantime, here’s the quickest way to reach Joshua.",
+            FALLBACK_CARDS,
+          );
           return;
         }
 
@@ -393,12 +396,19 @@ export default function ChatWidget() {
               }
               break;
             case "error":
-              fail(
-                e.code === "not_configured"
-                  ? "I'm not fully switched on yet — but you can still reach the real Joshua right here."
-                  : e.message,
-                e.code === "not_configured" ? FALLBACK_CARDS : undefined,
-              );
+              if (e.code === "not_configured") {
+                fail(
+                  "I'm not fully switched on yet — but you can still reach the real Joshua right here.",
+                  FALLBACK_CARDS,
+                );
+              } else if (e.code === "unavailable") {
+                fail(
+                  "I can't chat right now. Here's the quickest way to reach the real Joshua.",
+                  FALLBACK_CARDS,
+                );
+              } else {
+                fail(e.message);
+              }
               break;
           }
         };

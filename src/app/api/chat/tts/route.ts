@@ -1,11 +1,12 @@
 import { createHash } from "node:crypto";
 import { getConversation, hit, ID_RE } from "@/lib/chat/store";
+import { env } from "@/lib/env";
 
 export const maxDuration = 30;
 
 // Joshua's cloned voice ("Joshua Jumbo"). Not a secret — only the API key is.
 const DEFAULT_VOICE_ID = "WhxlORslJQKGrm3Kfxlf";
-const BASE = process.env.ELEVENLABS_BASE_URL || "https://api.elevenlabs.io";
+const BASE = env("ELEVENLABS_BASE_URL") || "https://api.elevenlabs.io";
 
 const MAX_CHARS = 900;
 const LIMITS = {
@@ -28,7 +29,7 @@ function toSpeech(text: string): string {
 /** Lets the widget know whether to show voice controls at all. */
 export async function GET() {
   return Response.json(
-    { enabled: Boolean(process.env.ELEVENLABS_API_KEY) },
+    { enabled: Boolean(env("ELEVENLABS_API_KEY")) },
     { headers: { "Cache-Control": "no-store" } },
   );
 }
@@ -39,7 +40,7 @@ export async function GET() {
  * clone can't be used to say arbitrary things.
  */
 export async function POST(req: Request) {
-  const apiKey = process.env.ELEVENLABS_API_KEY;
+  const apiKey = env("ELEVENLABS_API_KEY");
   if (!apiKey) return Response.json({ error: "not_configured" }, { status: 503 });
 
   let body: { conversationId?: unknown; messageId?: unknown };
@@ -78,7 +79,7 @@ export async function POST(req: Request) {
   const text = toSpeech(message.text);
   if (!text) return new Response(null, { status: 204 });
 
-  const voiceId = process.env.ELEVENLABS_VOICE_ID || DEFAULT_VOICE_ID;
+  const voiceId = env("ELEVENLABS_VOICE_ID") || DEFAULT_VOICE_ID;
   const upstream = await fetch(
     `${BASE}/v1/text-to-speech/${voiceId}/stream?output_format=mp3_44100_64`,
     {
@@ -86,7 +87,7 @@ export async function POST(req: Request) {
       headers: { "xi-api-key": apiKey, "Content-Type": "application/json" },
       body: JSON.stringify({
         text,
-        model_id: process.env.ELEVENLABS_MODEL || "eleven_flash_v2_5",
+        model_id: env("ELEVENLABS_MODEL") || "eleven_flash_v2_5",
         voice_settings: {
           stability: 0.5,
           similarity_boost: 0.85,

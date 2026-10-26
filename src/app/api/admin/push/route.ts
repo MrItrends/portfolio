@@ -1,13 +1,14 @@
 import { requireAdmin } from "@/lib/admin/auth";
 import { pushConfigured } from "@/lib/chat/push";
 import { getPushSubs, savePushSubs, type PushSub } from "@/lib/chat/store";
+import { env } from "@/lib/env";
 
 export async function GET(req: Request) {
   const denied = await requireAdmin(req);
   if (denied) return denied;
   return Response.json({
     configured: pushConfigured(),
-    publicKey: process.env.VAPID_PUBLIC_KEY ?? null,
+    publicKey: env("VAPID_PUBLIC_KEY") ?? null,
   });
 }
 

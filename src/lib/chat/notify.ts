@@ -1,6 +1,8 @@
 import { SITE_URL } from "@/lib/site";
 import { sendPush } from "./push";
+import { hit } from "./store";
 import type { Conversation } from "./types";
+import { env } from "@/lib/env";
 
 const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) =>
@@ -37,8 +39,8 @@ export async function notifyOwner(c: Conversation, kind: Kind): Promise<void> {
 
   console.log(`[chat] notify owner — ${subject}\n${lines.join("\n")}`);
 
-  const key = process.env.RESEND_API_KEY;
-  const to = process.env.OWNER_EMAIL;
+  const key = env("RESEND_API_KEY");
+  const to = env("OWNER_EMAIL");
 
   const push = sendPush({
     title: subject,
@@ -62,7 +64,7 @@ export async function notifyOwner(c: Conversation, kind: Kind): Promise<void> {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: process.env.NOTIFY_FROM || "Joshua's digital twin <onboarding@resend.dev>",
+          from: env("NOTIFY_FROM") || "Joshua's digital twin <onboarding@resend.dev>",
           to: [to],
           subject,
           text: lines.join("\n\n"),
@@ -78,5 +80,44 @@ export async function notifyOwner(c: Conversation, kind: Kind): Promise<void> {
     } catch (err) {
       console.error("[chat] email notification failed", err);
     }
+  }
+}
+
+/**
+ * Tells the owner the chat can't answer visitors (e.g. Anthropic credits ran
+ * out or the API key was rejected). At most one email per hour. Never throws.
+ */
+export async function alertOwnerOffline(reason: string): Promise<void> {
+  try {
+    if ((await hit("alert:offline", 60 * 60)) > 1) return;
+    console.error(`[chat] OFFLINE — ${reason}`);
+
+    const key = env("RESEND_API_KEY");
+    const to = env("OWNER_EMAIL");
+    if (!key || !to) return;
+
+    const text = [
+      "Your digital Joshua couldn't answer a visitor just now, so they were shown your CV and booking links instead.",
+      `Reason: ${reason}`,
+      "Most likely fix: add credits (Plans & Billing) or check the API key in your Anthropic console, then check ANTHROPIC_API_KEY in Vercel.",
+    ].join("\n\n");
+
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: env("NOTIFY_FROM") || "Joshua's digital twin <onboarding@resend.dev>",
+        to: [to],
+        subject: "Your digital Joshua is offline",
+        text,
+        html: `<div style="font-family:system-ui,sans-serif;line-height:1.5">${text
+          .split("\n\n")
+          .map((l) => `<p>${esc(l)}</p>`)
+          .join("")}</div>`,
+      }),
+    });
+    if (!res.ok) console.error("[chat] Resend rejected the offline alert", res.status);
+  } catch (err) {
+    console.error("[chat] offline alert failed", err);
   }
 }

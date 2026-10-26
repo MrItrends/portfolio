@@ -1,8 +1,9 @@
 import webpush from "web-push";
 import { getPushSubs, savePushSubs } from "./store";
+import { env } from "@/lib/env";
 
 export const pushConfigured = () =>
-  Boolean(process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY);
+  Boolean(env("VAPID_PUBLIC_KEY") && env("VAPID_PRIVATE_KEY"));
 
 export type PushPayload = {
   title: string;
@@ -18,9 +19,9 @@ export async function sendPush(payload: PushPayload): Promise<void> {
   if (!pushConfigured()) return;
   try {
     webpush.setVapidDetails(
-      `mailto:${process.env.OWNER_EMAIL || "owner@example.com"}`,
-      process.env.VAPID_PUBLIC_KEY!,
-      process.env.VAPID_PRIVATE_KEY!,
+      `mailto:${env("OWNER_EMAIL") || "owner@example.com"}`,
+      env("VAPID_PUBLIC_KEY")!,
+      env("VAPID_PRIVATE_KEY")!,
     );
     const subs = await getPushSubs();
     if (!subs.length) return;

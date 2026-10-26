@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { Conversation } from "./types";
+import { env } from "@/lib/env";
 
 /**
  * Minimal key-value layer so the chat works in three environments with the
@@ -10,34 +11,65 @@ import type { Conversation } from "./types";
 interface KV {
   get(key: string): Promise<string | null>;
   set(key: string, value: string, ttlSec?: number): Promise<void>;
+  /** Set a value and index it in a sorted set in one round trip. */
+  putIndexed(
+    key: string,
+    value: string,
+    ttlSec: number,
+    index: string,
+    score: number,
+    member: string,
+  ): Promise<void>;
   incr(key: string, ttlSec: number): Promise<number>;
-  zadd(key: string, score: number, member: string): Promise<void>;
   zrevrange(key: string, start: number, stop: number): Promise<string[]>;
   del(key: string): Promise<void>;
   zrem(key: string, member: string): Promise<void>;
 }
 
-class UpstashKV implements KV {
-  constructor(
-    private url: string,
-    private token: string,
-  ) {}
+type Cmd = (string | number)[];
 
-  private async cmd<T>(...args: (string | number)[]): Promise<T> {
-    const res = await fetch(this.url, {
+class UpstashKV implements KV {
+  private base: string;
+
+  constructor(
+    url: string,
+    private token: string,
+  ) {
+    this.base = url.replace(/\/+$/, "");
+  }
+
+  private async post<T>(path: string, body: unknown): Promise<T> {
+    const res = await fetch(this.base + path, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${this.token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(args),
+      body: JSON.stringify(body),
       cache: "no-store",
+      signal: AbortSignal.timeout(4000),
     });
-    const json = (await res.json()) as { result?: T; error?: string };
-    if (!res.ok || json.error) {
-      throw new Error(`Upstash error: ${json.error ?? res.status}`);
+    const json = (await res.json()) as unknown;
+    if (!res.ok) {
+      const msg = (json as { error?: string })?.error ?? res.status;
+      throw new Error(`Upstash error: ${msg}`);
     }
+    return json as T;
+  }
+
+  private async cmd<T>(...args: Cmd): Promise<T> {
+    const json = await this.post<{ result?: T; error?: string }>("", args);
+    if (json.error) throw new Error(`Upstash error: ${json.error}`);
     return json.result as T;
+  }
+
+  /** Several commands, one HTTP round trip. */
+  private async pipeline(cmds: Cmd[]): Promise<unknown[]> {
+    const out = await this.post<{ result?: unknown; error?: string }[]>("/pipeline", cmds);
+    return out.map((r) => {
+      if (r.error) throw new Error(`Upstash error: ${r.error}`);
+      return r.result;
+    });
   }
 
   get(key: string) {
@@ -47,13 +79,25 @@ class UpstashKV implements KV {
     if (ttlSec) await this.cmd("SET", key, value, "EX", ttlSec);
     else await this.cmd("SET", key, value);
   }
-  async incr(key: string, ttlSec: number) {
-    const n = await this.cmd<number>("INCR", key);
-    if (n === 1) await this.cmd("EXPIRE", key, ttlSec);
-    return n;
+  async putIndexed(
+    key: string,
+    value: string,
+    ttlSec: number,
+    index: string,
+    score: number,
+    member: string,
+  ) {
+    await this.pipeline([
+      ["SET", key, value, "EX", ttlSec],
+      ["ZADD", index, score, member],
+    ]);
   }
-  async zadd(key: string, score: number, member: string) {
-    await this.cmd("ZADD", key, score, member);
+  async incr(key: string, ttlSec: number) {
+    const [n] = await this.pipeline([
+      ["INCR", key],
+      ["EXPIRE", key, ttlSec, "NX"],
+    ]);
+    return Number(n);
   }
   zrevrange(key: string, start: number, stop: number) {
     return this.cmd<string[]>("ZREVRANGE", key, start, stop);
@@ -96,6 +140,20 @@ class MemoryKV implements KV {
     });
     this.persist();
   }
+  async putIndexed(
+    key: string,
+    value: string,
+    ttlSec: number,
+    index: string,
+    score: number,
+    member: string,
+  ) {
+    this.state.kv.set(key, { v: value, exp: Date.now() + ttlSec * 1000 });
+    const z = this.state.z.get(index) ?? new Map<string, number>();
+    z.set(member, score);
+    this.state.z.set(index, z);
+    this.persist();
+  }
   async incr(key: string, ttlSec: number) {
     const cur = Number((await this.get(key)) ?? 0) + 1;
     const existing = this.state.kv.get(key);
@@ -105,12 +163,6 @@ class MemoryKV implements KV {
     });
     this.persist();
     return cur;
-  }
-  async zadd(key: string, score: number, member: string) {
-    const z = this.state.z.get(key) ?? new Map<string, number>();
-    z.set(member, score);
-    this.state.z.set(key, z);
-    this.persist();
   }
   async zrevrange(key: string, start: number, stop: number) {
     const z = this.state.z.get(key);
@@ -163,12 +215,64 @@ class FileKV extends MemoryKV {
   }
 }
 
+/**
+ * Storage must never take the chat down. If the primary store errors (bad
+ * credentials, an outage, a timeout) we log it and carry on in memory — chats
+ * still work, they just won't persist or show up in the inbox until it's fixed.
+ */
+class ResilientKV implements KV {
+  private fallback = new MemoryKV();
+  private lastLog = 0;
+  /** False after the most recent operation had to fall back. */
+  healthy = true;
+
+  constructor(private primary: KV) {}
+
+  private async run<T>(op: string, fn: (kv: KV) => Promise<T>): Promise<T> {
+    try {
+      const out = await fn(this.primary);
+      this.healthy = true;
+      return out;
+    } catch (err) {
+      this.healthy = false;
+      const now = Date.now();
+      if (now - this.lastLog > 30_000) {
+        this.lastLog = now;
+        console.error(`[chat] storage ${op} failed — falling back to memory:`, err);
+      }
+      return fn(this.fallback);
+    }
+  }
+
+  get(key: string) {
+    return this.run("get", (kv) => kv.get(key));
+  }
+  set(key: string, value: string, ttlSec?: number) {
+    return this.run("set", (kv) => kv.set(key, value, ttlSec));
+  }
+  putIndexed(key: string, value: string, ttlSec: number, index: string, score: number, member: string) {
+    return this.run("put", (kv) => kv.putIndexed(key, value, ttlSec, index, score, member));
+  }
+  incr(key: string, ttlSec: number) {
+    return this.run("incr", (kv) => kv.incr(key, ttlSec));
+  }
+  zrevrange(key: string, start: number, stop: number) {
+    return this.run("list", (kv) => kv.zrevrange(key, start, stop));
+  }
+  del(key: string) {
+    return this.run("del", (kv) => kv.del(key));
+  }
+  zrem(key: string, member: string) {
+    return this.run("zrem", (kv) => kv.zrem(key, member));
+  }
+}
+
 const g = globalThis as unknown as { __chatKV?: KV };
 
 function createKV(): KV {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (url && token) return new UpstashKV(url, token);
+  const url = env("UPSTASH_REDIS_REST_URL");
+  const token = env("UPSTASH_REDIS_REST_TOKEN");
+  if (url && token) return new ResilientKV(new UpstashKV(url, token));
   if (process.env.NODE_ENV !== "production") return new FileKV();
   console.warn(
     "[chat] UPSTASH_REDIS_REST_URL/TOKEN not set — using in-memory store; conversations will not persist.",
@@ -177,6 +281,19 @@ function createKV(): KV {
 }
 
 const kv = () => (g.__chatKV ??= createKV());
+
+/** Where chats are stored, and (for Upstash) whether it is actually reachable. */
+export async function storageStatus(): Promise<{ mode: "upstash" | "file" | "memory"; ok: boolean }> {
+  const store = kv();
+  await store.get("chat:health").catch(() => null);
+  return { mode: storageMode(), ok: store instanceof ResilientKV ? store.healthy : true };
+}
+
+/** Where chats are stored. */
+export function storageMode(): "upstash" | "file" | "memory" {
+  if (env("UPSTASH_REDIS_REST_URL") && env("UPSTASH_REDIS_REST_TOKEN")) return "upstash";
+  return process.env.NODE_ENV !== "production" ? "file" : "memory";
+}
 
 const CONVO_TTL = 60 * 60 * 24 * 90; // keep chats 90 days
 const key = (id: string) => `chat:c:${id}`;
@@ -187,19 +304,22 @@ export const ID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{
 export async function getConversation(id: string): Promise<Conversation | null> {
   if (!ID_RE.test(id)) return null;
   const raw = await kv().get(key(id));
-  return raw ? (JSON.parse(raw) as Conversation) : null;
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as Conversation;
+  } catch {
+    return null;
+  }
 }
 
 export async function saveConversation(c: Conversation): Promise<void> {
   c.updatedAt = Date.now();
-  await kv().set(key(c.id), JSON.stringify(c), CONVO_TTL);
-  await kv().zadd(INDEX, c.updatedAt, c.id);
+  await kv().putIndexed(key(c.id), JSON.stringify(c), CONVO_TTL, INDEX, c.updatedAt, c.id);
 }
 
 export async function deleteConversation(id: string): Promise<boolean> {
   if (!ID_RE.test(id)) return false;
-  await kv().del(key(id));
-  await kv().zrem(INDEX, id);
+  await Promise.all([kv().del(key(id)), kv().zrem(INDEX, id)]);
   return true;
 }
 
