@@ -407,7 +407,10 @@ export default function ChatWidget() {
                   FALLBACK_CARDS,
                 );
               } else {
-                fail(e.message);
+                fail(
+                  "Something went wrong on my end. Here’s the quickest way to reach Joshua while I sort it out.",
+                  FALLBACK_CARDS,
+                );
               }
               break;
           }

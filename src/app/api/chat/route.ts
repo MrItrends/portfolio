@@ -162,7 +162,8 @@ function describeError(err: unknown): string {
     const type = (err.error as { error?: { type?: string } } | undefined)?.error?.type;
     return [err.status ?? "network", type ?? err.name].join(" ");
   }
-  return err instanceof Error ? err.name : "unknown";
+  // Local client errors (bad config, not an HTTP response) never carry secrets.
+  return err instanceof Error ? `${err.name}: ${err.message.slice(0, 160)}` : "unknown";
 }
 
 export async function POST(req: Request) {

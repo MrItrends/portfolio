@@ -42,7 +42,10 @@ export async function GET(req: Request) {
       checks.anthropicError =
         err instanceof Anthropic.APIError
           ? `${err.status ?? "network"} ${(err.error as { error?: { type?: string } } | undefined)?.error?.type ?? err.name}`
-          : "unknown";
+          
+          : err instanceof Error
+            ? `${err.name}: ${err.message.slice(0, 160)}`
+            : "unknown";
     }
   }
 
