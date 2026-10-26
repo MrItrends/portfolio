@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { env } from "@/lib/env";
+import { env, envProblem } from "@/lib/env";
 import { adminConfigured } from "@/lib/admin/auth";
 import { CHAT_MODEL } from "@/lib/chat/config";
 import { pushConfigured } from "@/lib/chat/push";
@@ -48,6 +48,14 @@ export async function GET(req: Request) {
             : "unknown";
     }
   }
+
+  // Variables that are set but unusable, with the reason (never the value).
+  const problems: Record<string, string> = {};
+  for (const name of ["ANTHROPIC_API_KEY", "UPSTASH_REDIS_REST_TOKEN", "UPSTASH_REDIS_REST_URL", "RESEND_API_KEY", "ELEVENLABS_API_KEY", "VAPID_PRIVATE_KEY"]) {
+    const p = envProblem(name);
+    if (p) problems[name] = p;
+  }
+  if (Object.keys(problems).length) checks.problems = problems;
 
   const ready = Boolean(checks.anthropicKey) && storage.mode === "upstash" && storage.ok;
   return Response.json({ ready, ...checks }, { headers: { "Cache-Control": "no-store" } });
