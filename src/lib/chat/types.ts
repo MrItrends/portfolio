@@ -56,4 +56,4 @@ export type StreamEvent =
   | { type: "card"; card: Card }
   | { type: "status"; status: ConversationStatus }
   | { type: "done"; messageId: string | null; status: ConversationStatus }
-  | { type: "error"; code: string; message: string };
+  | { type: "error"; code: string; message: string; detail?: string };

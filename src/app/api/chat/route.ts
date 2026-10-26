@@ -2,6 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import Anthropic from "@anthropic-ai/sdk";
 import { after } from "next/server";
 import { env } from "@/lib/env";
+import { CHAT_MODEL } from "@/lib/chat/config";
 import { PROJECTS, getProject } from "@/lib/projects";
 import { BOOKING_URL, RESUME_URL, SITE_URL } from "@/lib/site";
 import { buildSystemPrompt } from "@/lib/chat/persona";
@@ -23,7 +24,7 @@ import type {
 
 export const maxDuration = 60;
 
-const MODEL = env("CHAT_MODEL") || "claude-opus-5-5";
+const MODEL = CHAT_MODEL;
 const MAX_MESSAGE_CHARS = 1000;
 const MAX_MESSAGES_PER_CONVERSATION = 80;
 const MAX_TOOL_STEPS = 4;
@@ -153,6 +154,15 @@ function runTool(
   }
 
   return { text: "Unknown tool." };
+}
+
+/** Status + error type only (never the message), so an outage can be diagnosed from outside. */
+function describeError(err: unknown): string {
+  if (err instanceof Anthropic.APIError) {
+    const type = (err.error as { error?: { type?: string } } | undefined)?.error?.type;
+    return [err.status ?? "network", type ?? err.name].join(" ");
+  }
+  return err instanceof Error ? err.name : "unknown";
 }
 
 export async function POST(req: Request) {
@@ -358,6 +368,7 @@ async function handle(req: Request) {
             type: "error",
             code: unavailable ? "unavailable" : "model_error",
             message: "Something went wrong on my end. Try again in a moment?",
+            detail: describeError(err),
           });
           await preSave;
           return finish();
