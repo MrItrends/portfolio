@@ -21,7 +21,10 @@ export default function CookieConsent() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem(KEY);
+    let saved: string | null = null;
+    try {
+      saved = localStorage.getItem(KEY);
+    } catch {}
     if (saved === "granted") {
       // Re-apply the grant on load — consent resets to denied each page load.
       window.gtag?.("consent", "update", { analytics_storage: "granted" });
@@ -31,7 +34,9 @@ export default function CookieConsent() {
   }, []);
 
   const decide = (granted: boolean) => {
-    localStorage.setItem(KEY, granted ? "granted" : "denied");
+    try {
+      localStorage.setItem(KEY, granted ? "granted" : "denied");
+    } catch {}
     window.gtag?.("consent", "update", {
       analytics_storage: granted ? "granted" : "denied",
     });

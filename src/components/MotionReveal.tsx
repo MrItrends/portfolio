@@ -10,6 +10,8 @@ declare global {
 }
 
 const STAGGER_MS = 45;
+// Last resort: whatever happens, nothing stays hidden past this.
+const FAILSAFE_MS = 8000;
 
 /**
  * Reveals [data-reveal] elements once, as they scroll into view. Elements that
@@ -42,6 +44,14 @@ export default function MotionReveal() {
         });
     };
 
+    // No IntersectionObserver → just show everything.
+    if (typeof IntersectionObserver === "undefined") {
+      document
+        .querySelectorAll<HTMLElement>("[data-reveal]:not([data-in])")
+        .forEach((el) => el.setAttribute("data-in", ""));
+      return;
+    }
+
     const io = new IntersectionObserver(
       (entries) => {
         const batch: HTMLElement[] = [];
@@ -67,7 +77,14 @@ export default function MotionReveal() {
       .querySelectorAll<HTMLElement>("[data-reveal]:not([data-in])")
       .forEach((el) => io.observe(el));
 
+    const failsafe = window.setTimeout(() => {
+      document
+        .querySelectorAll<HTMLElement>("[data-reveal]:not([data-in])")
+        .forEach((el) => el.setAttribute("data-in", ""));
+    }, FAILSAFE_MS);
+
     return () => {
+      clearTimeout(failsafe);
       io.disconnect();
       window.removeEventListener("intro:done", onIntroDone);
     };

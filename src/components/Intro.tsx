@@ -27,6 +27,30 @@ function ease(t: number) {
   return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 }
 
+// Storage can throw (blocked in some in-app/private browsers) — never let that
+// take the page down.
+function readSeen() {
+  try {
+    return !!sessionStorage.getItem("intro-seen");
+  } catch {
+    return false;
+  }
+}
+
+function markSeen() {
+  try {
+    sessionStorage.setItem("intro-seen", "1");
+  } catch {}
+}
+
+// In-app browsers (Instagram, Facebook, …) — skip the preloader there.
+function isInAppBrowser() {
+  return /Instagram|FBAN|FBAV|FB_IAB/i.test(navigator.userAgent);
+}
+
+// Safety net: if the sequence hasn't finished by then, finish it anyway.
+const MAX_WAIT = 6000;
+
 export default function Intro({ children }: { children: React.ReactNode }) {
   const [phase, setPhase] = useState<Phase>("loading");
   const [stage, setStage] = useState<Stage>("count");
@@ -35,7 +59,9 @@ export default function Intro({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Show once per session — repeat navigation shouldn't replay the intro.
     // Synchronous to avoid a one-frame flash of the overlay for returning users.
-    if (sessionStorage.getItem("intro-seen")) {
+    if (readSeen() || isInAppBrowser()) {
+      markSeen();
+      window.dispatchEvent(new Event("intro:done"));
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setPhase("done");
       return;
@@ -46,9 +72,13 @@ export default function Intro({ children }: { children: React.ReactNode }) {
     ).matches;
 
     const pending: ReturnType<typeof setTimeout>[] = [];
+    pending.push(setTimeout(() => finish(), MAX_WAIT));
 
+    let finished = false;
     const finish = () => {
-      sessionStorage.setItem("intro-seen", "1");
+      if (finished) return;
+      finished = true;
+      markSeen();
       window.dispatchEvent(new Event("intro:done"));
       setPhase("revealing");
       pending.push(setTimeout(() => setPhase("done"), DISSOLVE));

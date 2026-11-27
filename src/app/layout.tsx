@@ -15,6 +15,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){["sessionStorage","localStorage"].forEach(function(n){try{window[n].getItem("x");window[n].setItem("__t","1");window[n].removeItem("__t")}catch(e){var m={};try{Object.defineProperty(window,n,{configurable:true,value:{getItem:function(k){return Object.prototype.hasOwnProperty.call(m,k)?m[k]:null},setItem:function(k,v){m[k]=String(v)},removeItem:function(k){delete m[k]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null},get length(){return Object.keys(m).length}}})}catch(e2){}}})})()`,
+          }}
+        />
         {/* Enables reveal-on-scroll before first paint (no flash). Skipped for reduced motion; undone if the app never starts, so content can never stay hidden. */}
         <script
           dangerouslySetInnerHTML={{
