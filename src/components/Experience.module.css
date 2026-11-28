@@ -10,13 +10,6 @@
 /* Three genuinely separate columns spread across the full row — jobs take
    the flexible first column, Tools and Languages sit further out with a
    generous gap between them, matching the reference's wide spread. */
-.grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  column-gap: clamp(3rem, 7vw, 7.5rem);
-  row-gap: var(--space-6);
-  align-items: start;
-}
 
 .list {
   list-style: none;
@@ -57,11 +50,13 @@
 }
 
 .heading {
-  margin: 0;
+  margin: 0 0 var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
   font-size: var(--text-sm);
+  font-weight: 500;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  opacity: 0.55;
 }
 
 .tags {

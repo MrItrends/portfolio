@@ -3,8 +3,15 @@ import SiteChrome from "@/components/SiteChrome";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Joshua Jumbo — Selected Work",
-  description: "Selected work and design stories.",
+  title: "Joshua Jumbo — Product Designer (Fintech, EdTech, HealthTech, AI)",
+  description:
+    "Product designer with six years shaping web and mobile products across fintech, edtech, healthtech and AI. Open to full-time and freelance roles. See selected case studies.",
+  openGraph: {
+    title: "Joshua Jumbo — Product Designer",
+    description:
+      "Six years of product design across fintech, edtech, healthtech and AI. Selected case studies and résumé.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

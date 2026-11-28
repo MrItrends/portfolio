@@ -2,7 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import Script from "next/script";
-import Intro from "./Intro";
 import AmbientSound from "./AmbientSound";
 import CookieConsent from "./CookieConsent";
 import ChatWidget from "./ChatWidget";
@@ -21,7 +20,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
 
   return (
     <>
-      <Intro>{children}</Intro>
+      {children}
       <AmbientSound />
       <CookieConsent />
       <ChatWidget />

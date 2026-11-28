@@ -1,3 +1,4 @@
+import { SITE, mailto } from "@/lib/site";
 import AboutStack from "./AboutStack";
 import styles from "./About.module.css";
 
@@ -41,12 +42,17 @@ export default function About() {
           </p>
           <a
             className={styles.cta}
-            href="https://cal.com/joshua-jumbo/project-discussion?overlayCalendar=true"
+            href={SITE.bookUrl}
             target="_blank"
             rel="noopener noreferrer"
           >
-            Get in touch
+            Book a call
           </a>
+          {mailto() && (
+            <a className={styles.cta} href={mailto()!}>
+              Email me
+            </a>
+          )}
         </div>
       </div>
     </section>

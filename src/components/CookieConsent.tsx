@@ -29,6 +29,7 @@ export default function CookieConsent() {
       // Re-apply the grant on load — consent resets to denied each page load.
       window.gtag?.("consent", "update", { analytics_storage: "granted" });
     } else if (saved !== "denied") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShow(true);
     }
   }, []);
