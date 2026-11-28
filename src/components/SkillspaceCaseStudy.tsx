@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { caseNumber } from "@/lib/projects";
+import CaseSummary from "./CaseSummary";
+import CaseFooter from "./CaseFooter";
 import styles from "./CaseStudy.module.css";
 
 /**
@@ -29,6 +31,8 @@ export default function SkillspaceCaseStudy() {
               <dd>Figma</dd>
             </div>
           </dl>
+
+          <CaseSummary slug="skillspace" />
 
           <div className={styles.lead}>
             <p>{`A platform designed for technical hiring managers to efficiently track and manage the recruitment of technical talent, eliminating the need for third-party software.`}</p>
@@ -131,9 +135,7 @@ export default function SkillspaceCaseStudy() {
           </figure>
         </section>
 
-        <Link href="/" className={styles.back}>
-          Home
-        </Link>
+        <CaseFooter slug="skillspace" />
       </div>
     </article>
   );

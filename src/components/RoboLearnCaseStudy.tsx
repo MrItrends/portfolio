@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { caseNumber } from "@/lib/projects";
+import CaseSummary from "./CaseSummary";
+import CaseFooter from "./CaseFooter";
 import styles from "./CaseStudy.module.css";
 
 /**
@@ -32,6 +34,8 @@ export default function RoboLearnCaseStudy() {
               <dd>Figma</dd>
             </div>
           </dl>
+
+          <CaseSummary slug="robolearn" />
 
           <div className={styles.lead}>
             <p>{`Robolearn is a platform for kids and teenagers who are interested in learning Robotics on their own.`}</p>
@@ -192,9 +196,7 @@ export default function RoboLearnCaseStudy() {
           </div>
         </section>
 
-        <Link href="/" className={styles.back}>
-          Home
-        </Link>
+        <CaseFooter slug="robolearn" />
       </div>
     </article>
   );

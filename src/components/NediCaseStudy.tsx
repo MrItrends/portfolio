@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import SwapMedia from "./SwapMedia";
 import { caseNumber } from "@/lib/projects";
+import CaseSummary from "./CaseSummary";
+import CaseFooter from "./CaseFooter";
 import styles from "./CaseStudy.module.css";
 
 /**
@@ -33,6 +35,8 @@ export default function NediCaseStudy() {
               <dd>Figma</dd>
             </div>
           </dl>
+
+          <CaseSummary slug="nedi" />
 
           <div className={styles.lead}>
             <p>
@@ -224,9 +228,7 @@ export default function NediCaseStudy() {
           </div>
         </section>
 
-        <Link href="/" className={styles.back}>
-          Home
-        </Link>
+        <CaseFooter slug="nedi" />
       </div>
     </article>
   );

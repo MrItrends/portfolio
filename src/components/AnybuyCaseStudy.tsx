@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { caseNumber } from "@/lib/projects";
+import CaseSummary from "./CaseSummary";
+import CaseFooter from "./CaseFooter";
 import styles from "./CaseStudy.module.css";
 
 /**
@@ -31,6 +33,8 @@ export default function AnybuyCaseStudy() {
               <dd>Figma, Claude</dd>
             </div>
           </dl>
+
+          <CaseSummary slug="anybuy" />
 
           <div className={styles.lead}>
             <p>{`Anybuy is a platform for selling pre-loved items, the idea isn’t novel but the aim was to resolve the concept of ‘what you buy isn’t what you get’ and also to ease the problem most users face, not getting overwhelmed with a lot of choice.`}</p>
@@ -141,9 +145,7 @@ export default function AnybuyCaseStudy() {
           </div>
         </section>
 
-        <Link href="/" className={styles.back}>
-          Home
-        </Link>
+        <CaseFooter slug="anybuy" />
       </div>
     </article>
   );

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { caseNumber } from "@/lib/projects";
+import CaseSummary from "./CaseSummary";
+import CaseFooter from "./CaseFooter";
 import styles from "./CaseStudy.module.css";
 
 /**
@@ -32,6 +34,8 @@ export default function NomNomCaseStudy() {
               <dd>Figma</dd>
             </div>
           </dl>
+
+          <CaseSummary slug="nomnom" />
 
           <div className={styles.lead}>
             <p>{`NomNom is a predictive market app that allows users to bet on instances, probabilities or chances of an event happening.`}</p>
@@ -198,9 +202,7 @@ export default function NomNomCaseStudy() {
           </div>
         </section>
 
-        <Link href="/" className={styles.back}>
-          Home
-        </Link>
+        <CaseFooter slug="nomnom" />
       </div>
     </article>
   );

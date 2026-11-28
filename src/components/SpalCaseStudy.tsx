@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import SpalHero from "./SpalHero";
 import { caseNumber } from "@/lib/projects";
+import CaseSummary from "./CaseSummary";
+import CaseFooter from "./CaseFooter";
 import styles from "./CaseStudy.module.css";
 
 /**
@@ -32,6 +34,8 @@ export default function SpalCaseStudy() {
               <dd>Figma, Claude</dd>
             </div>
           </dl>
+
+          <CaseSummary slug="spal" />
 
           <div className={styles.lead}>
             <p>{`SPAL is a business intelligence application for small businesses to help them easily manage their sales and expenses while providing intelligent insights about the business based on the data provided.`}</p>
@@ -210,9 +214,7 @@ export default function SpalCaseStudy() {
           </div>
         </section>
 
-        <Link href="/" className={styles.back}>
-          Home
-        </Link>
+        <CaseFooter slug="spal" />
       </div>
     </article>
   );
