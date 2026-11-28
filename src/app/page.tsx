@@ -1,4 +1,5 @@
 import Hero from "@/components/Hero";
+import BuiltWithAI from "@/components/BuiltWithAI";
 import Experience from "@/components/Experience";
 import SelectedWork from "@/components/SelectedWork";
 import About from "@/components/About";
@@ -8,8 +9,9 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <Experience />
       <SelectedWork />
+      <BuiltWithAI />
+      <Experience />
       <About />
       <Footer />
     </>

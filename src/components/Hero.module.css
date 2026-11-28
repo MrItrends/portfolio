@@ -1,10 +1,13 @@
-/* Landing hero — scrolling brand line with a floating sticker/still collage. */
+/* Landing hero — a clear, readable pitch. No motion required to see it. */
 
 .heroWrap {
   position: relative;
+  z-index: 2;
+  background-color: var(--color-bg);
+  background-image: var(--bg-grain);
+  background-repeat: repeat;
 }
 
-/* Header — name left, nav centre, contact right. */
 .header {
   position: sticky;
   top: 0;
@@ -13,10 +16,13 @@
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: var(--space-4);
-  padding: var(--space-5) var(--page-margin);
+  padding: var(--space-4) var(--page-margin);
   font-weight: 500;
   font-size: clamp(0.95rem, 1.1vw, 1.1rem);
   letter-spacing: 0.02em;
+  background-color: color-mix(in srgb, var(--color-bg) 88%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
 .identity {
@@ -44,7 +50,7 @@
   justify-self: end;
   display: inline-flex;
   align-items: center;
-  padding: 0.55em 1.1em;
+  padding: 0.65em 1.2em;
   background: var(--color-ink);
   color: var(--color-bg);
   text-transform: uppercase;
@@ -58,214 +64,103 @@
   opacity: 0.85;
 }
 
-/* ---------- Stage ---------- */
-.stage {
-  position: relative;
-  min-height: 46vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+/* ---------- Pitch ---------- */
+.body {
+  padding: var(--space-4) var(--page-margin) var(--space-5);
+  max-width: 1280px;
 }
 
-/* Single oversized line scrolling across the centre. */
-.marquee {
-  position: relative;
-  z-index: 1;
-  margin: 0;
-  width: 100%;
-  overflow: hidden;
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent,
-    #000 6%,
-    #000 94%,
-    transparent
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    #000 6%,
-    #000 94%,
-    transparent
-  );
-}
-
-.marqueeTrack {
-  display: inline-flex;
-  white-space: nowrap;
-  animation: marquee 32s linear infinite;
-  will-change: transform;
-}
-
-.marqueeItem {
+.status {
   display: inline-flex;
   align-items: center;
-  font-size: clamp(3rem, 13vw, 16rem);
-  text-transform: uppercase;
+  gap: 0.6em;
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-sm);
+  letter-spacing: 0.02em;
 }
 
 .dot {
-  margin: 0 0.35em;
-  opacity: 0.3;
-}
-
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-/* ---------- Collage ---------- */
-.collage {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-}
-
-/* Wrapper — carries position/size/float animation; drag it to move. */
-.decor {
-  position: absolute;
-  display: block;
-  animation: decorFloat 7s ease-in-out infinite;
-  transform-origin: center;
-  /* .collage is pointer-events:none so the marquee stays scrollable/clickable
-     underneath; each sticker opts back in so it can be picked up. */
-  pointer-events: auto;
-  cursor: grab;
-  touch-action: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.decorImg {
-  display: block;
-  width: 100%;
-  height: auto;
-  pointer-events: none;
-  -webkit-user-drag: none;
-}
-
-/* Corner handle — drag to resize + rotate together. Hidden until hover so
-   the collage doesn't look cluttered with eight visible controls at once. */
-.handle {
-  position: absolute;
-  right: -7px;
-  bottom: -7px;
-  width: 18px;
-  height: 18px;
+  width: 0.6rem;
+  height: 0.6rem;
   border-radius: 999px;
-  background: var(--color-ink);
-  border: 2px solid var(--color-bg);
-  padding: 0;
-  cursor: grab;
-  opacity: 0;
+  background: #1f9d55;
+  box-shadow: 0 0 0 4px rgba(31, 157, 85, 0.18);
+}
+
+.headline {
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(2.25rem, 0.8rem + 4.6vw, 4.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.sub {
+  margin: var(--space-3) 0 0;
+  max-width: 44rem;
+  font-size: var(--text-lg);
+  line-height: 1.4;
+  opacity: 0.8;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  padding: 0 1.4em;
+  font-weight: 500;
+  letter-spacing: 0.01em;
   transition: opacity var(--duration-base) var(--ease);
-  pointer-events: auto;
-  touch-action: none;
 }
 
-.decor:hover .handle,
-.decor:focus-within .handle {
-  opacity: 0.85;
+.primary {
+  background: var(--color-ink);
+  color: var(--color-bg);
 }
 
-.handle:active {
-  cursor: grabbing;
+.secondary {
+  border: 1px solid color-mix(in srgb, var(--color-ink) 35%, transparent);
 }
 
-@keyframes decorFloat {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-12px);
-  }
+.primary:hover,
+.secondary:hover {
+  opacity: 0.8;
 }
 
-/* SPAL still, top-left */
-.d1 {
-  width: clamp(74px, 9vw, 145px);
-  top: 5%;
-  left: 3%;
-  animation-duration: 8s;
-  animation-delay: -1s;
-}
-/* Balloon, top-centre */
-.d2 {
-  width: clamp(95px, 11vw, 180px);
-  top: 1%;
-  left: 41%;
-  animation-duration: 6.5s;
-  animation-delay: -3s;
-}
-/* SKFANS still, top-right */
-.d3 {
-  width: clamp(115px, 13vw, 215px);
-  top: 7%;
-  right: 3%;
-  animation-duration: 7.5s;
-  animation-delay: -2s;
-}
-/* figma logo, mid-right */
-.d4 {
-  width: clamp(58px, 6vw, 105px);
-  top: 13%;
-  right: 22%;
-  animation-duration: 6s;
-  animation-delay: -4s;
-}
-/* face line art, left */
-.d5 {
-  width: clamp(64px, 7vw, 120px);
-  top: 16%;
-  left: 3%;
-  animation-duration: 8.5s;
-  animation-delay: -0.5s;
-}
-/* monster, left-centre */
-.d6 {
-  width: clamp(46px, 5vw, 82px);
-  top: 13%;
-  left: 17%;
-  animation-duration: 6.8s;
-  animation-delay: -2.6s;
-}
-/* Moodoo still, left-mid */
-.d7 {
-  width: clamp(70px, 8vw, 130px);
-  top: 33%;
-  left: 8%;
-  animation-duration: 7.2s;
-  animation-delay: -1.8s;
-}
-/* grass "hi", right */
-.d8 {
-  width: clamp(120px, 15vw, 240px);
-  top: 27%;
-  right: 12%;
-  animation-duration: 9s;
-  animation-delay: -3.6s;
-}
-/* JJ monogram, lower-centre-right */
-.d9 {
-  width: clamp(60px, 6.5vw, 110px);
-  top: 40%;
-  left: 55%;
-  animation-duration: 7.8s;
-  animation-delay: -4.4s;
+.facts {
+  list-style: none;
+  margin: var(--space-5) 0 0;
+  padding: var(--space-3) 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-6);
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .marqueeTrack,
-  .decor {
-    animation: none;
-  }
+.facts li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.facts strong {
+  font-weight: 500;
+  font-size: var(--text-xl);
+  letter-spacing: -0.02em;
+}
+
+.facts span {
+  font-size: var(--text-sm);
+  opacity: 0.6;
 }
 
 @media (max-width: 768px) {
@@ -274,21 +169,22 @@
   }
   .header {
     grid-template-columns: 1fr auto;
+    padding: var(--space-3) var(--page-margin);
   }
-  .stage {
-    min-height: 40vh;
+  .body {
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-5);
   }
-  /* Thin the collage so it doesn't crowd the small screen. */
-  .d4,
-  .d6 {
-    display: none;
+  .primary,
+  .secondary {
+    flex: 1 1 auto;
+    justify-content: center;
   }
-  /* JJ monogram sits lower-centre on desktop, which lands it directly on
-     the marquee line (and camouflages it — same ink colour as the text)
-     once the stage shrinks for mobile. Move it up into the open cluster. */
-  .d9 {
-    top: 16%;
-    left: auto;
-    right: 6%;
+  .facts {
+    margin-top: var(--space-4);
+    gap: var(--space-3) var(--space-4);
+  }
+  .facts strong {
+    font-size: var(--text-lg);
   }
 }

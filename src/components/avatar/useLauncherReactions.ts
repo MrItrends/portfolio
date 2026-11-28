@@ -55,30 +55,18 @@ export function useLauncherReactions(enabled: boolean, onHome: boolean) {
       cleanups.push(() => clearTimeout(id));
     };
 
-    // Hello — once per session, after the preloader has finished.
+    // Hello — once per session, a few seconds after load.
     let helloDone = false;
     try {
       helloDone = sessionStorage.getItem(HELLO_KEY) === "1";
     } catch {}
     if (!helloDone) {
-      let waited = 0;
-      const poll = window.setInterval(() => {
-        waited += 500;
-        let intro = false;
+      later(() => {
+        play("laptop", "Hi, I'm Joshua's digital self. Ask me anything.", 5200);
         try {
-          intro = sessionStorage.getItem("intro-seen") === "1";
+          sessionStorage.setItem(HELLO_KEY, "1");
         } catch {}
-        if (intro || waited > 15_000) {
-          clearInterval(poll);
-          later(() => {
-            play("laptop", "Hi, I'm Joshua's digital self. Ask me anything.", 5200);
-            try {
-              sessionStorage.setItem(HELLO_KEY, "1");
-            } catch {}
-          }, 1500);
-        }
-      }, 500);
-      cleanups.push(() => clearInterval(poll));
+      }, 4000);
     }
 
     // Section nods (home page only).

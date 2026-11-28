@@ -1,27 +1,27 @@
+import { SITE, mailto } from "@/lib/site";
 import styles from "./Footer.module.css";
 
 /**
- * Site footer — copyright on the left, external identity links on the right.
+ * Site footer — a last, obvious next step for anyone who scrolled this far.
  */
 export default function Footer() {
+  const email = mailto();
   return (
-    <footer className={styles.footer} data-reveal="fade">
-      <span className={styles.copy}>© Copyright 2026</span>
-      <nav className={styles.links}>
-        <a
-          className={styles.link}
-          href="https://www.linkedin.com/in/joshuajumbo91/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+    <footer className={styles.footer}>
+      <span className={styles.copy}>&copy; {new Date().getFullYear()} {SITE.name}</span>
+      <nav className={styles.links} aria-label="Contact">
+        <a className={styles.link} href={SITE.bookUrl} target="_blank" rel="noopener noreferrer">
+          Book a call
+        </a>
+        {email && (
+          <a className={styles.link} href={email}>
+            Email
+          </a>
+        )}
+        <a className={styles.link} href={SITE.linkedinUrl} target="_blank" rel="noopener noreferrer">
           LinkedIn
         </a>
-        <a
-          className={styles.link}
-          href="https://drive.google.com/file/d/1HiwxVZHbhg37MiNFBmEBiKmhSVLSZSCw/view?usp=sharing"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a className={styles.link} href={SITE.resumeUrl} target="_blank" rel="noopener noreferrer">
           Resume
         </a>
       </nav>

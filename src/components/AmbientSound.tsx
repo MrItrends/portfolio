@@ -55,6 +55,7 @@ export default function AmbientSound() {
     const audio = audioRef.current!;
     indexRef.current = index;
     sessionStorage.setItem(LAST, String(index));
+    // Set the source lazily — nothing is downloaded until the visitor presses play.
     audio.src = TRACKS[index];
   };
 
@@ -81,7 +82,7 @@ export default function AmbientSound() {
 
   useEffect(() => {
     const audio = new Audio();
-    audio.preload = "auto";
+    audio.preload = "none";
     audioRef.current = audio;
 
     // Shuffle a track for this load, avoiding the previous one.
@@ -101,7 +102,6 @@ export default function AmbientSound() {
       audio.pause();
       audio.src = "";
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Polite: pause when the tab is hidden, resume when it returns.
