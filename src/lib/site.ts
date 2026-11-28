@@ -11,7 +11,7 @@ export const BOOKING_URL =
 export const LINKEDIN_URL = "https://www.linkedin.com/in/joshuajumbo91/";
 
 /** Set this to show a plain "Email me" link in the hero, About and footer. */
-export const CONTACT_EMAIL = "";
+export const CONTACT_EMAIL = "jumbojoshua91@gmail.com";
 
 export const SITE = {
   name: "Joshua Jumbo",
