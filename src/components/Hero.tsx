@@ -44,7 +44,7 @@ export default function Hero() {
         <p className={styles.sub}>
           Six years shaping web and mobile products &mdash; from a national
           education-data platform presented to Nigeria&rsquo;s Vice President to
-          an AI sales app beta-tested with 30+ users. Currently UI/UX Designer
+          an AI sales app tried by 80+ people. Currently UI/UX Designer
           at Idealoft Studio.
         </p>
 

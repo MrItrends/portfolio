@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import SpalHero from "./SpalHero";
 import { caseNumber } from "@/lib/projects";
+import CaseSummary from "./CaseSummary";
+import CaseFooter from "./CaseFooter";
 import styles from "./CaseStudy.module.css";
 
 /**
@@ -32,6 +34,8 @@ export default function SpalCaseStudy() {
               <dd>Figma, Claude</dd>
             </div>
           </dl>
+
+          <CaseSummary slug="spal" />
 
           <div className={styles.lead}>
             <p>{`SPAL is a business intelligence application for small businesses to help them easily manage their sales and expenses while providing intelligent insights about the business based on the data provided.`}</p>
@@ -191,7 +195,7 @@ export default function SpalCaseStudy() {
         <section className={styles.section}>
           <h2 className={styles.h2}>The Impact</h2>
           <div className={styles.body}>
-            <p>{`After designing, including the brand, I built SPAL using Claude. Deployed and tested with over 30 users.`}</p>
+            <p>{`After designing, including the brand, I built SPAL using Claude. Deployed and tested with over 80 users.`}</p>
             <p>{`Built a waiting list page where I collected data from interested users and have been sending them email newsletters about SPAL while over 10 users have been onboarded on the beta app where we occasionally go and engage with them on their experience and how we can improve the app before we launch.`}</p>
           </div>
           <figure className={styles.figure}>
@@ -210,9 +214,7 @@ export default function SpalCaseStudy() {
           </div>
         </section>
 
-        <Link href="/" className={styles.back}>
-          Home
-        </Link>
+        <CaseFooter slug="spal" />
       </div>
     </article>
   );

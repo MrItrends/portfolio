@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import SwapMedia from "./SwapMedia";
 import { caseNumber } from "@/lib/projects";
+import CaseSummary from "./CaseSummary";
+import CaseFooter from "./CaseFooter";
 import styles from "./CaseStudy.module.css";
 
 /**
@@ -19,8 +21,7 @@ export default function NediCaseStudy() {
         <header className={styles.header}>
           <p className={styles.kicker}>Selected Work — {caseNumber("nedi")}</p>
           <h1 className={styles.title}>
-            Designing the Minimum Viable Product for the Nigerian EDTECH
-            Platform
+            NEDI: a national education-data platform for Nigeria
           </h1>
 
           <dl className={styles.meta}>
@@ -33,6 +34,8 @@ export default function NediCaseStudy() {
               <dd>Figma</dd>
             </div>
           </dl>
+
+          <CaseSummary slug="nedi" />
 
           <div className={styles.lead}>
             <p>
@@ -224,9 +227,7 @@ export default function NediCaseStudy() {
           </div>
         </section>
 
-        <Link href="/" className={styles.back}>
-          Home
-        </Link>
+        <CaseFooter slug="nedi" />
       </div>
     </article>
   );

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { caseNumber } from "@/lib/projects";
+import CaseSummary from "./CaseSummary";
+import CaseFooter from "./CaseFooter";
 import styles from "./CaseStudy.module.css";
 
 /**
@@ -17,7 +19,9 @@ export default function SkillspaceCaseStudy() {
 
         <header className={styles.header}>
           <p className={styles.kicker}>Selected Work — {caseNumber("skillspace")}</p>
-          <h1 className={styles.title}>Skillspace.ai</h1>
+          <h1 className={styles.title}>
+            Skillspace: one platform for the whole technical hiring cycle
+          </h1>
 
           <dl className={styles.meta}>
             <div className={styles.metaItem}>
@@ -29,6 +33,8 @@ export default function SkillspaceCaseStudy() {
               <dd>Figma</dd>
             </div>
           </dl>
+
+          <CaseSummary slug="skillspace" />
 
           <div className={styles.lead}>
             <p>{`A platform designed for technical hiring managers to efficiently track and manage the recruitment of technical talent, eliminating the need for third-party software.`}</p>
@@ -131,9 +137,7 @@ export default function SkillspaceCaseStudy() {
           </figure>
         </section>
 
-        <Link href="/" className={styles.back}>
-          Home
-        </Link>
+        <CaseFooter slug="skillspace" />
       </div>
     </article>
   );

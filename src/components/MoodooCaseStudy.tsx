@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { caseNumber } from "@/lib/projects";
+import CaseSummary from "./CaseSummary";
+import CaseFooter from "./CaseFooter";
 import styles from "./CaseStudy.module.css";
 
 /**
@@ -18,8 +20,7 @@ export default function MoodooCaseStudy() {
         <header className={styles.header}>
           <p className={styles.kicker}>Selected Work — {caseNumber("moodoo")}</p>
           <h1 className={styles.title}>
-            Designing a B2B Employee Mood Intelligence Platform That Helps
-            Managers Understand Team Wellbeing Before Burnout Happens
+            Moodoo: spotting team burnout before it happens
           </h1>
 
           <dl className={styles.meta}>
@@ -32,6 +33,8 @@ export default function MoodooCaseStudy() {
               <dd>Figma</dd>
             </div>
           </dl>
+
+          <CaseSummary slug="moodoo" />
 
           <div className={styles.lead}>
             <p>{`Moodoo is a mood tracking app that helps teams and individuals within an organization to see their mood patterns.`}</p>
@@ -191,9 +194,7 @@ export default function MoodooCaseStudy() {
           </div>
         </section>
 
-        <Link href="/" className={styles.back}>
-          Home
-        </Link>
+        <CaseFooter slug="moodoo" />
       </div>
     </article>
   );

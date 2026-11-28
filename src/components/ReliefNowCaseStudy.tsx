@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { caseNumber } from "@/lib/projects";
+import CaseSummary from "./CaseSummary";
+import CaseFooter from "./CaseFooter";
 import styles from "./CaseStudy.module.css";
 
 /**
@@ -18,8 +20,7 @@ export default function ReliefNowCaseStudy() {
         <header className={styles.header}>
           <p className={styles.kicker}>Selected Work — {caseNumber("relief-now")}</p>
           <h1 className={styles.title}>
-            Designing ReliefNow: Helping Patients Find Effective, Non-Surgical
-            Pain Relief
+            ReliefNow: helping patients book non-surgical pain relief
           </h1>
 
           <dl className={styles.meta}>
@@ -32,6 +33,8 @@ export default function ReliefNowCaseStudy() {
               <dd>Figma</dd>
             </div>
           </dl>
+
+          <CaseSummary slug="relief-now" />
 
           <div className={styles.lead}>
             <p>{`Reliefnow is a healthcare consulting platform for top athletes and highly placed individuals in New York.`}</p>
@@ -157,9 +160,7 @@ export default function ReliefNowCaseStudy() {
           </div>
         </section>
 
-        <Link href="/" className={styles.back}>
-          Home
-        </Link>
+        <CaseFooter slug="relief-now" />
       </div>
     </article>
   );
