@@ -20,8 +20,7 @@ export default function MoodooCaseStudy() {
         <header className={styles.header}>
           <p className={styles.kicker}>Selected Work — {caseNumber("moodoo")}</p>
           <h1 className={styles.title}>
-            Designing a B2B Employee Mood Intelligence Platform That Helps
-            Managers Understand Team Wellbeing Before Burnout Happens
+            Moodoo: spotting team burnout before it happens
           </h1>
 
           <dl className={styles.meta}>

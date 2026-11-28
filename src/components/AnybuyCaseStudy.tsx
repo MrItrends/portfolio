@@ -20,7 +20,7 @@ export default function AnybuyCaseStudy() {
         <header className={styles.header}>
           <p className={styles.kicker}>Selected Work — {caseNumber("anybuy")}</p>
           <h1 className={styles.title}>
-            Built with Claude, rethinking how pre-loved products are sold
+            Anybuy: a trust-first pre-loved marketplace, built with AI
           </h1>
 
           <dl className={styles.meta}>

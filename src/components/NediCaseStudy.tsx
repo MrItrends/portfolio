@@ -21,8 +21,7 @@ export default function NediCaseStudy() {
         <header className={styles.header}>
           <p className={styles.kicker}>Selected Work — {caseNumber("nedi")}</p>
           <h1 className={styles.title}>
-            Designing the Minimum Viable Product for the Nigerian EDTECH
-            Platform
+            NEDI: a national education-data platform for Nigeria
           </h1>
 
           <dl className={styles.meta}>

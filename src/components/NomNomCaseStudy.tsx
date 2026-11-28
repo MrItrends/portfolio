@@ -20,8 +20,7 @@ export default function NomNomCaseStudy() {
         <header className={styles.header}>
           <p className={styles.kicker}>Selected Work — {caseNumber("nomnom")}</p>
           <h1 className={styles.title}>
-            Designing NomNom: Helping People Forecast Real-World Events Through
-            Prediction Markets
+            NomNom: prediction markets that feel like social media
           </h1>
 
           <dl className={styles.meta}>

@@ -19,7 +19,9 @@ export default function SkillspaceCaseStudy() {
 
         <header className={styles.header}>
           <p className={styles.kicker}>Selected Work — {caseNumber("skillspace")}</p>
-          <h1 className={styles.title}>Skillspace.ai</h1>
+          <h1 className={styles.title}>
+            Skillspace: one platform for the whole technical hiring cycle
+          </h1>
 
           <dl className={styles.meta}>
             <div className={styles.metaItem}>

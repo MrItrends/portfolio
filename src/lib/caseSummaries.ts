@@ -35,7 +35,7 @@ export const CASE_SUMMARIES: Record<string, CaseSummaryData> = {
       "Technical hiring managers juggle overly complex tools or test-only platforms, leaving the rest of the hiring process unaddressed.",
     did: "Researched the hiring process and competitors, built personas and journey maps, and designed the design system and high-fidelity screens so recruiters can run the whole hiring cycle in one place.",
     result:
-      "Delivered the design system and high-fidelity designs for the platform.",
+      "Delivered the design system and high-fidelity designs. I left in 2022, so I don't have usage data.",
   },
   moodoo: {
     problem:
@@ -48,7 +48,8 @@ export const CASE_SUMMARIES: Record<string, CaseSummaryData> = {
     problem:
       "Pre-loved marketplaces feel disorganised: buyers get lost in choice and often don't receive what was advertised.",
     did: "Designed an escrow flow with a PIN handoff between buyer and rider, clear category browsing with smart search, and an auction feature, then built it with Claude.",
-    result: "A working version built with Claude.",
+    result:
+      "An AI-built experiment, not launched. Onboarding sellers and verifying real, quality listings was the bottleneck, so I chose not to push it to users.",
   },
   "relief-now": {
     problem:

@@ -195,7 +195,7 @@ export default function SpalCaseStudy() {
         <section className={styles.section}>
           <h2 className={styles.h2}>The Impact</h2>
           <div className={styles.body}>
-            <p>{`After designing, including the brand, I built SPAL using Claude. Deployed and tested with over 30 users.`}</p>
+            <p>{`After designing, including the brand, I built SPAL using Claude. Deployed and tested with over 80 users.`}</p>
             <p>{`Built a waiting list page where I collected data from interested users and have been sending them email newsletters about SPAL while over 10 users have been onboarded on the beta app where we occasionally go and engage with them on their experience and how we can improve the app before we launch.`}</p>
           </div>
           <figure className={styles.figure}>

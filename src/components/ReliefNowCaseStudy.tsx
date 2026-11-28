@@ -20,8 +20,7 @@ export default function ReliefNowCaseStudy() {
         <header className={styles.header}>
           <p className={styles.kicker}>Selected Work — {caseNumber("relief-now")}</p>
           <h1 className={styles.title}>
-            Designing ReliefNow: Helping Patients Find Effective, Non-Surgical
-            Pain Relief
+            ReliefNow: helping patients book non-surgical pain relief
           </h1>
 
           <dl className={styles.meta}>

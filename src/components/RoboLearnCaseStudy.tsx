@@ -20,8 +20,7 @@ export default function RoboLearnCaseStudy() {
         <header className={styles.header}>
           <p className={styles.kicker}>Selected Work — {caseNumber("robolearn")}</p>
           <h1 className={styles.title}>
-            Designing an Interactive Robotics Learning Platform for Young
-            Innovators
+            RoboLearn: learning robotics hands-on, from the basics
           </h1>
 
           <dl className={styles.meta}>

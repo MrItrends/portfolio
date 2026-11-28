@@ -63,6 +63,13 @@ export const BUILDS: Build[] = [
       "A place to learn design and motion, growing into a broader learning platform.",
   },
   {
+    name: "Anybuy",
+    url: "https://anybuy-web.vercel.app/",
+    blurb:
+      "A pre-loved marketplace built as an AI experiment, with escrow and PIN handoff so what you buy is what you get. Not launched to users.",
+    stat: "Experiment",
+  },
+  {
     name: "The Test Tribe — Illustrated",
     url: "https://testtribedemo.vercel.app/",
     blurb:
