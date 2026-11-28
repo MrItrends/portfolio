@@ -15,7 +15,8 @@ export default function BuiltWithAI() {
         <span className={styles.count}>{BUILDS.length} products</span>
       </div>
       <p className={styles.lede}>
-        Beyond design files &mdash; products I&rsquo;ve built using AI.
+        Beyond design files &mdash; products I&rsquo;ve built using AI. None
+        were promoted; usage is word of mouth.
       </p>
 
       <ul className={styles.list}>
@@ -27,12 +28,15 @@ export default function BuiltWithAI() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <span className={styles.name}>{b.name}</span>
-              <span className={styles.host}>{host(b.url)}</span>
+              <span className={styles.top}>
+                <span className={styles.name}>{b.name}</span>
+                {b.stat && <span className={styles.stat}>{b.stat}</span>}
+              </span>
               <span className={styles.arrow} aria-hidden="true">
                 &#8599;
               </span>
-              {b.blurb && <span className={styles.blurb}>{b.blurb}</span>}
+              <span className={styles.blurb}>{b.blurb}</span>
+              <span className={styles.host}>{host(b.url)}</span>
             </a>
           </li>
         ))}
