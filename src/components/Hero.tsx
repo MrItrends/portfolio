@@ -15,6 +15,7 @@ export default function Hero() {
         <span className={styles.identity}>{SITE.name}</span>
         <nav className={styles.nav} aria-label="Primary">
           <a href="#work">Work</a>
+          <a href="#built">Built with AI</a>
           <a href="#about">About</a>
           <a href={SITE.resumeUrl} target="_blank" rel="noopener noreferrer">
             Resume
